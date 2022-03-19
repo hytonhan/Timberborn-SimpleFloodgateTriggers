@@ -3,7 +3,7 @@ This plugin for Timberborn allows you to automate your Floodgates a little. Curr
 
 # Usage
 The will add a simple UI fragment on the Floodgate UI. Example image below.
-![UIFragment](./.attachments/UIFragment.png)
+![UIFragment](.attachments/UIFragment.png)
 
 From the UI you can manage the settings:
 - Enable setting of height when drought ends
