@@ -12,6 +12,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public void Configure(IContainerDefinition containerDefinition)
         {
             containerDefinition.Bind<FloodGateUIFragment>().AsSingleton();
+            containerDefinition.Bind<AttachToStreamGaugeButton>().AsSingleton();
             containerDefinition.MultiBind<EntityPanelModule>().ToProvider<EntityPanelModuleProvider>().AsSingleton();
         }
 

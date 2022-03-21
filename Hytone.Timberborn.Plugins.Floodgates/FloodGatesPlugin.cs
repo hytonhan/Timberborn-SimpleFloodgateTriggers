@@ -2,6 +2,7 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
+using Hytone.Timberborn.Plugins.Floodgates.Schedule;
 using Hytone.Timberborn.Plugins.Floodgates.UI;
 using TimberbornAPI;
 using TimberbornAPI.Common;
@@ -25,6 +26,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates
 
             TimberAPI.DependencyRegistry.AddConfigurator(new FloodGatesUIFragmentConfigurator(), SceneEntryPoint.InGame);
             TimberAPI.DependencyRegistry.AddConfigurator(new FloodgateEntityActionConfigurator(), SceneEntryPoint.InGame);
+            TimberAPI.DependencyRegistry.AddConfigurator(new ScheduleSystemConfigurator(), SceneEntryPoint.InGame);
 
             Logger.LogInfo("FloodgateTriggersPlugin is loaded.");
         }

@@ -1,4 +1,7 @@
-﻿using Timberborn.Persistence;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Timberborn.Persistence;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 
@@ -16,6 +19,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<float> DroughtEndedHeightKey = new PropertyKey<float>(nameof(DroughtEndedHeight));
         private static readonly PropertyKey<bool> DroughtStartedEnabledKey = new PropertyKey<bool>(nameof(DroughtStartedEnabled));
         private static readonly PropertyKey<float> DroughtStartedHeightKey = new PropertyKey<float>(nameof(DroughtStartedHeight));
+
+        private readonly List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
+        public ReadOnlyCollection<StreamGaugeFloodgateLink> FloodgateLinks { get; private set; }
 
         public bool DroughtEndedEnabled { get; set; }
         public float DroughtEndedHeight { get; set; }
@@ -88,6 +94,19 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 floodgate.SetHeight(DroughtEndedHeight);
             }
+        }
+
+        public void DetachLink(StreamGaugeFloodgateLink link)
+        {
+            if(!_floodgateLinks.Remove(link))
+            {
+                throw new InvalidOperationException($"Coudln't remove {link} from {this}, it wasn't added.");
+            }
+        }
+
+        private void PostDetachLink(StreamGaugeFloodgateLink link)
+        {
+            link.StreamGauge.DetachFloodgate(link);
         }
     }
 }
