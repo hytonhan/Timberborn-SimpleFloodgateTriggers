@@ -1,9 +1,12 @@
 ﻿using System;
 using Timberborn.TimeSystem;
-using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
 {
+    /// <summary>
+    /// This class responsibility is to hold logic relating
+    /// to ScheduleTriggers
+    /// </summary>
     public class ScheduleTrigger : IScheduleTrigger
     {
         private readonly IDayNightCycle _dayNightCycle;
@@ -13,78 +16,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
 
         private float _firstSchedule;
         private float _secondSchedule;
-        //private readonly float _fullDelayInDays;
-        //private float _delayLeftInDays;
-        private float _timeUntilNextTrigger;
-        private float _resumedTimestamp;
 
-        public bool Finished { get; private set; }
 
-        //public bool InProgress { get; private set; }
         public bool Enabled { get; private set; }
 
         public bool FirstScheduleInProgress { get; private set; }
         public bool SecondScheduleInProgress { get; private set; }
 
-        //public float DaysLeft
-        //{
-        //    get
-        //    {
-        //        if (!InProgress)
-        //        {
-        //            return _delayLeftInDays;
-        //        }
-        //        return _delayLeftInDays - DaysSinceStart;
-        //    }
-        //}
-        public float TimeUntilNextTrigger
-        {
-            get
-            {
-                if (!Enabled)
-                {
-                    return float.MaxValue;
-                }
-                var currTime = _dayNightCycle.HoursPassedToday;
-                if (FirstScheduleInProgress)
-                {
-                    if (_firstSchedule < _secondSchedule &&
-                       _secondSchedule > currTime)
-                    {
-                        return (24f - _secondSchedule) + _firstSchedule;
-                    }
-                    else
-                    {
-                        return _firstSchedule - currTime;
-                    }
-                }
-                else if(SecondScheduleInProgress)
-                {
-                    if (_secondSchedule < _firstSchedule &&
-                        _firstSchedule > currTime)
-                    {
-                        return (24f - _firstSchedule) + _secondSchedule;
-                    }
-                    {
-                        return _secondSchedule - currTime;
-                    }
-                }
-                else
-                {
-                    return float.MaxValue;
-                }
-            }
-        }
-
-        //public float Progress
-        //{
-        //    get { return 1f - Mathf.Clamp01(DaysLeft / _fullDelayInDays); }
-        //}
-
-        //private float DaysSinceStart
-        //{
-        //    get { return _dayNightCycle.PartialDayNumber - _resumedTimestamp; }
-        //}
+        
 
         public ScheduleTrigger(IDayNightCycle dayNightCycle,
                                ScheduleTriggerService scheduleTriggerService,
@@ -101,23 +40,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
             _secondSchedule = secondSchedule;
         }
 
-        //public void Reset()
-        //{
-        //    Finished = false;
-        //    Pause();
-        //    _delayLeftInDays = _fullDelayInDays;
-        //}
-
-        //public void Resume()
-        //{
-        //    if (!InProgress && !Finished)
-        //    {
-        //        float partialDayNumber = _dayNightCycle.PartialDayNumber;
-        //        _timeTriggerService.Add(this, partialDayNumber + _delayLeftInDays);
-        //        _resumedTimestamp = partialDayNumber;
-        //        InProgress = true;
-        //    }
-        //}
+        /// <summary>
+        /// Enables this schedule trigger
+        /// </summary>
         public void Enable()
         {
             if (!Enabled)
@@ -127,7 +52,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
             var currTime = _dayNightCycle.HoursPassedToday;
             if (_firstSchedule <= _secondSchedule)
             {
-                if (_firstSchedule < currTime)
+                if (_firstSchedule < currTime && _secondSchedule > currTime)
                 {
                     FirstScheduleInProgress = true;
                     SecondScheduleInProgress = false;
@@ -140,7 +65,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
             }
             else
             {
-                if (_secondSchedule < currTime)
+                if (_secondSchedule < currTime && _firstSchedule > currTime)
                 {
                     FirstScheduleInProgress = false;
                     SecondScheduleInProgress = true;
@@ -154,6 +79,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
             _scheduleTriggerService.Add(this, _firstSchedule, _secondSchedule);
         }
 
+        /// <summary>
+        /// Disables this schedule trigger
+        /// </summary>
         public void Disable()
         {
             if (Enabled)
@@ -161,46 +89,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
                 Enabled = false;
                 FirstScheduleInProgress = false;
                 SecondScheduleInProgress = false;
-                _scheduleTriggerService.Remove(this);
             }
+            _scheduleTriggerService.Remove(this);
         }
 
-        //public void Pause()
-        //{
-        //    if (InProgress)
-        //    {
-        //        _timeTriggerService.Remove(this);
-        //        _delayLeftInDays -= DaysSinceStart;
-        //        InProgress = false;
-        //    }
-        //}
-
-        //public void FastForwardProgress(float progress)
-        //{
-        //    bool inProgress = InProgress;
-        //    Pause();
-        //    _delayLeftInDays -= _fullDelayInDays * progress;
-        //    if (_delayLeftInDays <= 0f)
-        //    {
-        //        Finish();
-        //    }
-        //    if (inProgress)
-        //    {
-        //        Resume();
-        //    }
-        //}
-
-        //public void Finish()
-        //{
-        //    if (!Finished)
-        //    {
-        //        InProgress = false;
-        //        Finished = true;
-        //        _delayLeftInDays = 0f;
-        //        _action();
-        //    }
-        //}
-
+       
+        /// <summary>
+        /// Invokes appropriate method when the schedule
+        /// is triggered
+        /// </summary>
         public void Trigger()
         {
             if(Enabled)
