@@ -19,6 +19,7 @@ From the UI you can manage the settings:
 		- Normally the height is set at the selected timestamp. If you change the timestamp, then the height might get instantly changed. This should be fixed 
 		once the schedule has been running in peace for a while.
 
+Below is a gif of floodgates that are scheduled to close at 16.
 ![Schedules woo!](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/schedule/attachments/ScheduleShowcase.gif)
 
 ## Known Limitations
