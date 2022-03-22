@@ -12,6 +12,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public void Configure(IContainerDefinition containerDefinition)
         {
             containerDefinition.Bind<FloodGateUIFragment>().AsSingleton();
+            containerDefinition.Bind<FloodgateScheduleFragment>().AsSingleton();
             containerDefinition.MultiBind<EntityPanelModule>().ToProvider<EntityPanelModuleProvider>().AsSingleton();
         }
 
@@ -21,16 +22,20 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private class EntityPanelModuleProvider : IProvider<EntityPanelModule>
         {
             private readonly FloodGateUIFragment _floodGateFragment;
+            private readonly FloodgateScheduleFragment _floodgateScheduleFragment;
 
-            public EntityPanelModuleProvider(FloodGateUIFragment floodGateFragment)
+            public EntityPanelModuleProvider(FloodGateUIFragment floodGateFragment,
+                                             FloodgateScheduleFragment floodgateScheduleFragment)
             {
                 _floodGateFragment = floodGateFragment ?? throw new ArgumentNullException(nameof(floodGateFragment)); ;
+                _floodgateScheduleFragment = floodgateScheduleFragment;
             }
 
             public EntityPanelModule Get()
             {
                 EntityPanelModule.Builder builder = new EntityPanelModule.Builder();
                 builder.AddBottomFragment(_floodGateFragment);
+                builder.AddBottomFragment(_floodgateScheduleFragment);
                 return builder.Build();
             }
         }

@@ -2,13 +2,14 @@
 using BepInEx.Logging;
 using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
+using Hytone.Timberborn.Plugins.Floodgates.Schedule;
 using Hytone.Timberborn.Plugins.Floodgates.UI;
 using TimberbornAPI;
 using TimberbornAPI.Common;
 
 namespace Hytone.Timberborn.Plugins.Floodgates
 {
-    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "0.1.2")]
+    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "0.2.0")]
     [BepInDependency("com.timberapi.timberapi")]
     [HarmonyPatch]
     public class FloodGatesPlugin : BaseUnityPlugin
@@ -25,6 +26,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates
 
             TimberAPI.DependencyRegistry.AddConfigurator(new FloodGatesUIFragmentConfigurator(), SceneEntryPoint.InGame);
             TimberAPI.DependencyRegistry.AddConfigurator(new FloodgateEntityActionConfigurator(), SceneEntryPoint.InGame);
+            TimberAPI.DependencyRegistry.AddConfigurator(new ScheduleSystemConfigurator(), SceneEntryPoint.InGame);
 
             Logger.LogInfo("FloodgateTriggersPlugin is loaded.");
         }
@@ -36,6 +38,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates
         {
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.EnableOnDroughtStarted", "Set height when drought starts");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.EnableOnDroughtEnded", "Set height when drought ends");
+            TimberAPI.Localization.AddLabel("Floodgate.Schedule.Enable", "Set height on a schedule");
+            TimberAPI.Localization.AddLabel("Floodgate.Schedule.DisableOnDrought", "Disable schedule during drought");
         }
     }
 }
