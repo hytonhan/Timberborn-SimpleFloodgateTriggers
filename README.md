@@ -4,6 +4,7 @@ or based on a basic schedule. Pretty neat.
 
 # Usage
 The will add a simple UI fragment on the Floodgate UI. Example image below.
+
 ![UIFragment](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/UIFragment.PNG)
 
 From the UI you can manage the settings:
@@ -20,6 +21,7 @@ From the UI you can manage the settings:
 		once the schedule has been running in peace for a while.
 
 Below is a gif of floodgates that are scheduled to close at 16.
+
 ![Schedules woo!](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/schedule/attachments/ScheduleShowcase.gif)
 
 ## Known Limitations
