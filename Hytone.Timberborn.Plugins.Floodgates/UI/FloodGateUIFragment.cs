@@ -22,7 +22,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private VisualElement _root;
         private Floodgate _floodgate;
         private FloodgateTriggerMonoBehaviour _floodgateTriggerComponent;
-        private readonly VisualElementLoader _visualElementLoader;
 
         private Slider _droughtEndedSlider;
         private Toggle _droughtEndedEnabledToggle;
@@ -37,7 +36,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                    EventBus eventBus)
         {
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
-            _visualElementLoader = visualElementLoader ?? throw new ArgumentNullException(nameof(visualElementLoader));
         }
 
         public void ClearFragment()
@@ -58,7 +56,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtEnded",
                                                                          name: "DroughtEndedEnabled",
-                                                                         fontStyle: FontStyle.Normal, 
+                                                                         fontStyle: FontStyle.Normal,
                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
                                                                                                     .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
@@ -162,7 +160,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             _floodgateTriggerComponent.DroughtEndedEnabled = changeEvent.newValue;
         }
-       
+
         /// <summary>
         /// Store value when Drought Started toggle is toggled
         /// </summary>
