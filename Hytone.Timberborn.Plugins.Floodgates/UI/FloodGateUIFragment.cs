@@ -38,11 +38,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
+        //public void ClearFragment()
+        //{
+        //    _floodgate = null;
+        //    _floodgateTriggerComponent = null;
+        //    _root.ToggleDisplayStyle(false);
+        //}
         public void ClearFragment()
         {
             _floodgate = null;
             _floodgateTriggerComponent = null;
-            _root.ToggleDisplayStyle(false);
         }
 
         /// <summary>
@@ -89,7 +94,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
                         .BuildAndInitialize();
-            this._root.ToggleDisplayStyle(false);
+            //this._root.ToggleDisplayStyle(false);
 
             _droughtEndedSlider = _root.Q<Slider>("DroughtEndedSlider");
             _droughtEndedEnabledToggle = _root.Q<Toggle>("DroughtEndedEnabled");
@@ -128,10 +133,44 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
             _floodgate = component;
         }
+        public void ShowFragment(Floodgate floodgate,
+                                 FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
+        {
+            if ((bool)floodgate)
+            {
+                if ((bool)floodgateTriggerMonoBehaviour)
+                {
+                    _droughtEndedSlider.highValue = floodgate.MaxHeight;
+                    _droughtEndedSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.DroughtEndedHeight);
+
+                    _droughtStartedSlider.highValue = floodgate.MaxHeight;
+                    _droughtStartedSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.DroughtStartedHeight);
+                }
+                _floodgateTriggerComponent = floodgateTriggerMonoBehaviour;
+            }
+            _floodgate = floodgate;
+        }
 
         /// <summary>
         /// Update ui elements when fragment is updated
         /// </summary>
+        //public void UpdateFragment()
+        //{
+        //    if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
+        //    {
+        //        _droughtEndedLabel.text = "Height: " + _droughtEndedSlider.value.ToString(CultureInfo.InvariantCulture);
+        //        _droughtEndedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtEndedEnabled);
+
+        //        _droughtStartedLabel.text = "Height: " + _droughtStartedSlider.value.ToString(CultureInfo.InvariantCulture);
+        //        _droughtStartedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtStartedEnabled);
+
+        //        _root.ToggleDisplayStyle(visible: true);
+        //    }
+        //    else
+        //    {
+        //        _root.ToggleDisplayStyle(visible: false);
+        //    }
+        //}
         public void UpdateFragment()
         {
             if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
@@ -141,12 +180,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 _droughtStartedLabel.text = "Height: " + _droughtStartedSlider.value.ToString(CultureInfo.InvariantCulture);
                 _droughtStartedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtStartedEnabled);
-
-                _root.ToggleDisplayStyle(visible: true);
-            }
-            else
-            {
-                _root.ToggleDisplayStyle(visible: false);
             }
         }
 

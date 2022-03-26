@@ -1,4 +1,5 @@
-﻿using Timberborn.WaterBuildings;
+﻿using Bindito.Unity;
+using Timberborn.WaterBuildings;
 using TimberbornAPI.EntityActionSystem;
 using UnityEngine;
 
@@ -6,6 +7,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
     public class EntityActions : IEntityAction
     {
+        private readonly IInstantiator _instantiator;
+
+        public EntityActions(IInstantiator instantiator)
+        {
+            _instantiator = instantiator;
+        }
+
         /// <summary>
         /// Add our custom classes to all Floodgates and StreamGauges
         /// </summary>
@@ -14,11 +22,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             if (entity.GetComponent<Floodgate>() != null)
             {
-                entity.AddComponent<FloodgateTriggerMonoBehaviour>();
+                _instantiator.AddComponent<FloodgateTriggerMonoBehaviour>(entity);
             }
             if (entity.GetComponent<StreamGauge>() != null)
             {
-                entity.AddComponent<StreamGaugeMonoBehaviour>();
+                _instantiator.AddComponent<StreamGaugeMonoBehaviour>(entity);
             }
         }
     }

@@ -14,6 +14,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<FloodGateUIFragment>().AsSingleton();
             containerDefinition.Bind<FloodgateScheduleFragment>().AsSingleton();
             containerDefinition.Bind<AttachToStreamGaugeButton>().AsSingleton();
+            containerDefinition.Bind<AttachToStreamGaugeFragment>().AsSingleton();
+            containerDefinition.Bind<TriggersFragment>().AsSingleton();
             containerDefinition.MultiBind<EntityPanelModule>().ToProvider<EntityPanelModuleProvider>().AsSingleton();
         }
 
@@ -24,19 +26,26 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             private readonly FloodGateUIFragment _floodGateFragment;
             private readonly FloodgateScheduleFragment _floodgateScheduleFragment;
+            //private readonly AttachToStreamGaugeFragment _attachToStreamGaugeButton;
+            private readonly TriggersFragment _triggersFragment;
 
             public EntityPanelModuleProvider(FloodGateUIFragment floodGateFragment,
-                                             FloodgateScheduleFragment floodgateScheduleFragment)
+                                             FloodgateScheduleFragment floodgateScheduleFragment,
+                                             TriggersFragment triggersFragment)
             {
                 _floodGateFragment = floodGateFragment ?? throw new ArgumentNullException(nameof(floodGateFragment)); ;
                 _floodgateScheduleFragment = floodgateScheduleFragment;
+                _triggersFragment = triggersFragment;
+                //_attachToStreamGaugeButton = attachToStreamGaugeButton;
             }
 
             public EntityPanelModule Get()
             {
                 EntityPanelModule.Builder builder = new EntityPanelModule.Builder();
-                builder.AddBottomFragment(_floodGateFragment);
-                builder.AddBottomFragment(_floodgateScheduleFragment);
+                builder.AddBottomFragment(_triggersFragment);
+                //builder.AddBottomFragment(_floodGateFragment);
+                //builder.AddBottomFragment(_floodgateScheduleFragment);
+                //builder.AddBottomFragment(_attachToStreamGaugeButton);
                 return builder.Build();
             }
         }

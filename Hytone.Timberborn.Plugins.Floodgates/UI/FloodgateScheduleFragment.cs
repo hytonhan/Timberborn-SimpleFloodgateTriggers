@@ -13,7 +13,7 @@ using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
-    public class FloodgateScheduleFragment : IEntityPanelFragment
+    public class FloodgateScheduleFragment
     {
         private readonly UIBuilder _builder;
         private VisualElement _root;
@@ -37,16 +37,22 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
+        //public void ClearFragment()
+        //{
+        //    _floodgate = null;
+        //    _floodgateTriggerComponent = null;
+        //    _root.ToggleDisplayStyle(false);
+        //}
         public void ClearFragment()
         {
             _floodgate = null;
             _floodgateTriggerComponent = null;
-            _root.ToggleDisplayStyle(false);
         }
         public VisualElement InitializeFragment()
         {
             var rootBuilder =
                 _builder.CreateFragmentBuilder()
+                        //.ModifyWrapper(builder => builder.SetName)
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
                                                                          name: nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle",
@@ -105,7 +111,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
             _root = rootBuilder.BuildAndInitialize();
 
-            this._root.ToggleDisplayStyle(false);
+            //this._root.ToggleDisplayStyle(false);
 
             _firstScheduleTimeLabel = _root.Q<Label>(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label");
             _firstScheduleTimeSlider = _root.Q<Slider>(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider");
@@ -143,30 +149,71 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// Initial stuff to do when fragment is shown
         /// </summary>
         /// <param name="entity"></param>
-        public void ShowFragment(GameObject entity)
-        {
-            var component = entity.GetComponent<Floodgate>();
-            if ((bool)component)
-            {
-                var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
-                if ((bool)triggerComponent)
-                {
-                    _firstScheduleHeightSlider.highValue = component.MaxHeight;
-                    _firstScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleTime);
-                    _firstScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleHeight);
+        //public void ShowFragment(GameObject entity)
+        //{
+        //    var component = entity.GetComponent<Floodgate>();
+        //    if ((bool)component)
+        //    {
+        //        var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
+        //        if ((bool)triggerComponent)
+        //        {
+        //            _firstScheduleHeightSlider.highValue = component.MaxHeight;
+        //            _firstScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleTime);
+        //            _firstScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleHeight);
 
-                    _secondScheduleHeightSlider.highValue = component.MaxHeight;
-                    _secondScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleTime);
-                    _secondScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleHeight);
+        //            _secondScheduleHeightSlider.highValue = component.MaxHeight;
+        //            _secondScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleTime);
+        //            _secondScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleHeight);
+        //        }
+        //        _floodgateTriggerComponent = triggerComponent;
+        //    }
+        //    _floodgate = component;
+        //}
+        public void ShowFragment(Floodgate floodgate,
+                                 FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
+        {
+            //var component = entity.GetComponent<Floodgate>();
+            if ((bool)floodgate)
+            {
+                //var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
+                if ((bool)floodgateTriggerMonoBehaviour)
+                {
+                    _firstScheduleHeightSlider.highValue = floodgate.MaxHeight;
+                    _firstScheduleTimeSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.FirstScheduleTime);
+                    _firstScheduleHeightSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.FirstScheduleHeight);
+
+                    _secondScheduleHeightSlider.highValue = floodgate.MaxHeight;
+                    _secondScheduleTimeSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.SecondScheduleTime);
+                    _secondScheduleHeightSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.SecondScheduleHeight);
                 }
-                _floodgateTriggerComponent = triggerComponent;
+                _floodgateTriggerComponent = floodgateTriggerMonoBehaviour;
             }
-            _floodgate = component;
+            _floodgate = floodgate;
         }
 
         /// <summary>
         /// Update ui elements when fragment is updated
         /// </summary>
+        //public void UpdateFragment()
+        //{
+        //    if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
+        //    {
+        //        _firstScheduleTimeLabel.text = "Time: " + _firstScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
+        //        _firstScheduleHeightLabel.text = "Height: " + _firstScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
+
+        //        _secondScheduleTimeLabel.text = "Time: " + _secondScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
+        //        _secondScheduleHeightLabel.text = "Height: " + _secondScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
+
+        //        _scheduleEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.ScheduleEnabled);
+        //        _disableScheduleOnDrought.SetValueWithoutNotify(_floodgateTriggerComponent.DisableScheduleOnDrought);
+
+        //        _root.ToggleDisplayStyle(visible: true);
+        //    }
+        //    else
+        //    {
+        //        _root.ToggleDisplayStyle(visible: false);
+        //    }
+        //}
         public void UpdateFragment()
         {
             if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
@@ -179,12 +226,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 _scheduleEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.ScheduleEnabled);
                 _disableScheduleOnDrought.SetValueWithoutNotify(_floodgateTriggerComponent.DisableScheduleOnDrought);
-
-                _root.ToggleDisplayStyle(visible: true);
-            }
-            else
-            {
-                _root.ToggleDisplayStyle(visible: false);
             }
         }
 

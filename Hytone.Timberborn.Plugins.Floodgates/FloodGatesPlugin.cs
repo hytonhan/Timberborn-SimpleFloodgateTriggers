@@ -4,8 +4,16 @@ using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using Hytone.Timberborn.Plugins.Floodgates.Schedule;
 using Hytone.Timberborn.Plugins.Floodgates.UI;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Timberborn.DistributionSystem;
+using Timberborn.EntitySystem;
+using Timberborn.PickObjectToolSystem;
+using Timberborn.WaterBuildings;
 using TimberbornAPI;
 using TimberbornAPI.Common;
+using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates
 {
@@ -40,6 +48,48 @@ namespace Hytone.Timberborn.Plugins.Floodgates
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.EnableOnDroughtEnded", "Set height when drought ends");
             TimberAPI.Localization.AddLabel("Floodgate.Schedule.Enable", "Set height on a schedule");
             TimberAPI.Localization.AddLabel("Floodgate.Schedule.DisableOnDrought", "Disable schedule during drought");
+            TimberAPI.Localization.AddLabel("Floodgate.Triggers.Basic", "Basic");
+            TimberAPI.Localization.AddLabel("Floodgate.Triggers.Advanced", "Advanced");
+            TimberAPI.Localization.AddLabel("Floodgate.Triggers.NewStreamGauge", "Attach Streamgauge");
+            TimberAPI.Localization.AddLabel("Floodgate.Triggers.PickStreamGaugeTitle", "Pick a StreamGauge");
+            TimberAPI.Localization.AddLabel("Floodgate.Triggers.PickStreamGaugeTip", "No really, pick any.");
         }
     }
+
+
+    [HarmonyPatch(typeof(PickObjectTool), nameof(PickObjectTool.Enter))]
+    public static class PickObjectToolPatch
+    {
+        static void Postfix(PickObjectTool __instance)
+        {
+            var foo = from component
+                      in __instance._entityComponentRegistry.GetAll<StreamGaugeMonoBehaviour>()
+                      where component.enabled
+                      select component;
+
+            IEnumerable<GameObject> values = from component
+                                             in __instance._entityComponentRegistry.GetEnabled<StreamGaugeMonoBehaviour>()
+                                             select component.gameObject;
+
+            FloodGatesPlugin.Logger.LogInfo($"value count: {values.Count()}");
+            FloodGatesPlugin.Logger.LogInfo($"value count2: {foo.Count()}");
+            FloodGatesPlugin.Logger.LogInfo($"value count: ");
+
+
+            IEnumerable<GameObject> values2 = from component
+                                              in __instance._entityComponentRegistry.GetEnabled<DropOffPoint>()
+                                              select component.gameObject;
+
+            FloodGatesPlugin.Logger.LogInfo($"value count3: {values2.Count()}");
+        }
+    }
+
+    //[HarmonyPatch(typeof(EntityComponentRegistry), MethodType.Constructor, new Type[] {typeof(RegisteredComponentService) })]
+    //public static class EntityComponentRegistryPatch
+    //{
+    //    static void Postfix(EntityComponentRegistry __instance)
+    //    {
+    //        FloodGatesPlugin.Logger.LogInfo("EntityComponentRegistry!");
+    //    }
+    //}
 }

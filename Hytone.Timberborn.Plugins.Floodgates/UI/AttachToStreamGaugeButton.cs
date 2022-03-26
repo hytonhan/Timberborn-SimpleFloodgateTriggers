@@ -41,7 +41,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                Func<FloodgateTriggerMonoBehaviour> floodgateProvider, 
                                Action createdRouteCallback)
         {
-            _button = root.Q<Button>(nameof(AttachToStreamGaugeButton));
+            _button = root.Q<Button>("NewStreamGaugeButton");
             _button.clicked += delegate
             {
                 StartAttachStreamGauge(floodgateProvider(), createdRouteCallback);
@@ -62,7 +62,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _button.SetEnabled(currentGauges < maxGauges);
         }
 
-        private void StartAttachStreamGauge(FloodgateTriggerMonoBehaviour floodgate, Action createdRouteCallback)
+        private void StartAttachStreamGauge(FloodgateTriggerMonoBehaviour floodgate, Action createdLinkCallback)
         {
             _pickObjectTool.StartPicking<StreamGaugeMonoBehaviour>(
                 _loc.T(PickStreamGaugeTitleLocKey), 
@@ -70,21 +70,22 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 (GameObject gameObject) => ValidateStreamGauge(floodgate, gameObject), 
                 delegate (GameObject streamGauge)
             {
-                FinishDropOffPointSelection(floodgate, streamGauge, createdRouteCallback);
+                FinishStreamGaugeSelection(floodgate, streamGauge, createdLinkCallback);
             });
             _selectionManager.Select(floodgate.gameObject);
         }
 
         private string ValidateStreamGauge(FloodgateTriggerMonoBehaviour floodgate, GameObject gameObject)
         {
-            FloodgateTriggerMonoBehaviour component = gameObject.GetComponent<FloodgateTriggerMonoBehaviour>();
+            StreamGaugeMonoBehaviour streamGaugeComponent = gameObject.GetComponent<StreamGaugeMonoBehaviour>();
+            //FloodgateTriggerMonoBehaviour component = gameObject.GetComponent<FloodgateTriggerMonoBehaviour>();
             //if (!floodgate.CanCompleteRoute(component))
             //{
             //    return _loc.T(PickDropOffPointWarningLocKey);
             //}
             return "";
         }
-        private void FinishDropOffPointSelection(FloodgateTriggerMonoBehaviour floodgate, GameObject streamGauge, Action attachedStreamGaugeCallback)
+        private void FinishStreamGaugeSelection(FloodgateTriggerMonoBehaviour floodgate, GameObject streamGauge, Action attachedStreamGaugeCallback)
         {
             StreamGauge streamGaugeComponent = streamGauge.GetComponent<StreamGauge>();
             attachedStreamGaugeCallback();
