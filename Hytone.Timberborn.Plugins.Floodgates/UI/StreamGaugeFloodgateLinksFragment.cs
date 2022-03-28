@@ -1,22 +1,13 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
-using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using Timberborn.AssetSystem;
 using Timberborn.Common;
 using Timberborn.CoreUI;
 using Timberborn.EntityPanelSystem;
-using Timberborn.EntitySystem;
 using Timberborn.SelectionSystem;
-using Timberborn.SingletonSystem;
-using Timberborn.WaterBuildings;
-using TimberbornAPI.AssetLoaderSystem.AssetSystem;
-using TimberbornAPI.Common;
 using TimberbornAPI.UIBuilderSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -48,8 +39,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _selectionManager = selectionManager;
         }
 
-        //TODO: Add fragment for StreamGauge to show links to Floodagtes!
-
         public VisualElement InitializeFragment()
         {
             _floodgateSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
@@ -57,14 +46,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                 .FirstOrDefault();
             var rootbuilder =
                 _builder.CreateFragmentBuilder()
-                        //.ModifyWrapper(builder => builder.SetFlexDirection(FlexDirection.Row)
-                        //                                 .SetFlexWrap(Wrap.Wrap)
-                        //                                 .SetJustifyContent(Justify.Center))
                         .AddComponent(
                             _builder.CreateComponentBuilder()
                                     .CreateVisualElement()
-                                    //.SetFlexDirection(FlexDirection.Row)
-                                    //.SetFlexWrap(Wrap.Wrap)
                                     .SetJustifyContent(Justify.Center)
                                     .SetName("FloodgatesContainer")
                                     .AddComponent(
@@ -158,13 +142,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
             UpdateFragment();
         }
-
-        //public void ResetLinks()
-        //{
-        //    RemoveAllStreamGaugeViews();
-        //    UpdateLinks();
-        //    UpdateFragment();
-        //}
 
         public void RemoveAllStreamGaugeViews()
         {

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Timberborn.EntityPanelSystem;
+﻿using Timberborn.EntityPanelSystem;
 using Timberborn.CoreUI;
-using Timberborn.DistributionSystem;
-using Timberborn.DistributionSystemUI;
-using Timberborn.EntityPanelSystem;
-using Timberborn.InventorySystemUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
@@ -92,11 +85,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .SetHeight(new Length(420, Pixel))
                                                             .SetPadding(new Padding(new Length(8, Pixel)))
                                                             .Build())
-                                      //.AddPreset(factory => factory.ScrollViews()
-                                      //                             .MainScrollView(name: "BasicTab",
-                                      //                                             height: new Length(300, Pixel),
-                                      //                                             builder: 
-                                      //                                              factory => factory.SetStyle(a => a.paddingTop = new Length(8, Pixel))))
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateVisualElement()
                                                             .SetName("AdvancedTab")

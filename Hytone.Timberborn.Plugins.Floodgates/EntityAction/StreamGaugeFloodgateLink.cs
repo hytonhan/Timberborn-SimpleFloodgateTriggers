@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
+﻿namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
     public class StreamGaugeFloodgateLink
     {

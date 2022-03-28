@@ -1,7 +1,4 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Timberborn.WaterBuildings;
 using UnityEngine.UIElements;
 
@@ -12,7 +9,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private readonly AttachToStreamGaugeButton _attachButton;
         private Floodgate _floodgate;
         private FloodgateTriggerMonoBehaviour _floodgateTriggerMonoBehaviour;
-        //private readonly List<>
+
+        //TODO IS THIS USED ANYWHERE?
 
         public FloodgateUIFragmentLinks(
             AttachToStreamGaugeButton attachButton,

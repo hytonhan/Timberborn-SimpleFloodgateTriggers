@@ -1,26 +1,24 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Timberborn.DistributionSystemUI;
 using Timberborn.Localization;
 using Timberborn.PickObjectToolSystem;
 using Timberborn.SelectionSystem;
 using Timberborn.ToolSystem;
-using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
+    /// <summary>
+    /// Custom button behaviour which handles the linking
+    /// of a Floodgate with a StreamGauge
+    /// </summary>
     public class AttachToStreamGaugeButton
     {
         private static readonly string PickStreamGaugeTipLocKey = "Floodgate.Triggers.PickStreamGaugeTip";
         private static readonly string PickStreamGaugeTitleLocKey = "Floodgate.Triggers.PickStreamGaugeTitle";
-        private static readonly string PickStreamGaugeWarningLocKey = "Floodgate.Triggers.PickStreamGaugeWarning";
         private static readonly string AttachToStreamGaugeLocKey = "Floodgate.Triggers.AttachToStreamGauge";
 
-        //private readonly GoodSelectionBox _goodSelectionBox;
         private readonly ILoc _loc;
         private readonly PickObjectTool _pickObjectTool;
         private readonly SelectionManager _selectionManager;

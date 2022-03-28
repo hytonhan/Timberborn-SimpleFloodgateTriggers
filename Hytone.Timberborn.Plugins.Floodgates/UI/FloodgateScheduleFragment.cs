@@ -1,9 +1,6 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
 using System.Globalization;
-using Timberborn.CoreUI;
-using Timberborn.EntityPanelSystem;
-using Timberborn.SingletonSystem;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
 using TimberbornAPI.UIBuilderSystem;
@@ -37,24 +34,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }
 
-        //public void ClearFragment()
-        //{
-        //    _floodgate = null;
-        //    _floodgateTriggerComponent = null;
-        //    _root.ToggleDisplayStyle(false);
-        //}
         public void ClearFragment()
         {
             _floodgate = null;
             _floodgateTriggerComponent = null;
         }
+
         public VisualElement InitializeFragment()
         {
             var rootBuilder =
                 _builder.CreateComponentBuilder()
                         .CreateVisualElement()
                         .SetMargin(new Margin(new Length(50, Pixel), 0, new Length(50, Pixel), 0))
-                        //.ModifyWrapper(builder => builder.SetName)
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
                                                                          name: nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle",
@@ -113,8 +104,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
             _root = rootBuilder.BuildAndInitialize();
 
-            //this._root.ToggleDisplayStyle(false);
-
             _firstScheduleTimeLabel = _root.Q<Label>(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label");
             _firstScheduleTimeSlider = _root.Q<Slider>(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider");
 
@@ -139,11 +128,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _scheduleEnabledToggle.RegisterValueChangedCallback(ToggleScheduleEnabled);
             _disableScheduleOnDrought.RegisterValueChangedCallback(ToggleDisableScheduleOnDrought);
 
-            //_droughtStartedSlider = _root.Q<Slider>("DroughtStartedSlider");
-            //_droughtStartedEnabledToggle = _root.Q<Toggle>("DroughtStartedEnabled");
-            //_droughtStartedLabel = _root.Q<Label>("DroughtStartedValue");
-            //_droughtStartedSlider.RegisterValueChangedCallback(ChangeDroughtStartedHeight);
-            //_droughtStartedEnabledToggle.RegisterValueChangedCallback(ToggleDroughtStarted);
 
             return _root;
         }
@@ -151,26 +135,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// Initial stuff to do when fragment is shown
         /// </summary>
         /// <param name="entity"></param>
-        //public void ShowFragment(GameObject entity)
-        //{
-        //    var component = entity.GetComponent<Floodgate>();
-        //    if ((bool)component)
-        //    {
-        //        var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
-        //        if ((bool)triggerComponent)
-        //        {
-        //            _firstScheduleHeightSlider.highValue = component.MaxHeight;
-        //            _firstScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleTime);
-        //            _firstScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleHeight);
-
-        //            _secondScheduleHeightSlider.highValue = component.MaxHeight;
-        //            _secondScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleTime);
-        //            _secondScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleHeight);
-        //        }
-        //        _floodgateTriggerComponent = triggerComponent;
-        //    }
-        //    _floodgate = component;
-        //}
         public void ShowFragment(Floodgate floodgate,
                                  FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
         {
@@ -196,26 +160,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <summary>
         /// Update ui elements when fragment is updated
         /// </summary>
-        //public void UpdateFragment()
-        //{
-        //    if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
-        //    {
-        //        _firstScheduleTimeLabel.text = "Time: " + _firstScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
-        //        _firstScheduleHeightLabel.text = "Height: " + _firstScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
-
-        //        _secondScheduleTimeLabel.text = "Time: " + _secondScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
-        //        _secondScheduleHeightLabel.text = "Height: " + _secondScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
-
-        //        _scheduleEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.ScheduleEnabled);
-        //        _disableScheduleOnDrought.SetValueWithoutNotify(_floodgateTriggerComponent.DisableScheduleOnDrought);
-
-        //        _root.ToggleDisplayStyle(visible: true);
-        //    }
-        //    else
-        //    {
-        //        _root.ToggleDisplayStyle(visible: false);
-        //    }
-        //}
         public void UpdateFragment()
         {
             if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)

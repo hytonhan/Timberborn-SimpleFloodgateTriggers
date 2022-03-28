@@ -1,14 +1,15 @@
 ﻿using Bindito.Core;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
 using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
+    /// <summary>
+    /// Custom behaviour we want to add for StreamGauges
+    /// </summary>
     public class StreamGaugeMonoBehaviour : MonoBehaviour, IRegisteredComponent, IFinishedStateListener
 	{
         private List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
@@ -17,7 +18,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private EntityComponentRegistry _entityComponentRegistry;
 		
         [Inject]
-
         public void InjectDependencies(
             EntityComponentRegistry entityComponentRegistry)
         {
@@ -30,12 +30,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             FloodgateLinks = _floodgateLinks.AsReadOnly();
             base.enabled = false;
         }
-
-        //private void Start()
-        //{
-        //    // HACK: No way this is how this is supposed to be used, but hey, it works!
-        //    _entityComponentRegistry.Register(this);
-        //}
 
         public void AttachFloodgate(StreamGaugeFloodgateLink link)
         {

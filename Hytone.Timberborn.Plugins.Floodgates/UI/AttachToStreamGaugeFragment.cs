@@ -4,16 +4,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using Timberborn.AssetSystem;
 using Timberborn.Common;
-using Timberborn.CoreUI;
-using Timberborn.EntityPanelSystem;
-using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.SelectionSystem;
-using Timberborn.SingletonSystem;
 using Timberborn.WaterBuildings;
-using TimberbornAPI.AssetLoaderSystem.AssetSystem;
 using TimberbornAPI.Common;
 using TimberbornAPI.UIBuilderSystem;
 using UnityEngine;
@@ -36,8 +30,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private readonly SelectionManager _selectionManager;
         StreamGaugeFloodgateLinkViewFactory _streamGaugeFloodgateLinkViewFactory;
 
-        //private List<Tuple<Slider, Slider, Slider, Slider>>
-
+        //There has to be a better way for this...
         private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>> _settingsList = new List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>>();
         
         public AttachToStreamGaugeFragment(

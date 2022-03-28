@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Timberborn.Persistence;
+﻿using Timberborn.Persistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
+    /// <summary>
+    /// Defines how a StreamGaugeFloodgateLink instance should be 
+    /// serialized and deserialized
+    /// </summary>
     public class StreamGaugeFloodgateLinkSerializer : IObjectSerializer<StreamGaugeFloodgateLink>
     {
         private static readonly PropertyKey<FloodgateTriggerMonoBehaviour> FloodgateKey = new PropertyKey<FloodgateTriggerMonoBehaviour>("Floodgate");
