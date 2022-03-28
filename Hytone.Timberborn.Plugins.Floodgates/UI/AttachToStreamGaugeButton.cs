@@ -78,21 +78,22 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private string ValidateStreamGauge(FloodgateTriggerMonoBehaviour floodgate, GameObject gameObject)
         {
             StreamGaugeMonoBehaviour streamGaugeComponent = gameObject.GetComponent<StreamGaugeMonoBehaviour>();
-            //FloodgateTriggerMonoBehaviour component = gameObject.GetComponent<FloodgateTriggerMonoBehaviour>();
-            //if (!floodgate.CanCompleteRoute(component))
-            //{
-            //    return _loc.T(PickDropOffPointWarningLocKey);
-            //}
             return "";
         }
-        private void FinishStreamGaugeSelection(FloodgateTriggerMonoBehaviour floodgate, GameObject streamGauge, Action attachedStreamGaugeCallback)
+        private void FinishStreamGaugeSelection(
+            FloodgateTriggerMonoBehaviour floodgate, 
+            GameObject streamGauge, 
+            Action attachedStreamGaugeCallback)
         {
-            StreamGauge streamGaugeComponent = streamGauge.GetComponent<StreamGauge>();
+            StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();
+            floodgate.AttachLink(floodgate, streamGaugeComponent);
             attachedStreamGaugeCallback();
-            //_goodSelectionBox.Show(delegate (GoodSpecification good)
-            //{
-            //    FinishGoodSelection(distributionPost, dropOffPointComponent, good, createdRouteCallback);
-            //});
+        }
+
+        public void UpdateRemainingSlots(int currentLinks, int maxLinks)
+        {
+            _button.text = $"{_loc.T(AttachToStreamGaugeLocKey)} ({currentLinks}/{maxLinks})";
+            _button.SetEnabled(currentLinks < maxLinks);
         }
     }
 }

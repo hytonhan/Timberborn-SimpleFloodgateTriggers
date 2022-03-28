@@ -16,6 +16,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<AttachToStreamGaugeButton>().AsSingleton();
             containerDefinition.Bind<AttachToStreamGaugeFragment>().AsSingleton();
             containerDefinition.Bind<TriggersFragment>().AsSingleton();
+            containerDefinition.Bind<StreamGaugeFloodgateLinkViewFactory>().AsSingleton();
+            containerDefinition.Bind<StreamGaugeFloodgateLinksFragment>().AsSingleton();
             containerDefinition.MultiBind<EntityPanelModule>().ToProvider<EntityPanelModuleProvider>().AsSingleton();
         }
 
@@ -28,21 +30,25 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             private readonly FloodgateScheduleFragment _floodgateScheduleFragment;
             //private readonly AttachToStreamGaugeFragment _attachToStreamGaugeButton;
             private readonly TriggersFragment _triggersFragment;
+            private readonly StreamGaugeFloodgateLinksFragment _streamGaugeFloodgateLinksFragment;
 
             public EntityPanelModuleProvider(FloodGateUIFragment floodGateFragment,
                                              FloodgateScheduleFragment floodgateScheduleFragment,
-                                             TriggersFragment triggersFragment)
+                                             TriggersFragment triggersFragment,
+                                             StreamGaugeFloodgateLinksFragment streamGaugeFloodgateLinksFragment)
             {
                 _floodGateFragment = floodGateFragment ?? throw new ArgumentNullException(nameof(floodGateFragment)); ;
                 _floodgateScheduleFragment = floodgateScheduleFragment;
                 _triggersFragment = triggersFragment;
                 //_attachToStreamGaugeButton = attachToStreamGaugeButton;
+                _streamGaugeFloodgateLinksFragment = streamGaugeFloodgateLinksFragment;
             }
 
             public EntityPanelModule Get()
             {
                 EntityPanelModule.Builder builder = new EntityPanelModule.Builder();
                 builder.AddBottomFragment(_triggersFragment);
+                builder.AddBottomFragment(_streamGaugeFloodgateLinksFragment);
                 //builder.AddBottomFragment(_floodGateFragment);
                 //builder.AddBottomFragment(_floodgateScheduleFragment);
                 //builder.AddBottomFragment(_attachToStreamGaugeButton);

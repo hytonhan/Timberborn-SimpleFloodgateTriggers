@@ -50,6 +50,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public float SecondScheduleTime { get; set; }
         public float SecondScheduleHeight { get; set; }
 
+        public int MaxStreamGaugeLinks = 1;
+
         [Inject]
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
@@ -57,6 +59,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
             _droughtServíce = droughtService;
+        }
+
+        public void Awake()
+        {
+            FloodgateLinks = _floodgateLinks.AsReadOnly();
         }
 
         public void OnEnterFinishedState()
@@ -239,12 +246,27 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
         }
 
+        public void AttachLink(FloodgateTriggerMonoBehaviour floodgate,
+                               StreamGaugeMonoBehaviour streamGauge)
+        {
+
+            var link = new StreamGaugeFloodgateLink(floodgate, streamGauge);
+            _floodgateLinks.Add(link);
+            PostAttachLink(link);
+        }
+
+        public void PostAttachLink(StreamGaugeFloodgateLink link)
+        {
+            link.StreamGauge.AttachFloodgate(link);
+        }
+
         public void DetachLink(StreamGaugeFloodgateLink link)
         {
             if(!_floodgateLinks.Remove(link))
             {
                 throw new InvalidOperationException($"Coudln't remove {link} from {this}, it wasn't added.");
             }
+            PostDetachLink(link);
         }
 
         private void PostDetachLink(StreamGaugeFloodgateLink link)

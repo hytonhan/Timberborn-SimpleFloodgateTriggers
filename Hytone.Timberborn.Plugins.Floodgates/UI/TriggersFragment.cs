@@ -13,6 +13,8 @@ using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using TimberbornAPI.UIBuilderSystem;
 using static UnityEngine.UIElements.Length.Unit;
 using Timberborn.WaterBuildings;
+using TimberbornAPI.Common;
+using Timberborn.Localization;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -20,6 +22,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     {
 
         private readonly UIBuilder _builder;
+        private readonly ILoc _loc;
         private static readonly string SelectedTabButtonCLass = "distribution-post-fragment__tab-button--selected";
 
         private VisualElement _root;
@@ -33,45 +36,35 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private VisualElement _basicTab;
         private VisualElement _advancedTab;
+        private VisualElement _floodgatesLinks;
 
         private AttachToStreamGaugeFragment _attachToStreamGaugeFragment;
         private FloodGateUIFragment _droughtSettingsFragment;
         private FloodgateScheduleFragment _scheduleFragment;
 
+        private bool _lastActiveTabWasBasic = true;
+
         public TriggersFragment(UIBuilder builder,
                                 AttachToStreamGaugeFragment attachToStreamGaugeFragment,
                                 FloodGateUIFragment floodgateUIFragment,
-                                FloodgateScheduleFragment scheduleFragment)
+                                FloodgateScheduleFragment scheduleFragment,
+                                ILoc loc)
         {
             _builder = builder;
-            //_basicButton.style.color
             _attachToStreamGaugeFragment = attachToStreamGaugeFragment;
             _droughtSettingsFragment = floodgateUIFragment;
             _scheduleFragment = scheduleFragment;
+            _loc = loc;
         }
 
         public VisualElement InitializeFragment()
         {
-            //VisualElement child = _builder.CreateFragmentBuilder()
-            //                    .AddPreset(builder => builder.Labels()
-            //                                                    .DefaultBig(text: "Foo"))
-            //                    .BuildAndInitialize();
-            VisualElement child = _builder.CreateComponentBuilder()
-                                          .CreateLabel()
-                                          .AddPreset(builder => builder.Labels()
-                                                                       .DefaultBig(text: "Bar"))
-                                          .BuildAndInitialize();
-
             var rootBuilder = _builder.CreateFragmentBuilder()
                                       .ModifyWrapper(builder => builder.SetFlexDirection(FlexDirection.Row)
                                                                        .SetFlexWrap(Wrap.Wrap)
                                                                        .SetJustifyContent(Justify.Center))
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass(TimberApiStyle.Buttons.Normal.ButtonGame)
-                                                            //.AddClass(TimberApiStyle.Buttons.Hover.ButtonGameHover)
-                                                            //.AddClass(TimberApiStyle.Sounds.Click)
-                                                            //.AddClass(TimberApiStyle.Scales.Scale5)
                                                             .AddClass("distribution-post-fragment__tab-button")
                                                             .AddClass("distribution-post-fragment__tab-button--selected")
                                                             .SetName("BasicButton")
@@ -84,10 +77,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass(TimberApiStyle.Buttons.Normal.ButtonGame)
-                                                            //.AddClass(TimberApiStyle.Buttons.Hover.ButtonGameHover)
-                                                            //.AddClass(TimberApiStyle.Sounds.Click)
-                                                            //.AddClass(TimberApiStyle.Scales.Scale5)
                                                             .AddClass("distribution-post-fragment__tab-button")
                                                             .SetName("AdvancedButton")
                                                             .SetLocKey("Floodgate.Triggers.Advanced")
@@ -97,61 +86,39 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .SetHeight(new Length(29, Pixel))
                                                             .SetWidth(new Length(145, Pixel))
                                                             .Build())
-                                      .AddPreset(factory => factory.ScrollViews()
-                                                                   .MainScrollView(name: "BasicTab",
-                                                                                   height: new Length(300, Pixel)))
-                                      //.AddComponent(builder => builder.AddPreset(factory => factory.ScrollViews()
-                                      //                                                              .MainScrollView(name: "AdvancedTab",
-                                      //                                                                               height: new Length(250, Pixel)))
-                                      //                                .AddComponent(_builder.CreateComponentBuilder()
-                                      //                                                      .CreateButton()
-                                      //                                                      .AddClass("entity-fragment__button")
-                                      //                                                      .AddClass("entity-fragment__button--green")
-                                      //                                                      .SetName("NewStreamGaugeButton")
-                                      //                                                      .SetLocKey("Floodgate.Triggers.NewStreamGauge")
-                                      //                                                      .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
-                                      //                                                      .SetFontSize(new Length(14, Pixel))
-                                      //                                                      .SetFontStyle(FontStyle.Normal)
-                                      //                                                      .SetHeight(new Length(29, Pixel))
-                                      //                                                      .SetWidth(new Length(290, Pixel))
-                                      //                                                      .Build()));
+                                      .AddComponent(_builder.CreateComponentBuilder()
+                                                            .CreateVisualElement()
+                                                            .SetName("BasicTab")
+                                                            .SetHeight(new Length(420, Pixel))
+                                                            .SetPadding(new Padding(new Length(8, Pixel)))
+                                                            .Build())
+                                      //.AddPreset(factory => factory.ScrollViews()
+                                      //                             .MainScrollView(name: "BasicTab",
+                                      //                                             height: new Length(300, Pixel),
+                                      //                                             builder: 
+                                      //                                              factory => factory.SetStyle(a => a.paddingTop = new Length(8, Pixel))))
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateVisualElement()
                                                             .SetName("AdvancedTab")
-                                                            .SetHeight(new Length(300, Pixel))
-                                                            .AddComponent(builder => builder.AddPreset(factory => factory.ScrollViews()
-                                                                                            .MainScrollView(name: "AdvancedScroll",
-                                                                                                            height: new Length(250, Pixel)))
+                                                            .SetPadding(new Padding(new Length(8, Pixel), 0, 0, 0))
+                                                            .AddComponent(builder => builder.AddComponent(_builder.CreateComponentBuilder()
+                                                                                                                  .CreateVisualElement()
+                                                                                                                  .SetName("Placeholder")
+                                                                                                                  .BuildAndInitialize())
                                                                                             .AddComponent(_builder.CreateComponentBuilder()
                                                                                                                   .CreateButton()
                                                                                                                   .AddClass("entity-fragment__button")
                                                                                                                   .AddClass("entity-fragment__button--green")
                                                                                                                   .SetName("NewStreamGaugeButton")
-                                                                                                                  .SetLocKey("Floodgate.Triggers.NewStreamGauge")
+                                                                                                                  //.SetLocKey("Floodgate.Triggers.NewStreamGauge")
+                                                                                                                  //.SetText($"{_loc.T("Floodgate.Triggers.NewStreamGauge")}"
                                                                                                                   .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
-                                                                                                                  .SetFontSize(new Length(14, Pixel))
+                                                                                                                  .SetFontSize(new Length(13, Pixel))
                                                                                                                   .SetFontStyle(FontStyle.Normal)
                                                                                                                   .SetHeight(new Length(29, Pixel))
                                                                                                                   .SetWidth(new Length(290, Pixel))
                                                                                                                   .Build()))
                                                             .BuildAndInitialize());
-
-
-            //.AddPreset(factory => factory.Buttons)                             
-            //.AddPreset(factory => factory.Buttons().ButtonGame(locKey: "Floodgate.Triggers.Basic",
-            //                                                   name: "BasicButton",
-            //                                                   width: new Length(147, Pixel),
-            //                                                   height: new Length(29,  Pixel),
-            //                                                   fontStyle: FontStyle.Normal
-            //                                                   ))
-            //.AddPreset(factory => factory.Buttons().ButtonGame(locKey: "Floodgate.Triggers.Advanced",
-            //                                                   name: "AdvancedButton",
-            //                                                   width: new Length(147, Pixel),
-            //                                                   height: new Length(29,  Pixel),
-            //                                                   fontStyle: FontStyle.Italic
-            //                                                   ));
-
-
 
             _root = rootBuilder.BuildAndInitialize();
             this._root.ToggleDisplayStyle(false);
@@ -161,12 +128,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _basicTab.Add(_scheduleFragment.InitializeFragment());
 
             _advancedTab = _root.Q<VisualElement>("AdvancedTab");
-            _advancedTab.Add(_attachToStreamGaugeFragment.InitiliazeFragment(_root));
+            _floodgatesLinks = _root.Q<VisualElement>("Placeholder");
+            _floodgatesLinks.Add(_attachToStreamGaugeFragment.InitiliazeFragment(_root));
 
             _basicButton = _root.Q<Button>("BasicButton");
-            _basicButton.clicked += () => SwitchTriggerTab(true);
+            _basicButton.clicked += () => 
+            {
+                _lastActiveTabWasBasic = true;
+                SwitchTriggerTab(_lastActiveTabWasBasic);
+            };
             _advancedButton = _root.Q<Button>("AdvancedButton");
-            _advancedButton.clicked += () => SwitchTriggerTab(false);
+            _advancedButton.clicked += () =>
+            {
+                _lastActiveTabWasBasic = false;
+                SwitchTriggerTab(_lastActiveTabWasBasic);
+            };
 
             _newButton = _root.Q<Button>("NewStreamGaugeButton");
 
@@ -182,7 +158,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _droughtSettingsFragment.ShowFragment(_floodgate, _floodgateTriggerMonoBehaviour);
                 _scheduleFragment.ShowFragment(_floodgate, _floodgateTriggerMonoBehaviour);
                 _attachToStreamGaugeFragment.ShowFragment(_floodgateTriggerMonoBehaviour);
-                SwitchTriggerTab(true);
+                SwitchTriggerTab(_lastActiveTabWasBasic);
             }
         }
 
@@ -197,7 +173,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public void UpdateFragment()
         {
-            if((bool)_floodgateTriggerMonoBehaviour)
+            if ((bool)_floodgateTriggerMonoBehaviour)
             {
                 _droughtSettingsFragment.UpdateFragment();
                 _scheduleFragment.UpdateFragment();

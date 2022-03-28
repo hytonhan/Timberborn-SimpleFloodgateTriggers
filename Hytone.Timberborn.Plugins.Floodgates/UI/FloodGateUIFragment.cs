@@ -57,7 +57,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public VisualElement InitializeFragment()
         {
             _root =
-                _builder.CreateFragmentBuilder()
+                _builder.CreateComponentBuilder()
+                        .CreateVisualElement()
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtEnded",
                                                                          name: "DroughtEndedEnabled",

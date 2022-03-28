@@ -27,6 +27,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         private void Awake()
         {
+            FloodgateLinks = _floodgateLinks.AsReadOnly();
             base.enabled = false;
         }
 
@@ -36,12 +37,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         //    _entityComponentRegistry.Register(this);
         //}
 
-		public void AttachFloodgate(StreamGaugeFloodgateLink link)
+        public void AttachFloodgate(StreamGaugeFloodgateLink link)
         {
-			_floodgateLinks.Add(link);
+            _floodgateLinks.Add(link);
 
-		}
-		public void DetachFloodgate(StreamGaugeFloodgateLink link)
+        }
+
+        public void DetachFloodgate(StreamGaugeFloodgateLink link)
         {
 			_floodgateLinks.Remove(link);
 		}

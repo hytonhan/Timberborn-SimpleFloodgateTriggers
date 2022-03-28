@@ -50,9 +50,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates
             TimberAPI.Localization.AddLabel("Floodgate.Schedule.DisableOnDrought", "Disable schedule during drought");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.Basic", "Basic");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.Advanced", "Advanced");
-            TimberAPI.Localization.AddLabel("Floodgate.Triggers.NewStreamGauge", "Attach Streamgauge");
+            TimberAPI.Localization.AddLabel("Floodgate.Triggers.AttachToStreamGauge", "Attach Streamgauge");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.PickStreamGaugeTitle", "Pick a StreamGauge");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.PickStreamGaugeTip", "No really, pick any.");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.NoLinks", "No Streamgauges attached");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.NoFloodgateLinks", "No Floodgates attached");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.LinkedFloodgates", "Linked Floodgates");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.Threshold1", "Streamgauge threshold 1");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.Threshold2", "Streamgauge threshold 2");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.HeightWhenBelowThreshold1", "Floodgate height when below threshold 1");
         }
     }
 

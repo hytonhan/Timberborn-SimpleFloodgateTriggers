@@ -10,6 +10,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         public StreamGaugeMonoBehaviour StreamGauge { get; }
 
-
+        public StreamGaugeFloodgateLink(
+            FloodgateTriggerMonoBehaviour floodgate,
+            StreamGaugeMonoBehaviour streamGauge)
+        {
+            Floodgate = floodgate;
+            StreamGauge = streamGauge;
+        }
     }
 }

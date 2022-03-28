@@ -51,7 +51,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public VisualElement InitializeFragment()
         {
             var rootBuilder =
-                _builder.CreateFragmentBuilder()
+                _builder.CreateComponentBuilder()
+                        .CreateVisualElement()
+                        .SetMargin(new Margin(new Length(50, Pixel), 0, new Length(50, Pixel), 0))
                         //.ModifyWrapper(builder => builder.SetName)
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
