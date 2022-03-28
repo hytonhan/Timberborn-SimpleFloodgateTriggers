@@ -28,7 +28,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             private readonly FloodGateUIFragment _floodGateFragment;
             private readonly FloodgateScheduleFragment _floodgateScheduleFragment;
-            //private readonly AttachToStreamGaugeFragment _attachToStreamGaugeButton;
             private readonly TriggersFragment _triggersFragment;
             private readonly StreamGaugeFloodgateLinksFragment _streamGaugeFloodgateLinksFragment;
 
@@ -49,9 +48,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 EntityPanelModule.Builder builder = new EntityPanelModule.Builder();
                 builder.AddBottomFragment(_triggersFragment);
                 builder.AddBottomFragment(_streamGaugeFloodgateLinksFragment);
-                //builder.AddBottomFragment(_floodGateFragment);
-                //builder.AddBottomFragment(_floodgateScheduleFragment);
-                //builder.AddBottomFragment(_attachToStreamGaugeButton);
                 return builder.Build();
             }
         }

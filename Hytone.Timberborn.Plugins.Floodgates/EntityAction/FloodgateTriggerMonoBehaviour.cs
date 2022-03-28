@@ -31,6 +31,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<bool> ScheduleEnabledKey = new PropertyKey<bool>(nameof(ScheduleEnabled));
         private static readonly PropertyKey<bool> DisableScheduleOnDroughtKey = new PropertyKey<bool>(nameof(DisableScheduleOnDrought));
 
+        private static readonly ListKey<StreamGaugeFloodgateLink> FloodgateLinksKey = new ListKey<StreamGaugeFloodgateLink>(nameof(FloodgateLinks));
+
         private IScheduleTriggerFactory _scheduleTriggerFactory;
         private IScheduleTrigger _scheduleTrigger;
         private DroughtService _droughtServíce;
@@ -97,6 +99,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             component.Set(SecondScheduleHeightKey, SecondScheduleHeight);
             component.Set(ScheduleEnabledKey, ScheduleEnabled);
             component.Set(DisableScheduleOnDroughtKey, DisableScheduleOnDrought);
+            component.Set(FloodgateLinksKey, FloodgateLinks);
         }
 
         /// <summary>
@@ -149,6 +152,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if (component.Has(DisableScheduleOnDroughtKey))
             {
                 DisableScheduleOnDrought = component.Get(DisableScheduleOnDroughtKey);
+            }
+            if (component.Has(FloodgateLinksKey))
+            {
+                _floodgateLinks.AddRange(component.Get(FloodgateLinksKey));
+
+                foreach(var link in FloodgateLinks)
+                {
+                    PostAttachLink(link);
+                }
             }
         }
 

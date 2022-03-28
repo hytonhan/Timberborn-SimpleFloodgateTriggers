@@ -56,46 +56,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates
             TimberAPI.Localization.AddLabel("Floodgates.Triggers.NoLinks", "No Streamgauges attached");
             TimberAPI.Localization.AddLabel("Floodgates.Triggers.NoFloodgateLinks", "No Floodgates attached");
             TimberAPI.Localization.AddLabel("Floodgates.Triggers.LinkedFloodgates", "Linked Floodgates");
-            TimberAPI.Localization.AddLabel("Floodgates.Triggers.Threshold1", "Streamgauge threshold 1");
-            TimberAPI.Localization.AddLabel("Floodgates.Triggers.Threshold2", "Streamgauge threshold 2");
-            TimberAPI.Localization.AddLabel("Floodgates.Triggers.HeightWhenBelowThreshold1", "Floodgate height when below threshold 1");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.Threshold1", "Streamgauge low threshold");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.Threshold2", "Streamgauge high threshold");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.HeightWhenBelowThreshold1", "Floodgate height below low threshold");
+            TimberAPI.Localization.AddLabel("Floodgates.Triggers.HeightWhenAboveThreshold2", "Floodgate height above high threshold");
         }
     }
-
-
-    [HarmonyPatch(typeof(PickObjectTool), nameof(PickObjectTool.Enter))]
-    public static class PickObjectToolPatch
-    {
-        static void Postfix(PickObjectTool __instance)
-        {
-            var foo = from component
-                      in __instance._entityComponentRegistry.GetAll<StreamGaugeMonoBehaviour>()
-                      where component.enabled
-                      select component;
-
-            IEnumerable<GameObject> values = from component
-                                             in __instance._entityComponentRegistry.GetEnabled<StreamGaugeMonoBehaviour>()
-                                             select component.gameObject;
-
-            FloodGatesPlugin.Logger.LogInfo($"value count: {values.Count()}");
-            FloodGatesPlugin.Logger.LogInfo($"value count2: {foo.Count()}");
-            FloodGatesPlugin.Logger.LogInfo($"value count: ");
-
-
-            IEnumerable<GameObject> values2 = from component
-                                              in __instance._entityComponentRegistry.GetEnabled<DropOffPoint>()
-                                              select component.gameObject;
-
-            FloodGatesPlugin.Logger.LogInfo($"value count3: {values2.Count()}");
-        }
-    }
-
-    //[HarmonyPatch(typeof(EntityComponentRegistry), MethodType.Constructor, new Type[] {typeof(RegisteredComponentService) })]
-    //public static class EntityComponentRegistryPatch
-    //{
-    //    static void Postfix(EntityComponentRegistry __instance)
-    //    {
-    //        FloodGatesPlugin.Logger.LogInfo("EntityComponentRegistry!");
-    //    }
-    //}
 }
