@@ -3,8 +3,8 @@
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
     /// <summary>
-    /// Defines how a StreamGaugeFloodgateLink instance should be 
-    /// serialized and deserialized
+    /// Defines how a StreamGaugeFloodgateLink instance 
+    /// should be serialized and deserialized
     /// </summary>
     public class StreamGaugeFloodgateLinkSerializer : IObjectSerializer<StreamGaugeFloodgateLink>
     {

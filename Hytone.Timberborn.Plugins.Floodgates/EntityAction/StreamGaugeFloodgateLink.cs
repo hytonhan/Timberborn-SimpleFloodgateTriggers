@@ -1,5 +1,8 @@
 ﻿namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
+    /// <summary>
+    /// Represents a link between a Floodgate and a Streamgauge
+    /// </summary>
     public class StreamGaugeFloodgateLink
     {
         public FloodgateTriggerMonoBehaviour Floodgate { get; }

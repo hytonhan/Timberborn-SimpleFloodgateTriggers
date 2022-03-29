@@ -45,7 +45,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             var rootBuilder =
                 _builder.CreateComponentBuilder()
                         .CreateVisualElement()
-                        .SetMargin(new Margin(new Length(50, Pixel), 0, new Length(50, Pixel), 0))
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
                                                                          name: nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle",
@@ -99,8 +98,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    1f,
                                                                    name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
-                        ;
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))));
 
             _root = rootBuilder.BuildAndInitialize();
 

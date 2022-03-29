@@ -39,7 +39,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _floodGateFragment = floodGateFragment ?? throw new ArgumentNullException(nameof(floodGateFragment)); ;
                 _floodgateScheduleFragment = floodgateScheduleFragment;
                 _triggersFragment = triggersFragment;
-                //_attachToStreamGaugeButton = attachToStreamGaugeButton;
                 _streamGaugeFloodgateLinksFragment = streamGaugeFloodgateLinksFragment;
             }
 

@@ -11,11 +11,14 @@ using Timberborn.Localization;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
-    internal class TriggersFragment : IEntityPanelFragment
+    /// <summary>
+    /// The container fragment that holds all the trigger related
+    /// UI Element related to a Floodgate
+    /// </summary>
+    public class TriggersFragment : IEntityPanelFragment
     {
 
         private readonly UIBuilder _builder;
-        private readonly ILoc _loc;
         private static readonly string SelectedTabButtonCLass = "distribution-post-fragment__tab-button--selected";
 
         private VisualElement _root;
@@ -40,14 +43,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public TriggersFragment(UIBuilder builder,
                                 AttachToStreamGaugeFragment attachToStreamGaugeFragment,
                                 FloodGateUIFragment floodgateUIFragment,
-                                FloodgateScheduleFragment scheduleFragment,
-                                ILoc loc)
+                                FloodgateScheduleFragment scheduleFragment)
         {
             _builder = builder;
             _attachToStreamGaugeFragment = attachToStreamGaugeFragment;
             _droughtSettingsFragment = floodgateUIFragment;
             _scheduleFragment = scheduleFragment;
-            _loc = loc;
         }
 
         public VisualElement InitializeFragment()
@@ -98,8 +99,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                                                   .AddClass("entity-fragment__button")
                                                                                                                   .AddClass("entity-fragment__button--green")
                                                                                                                   .SetName("NewStreamGaugeButton")
-                                                                                                                  //.SetLocKey("Floodgate.Triggers.NewStreamGauge")
-                                                                                                                  //.SetText($"{_loc.T("Floodgate.Triggers.NewStreamGauge")}"
                                                                                                                   .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
                                                                                                                   .SetFontSize(new Length(13, Pixel))
                                                                                                                   .SetFontStyle(FontStyle.Normal)

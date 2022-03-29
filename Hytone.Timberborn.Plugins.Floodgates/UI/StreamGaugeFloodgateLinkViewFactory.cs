@@ -6,6 +6,9 @@ using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
+    /// <summary>
+    /// Handles the creation of new floodgate-streamgauge link views.
+    /// </summary>
     public class StreamGaugeFloodgateLinkViewFactory
     {
         private readonly UIBuilder _builder;
@@ -15,7 +18,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _builder = builder;
         }
 
-
+        /// <summary>
+        /// Create a link view that is shown on the Floodgate's fragment
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public VisualElement CreateViewForFloodgate(int index)
         {
             var foo = _builder.CreateComponentBuilder()
@@ -140,6 +147,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             return foo;
         }
 
+        /// <summary>
+        /// Createa a link view that is shown on the StreamGauge's fragment
+        /// </summary>
+        /// <returns></returns>
         public VisualElement CreateViewForStreamGauge()
         {
             var foo = _builder.CreateComponentBuilder()

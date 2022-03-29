@@ -257,6 +257,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
         }
 
+        /// <summary>
+        /// Creates a link between a Floodgate and Streamgauge
+        /// </summary>
+        /// <param name="floodgate"></param>
+        /// <param name="streamGauge"></param>
         public void AttachLink(FloodgateTriggerMonoBehaviour floodgate,
                                StreamGaugeMonoBehaviour streamGauge)
         {
@@ -266,11 +271,20 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             PostAttachLink(link);
         }
 
+        /// <summary>
+        /// Do the linking at the streamgauge's end too
+        /// </summary>
+        /// <param name="link"></param>
         public void PostAttachLink(StreamGaugeFloodgateLink link)
         {
             link.StreamGauge.AttachFloodgate(link);
         }
 
+        /// <summary>
+        /// Deletes a link between a Floodgate and Streamgauge
+        /// </summary>
+        /// <param name="link"></param>
+        /// <exception cref="InvalidOperationException"></exception>
         public void DetachLink(StreamGaugeFloodgateLink link)
         {
             if(!_floodgateLinks.Remove(link))
@@ -280,6 +294,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             PostDetachLink(link);
         }
 
+        /// <summary>
+        /// Remvoes the link from Streamgauge's end too
+        /// </summary>
+        /// <param name="link"></param>
         private void PostDetachLink(StreamGaugeFloodgateLink link)
         {
             link.StreamGauge.DetachFloodgate(link);

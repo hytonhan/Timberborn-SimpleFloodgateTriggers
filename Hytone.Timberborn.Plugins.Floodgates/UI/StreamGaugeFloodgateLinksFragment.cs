@@ -14,7 +14,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     public class StreamGaugeFloodgateLinksFragment : IEntityPanelFragment
     {
         private readonly UIBuilder _builder;
-        private FloodgateTriggerMonoBehaviour _floodgateTriggerMonoBehaviour;
 
         private VisualElement _root;
         private ScrollView _floodgatesLinks;
@@ -23,7 +22,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private StreamGaugeMonoBehaviour _streamGaugeMonoBehaviour;
 
         private VisualElement _linksView;
-        //private Label _noLinks;
         private Sprite _floodgateSprite;
 
         StreamGaugeFloodgateLinkViewFactory _streamGaugeFloodgateLinkViewFactory;
@@ -84,6 +82,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _root.ToggleDisplayStyle(visible: false);
             return _root;
         }
+
         public void ShowFragment(GameObject entity)
         {
             _streamGaugeMonoBehaviour = entity.GetComponent<StreamGaugeMonoBehaviour>();
@@ -106,6 +105,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
         }
 
+        /// <summary>
+        /// Creates view for all existing floodgate links
+        /// </summary>
         public void UpdateLinks()
         {
             ReadOnlyCollection<StreamGaugeFloodgateLink> links = _streamGaugeMonoBehaviour.FloodgateLinks;
@@ -143,6 +145,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             UpdateFragment();
         }
 
+        /// <summary>
+        /// Removes all existing floodagate link views
+        /// </summary>
         public void RemoveAllStreamGaugeViews()
         {
             _linksView.Clear();

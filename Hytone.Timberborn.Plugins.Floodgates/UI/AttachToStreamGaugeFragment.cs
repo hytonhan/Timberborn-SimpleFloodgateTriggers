@@ -125,6 +125,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
         }
 
+        /// <summary>
+        /// Creates a little view for every existing floodgate-streamague link
+        /// </summary>
         public void AddAllStreamGaugeViews()
         {
             ReadOnlyCollection<StreamGaugeFloodgateLink> links = _floodgateTriggerMonoBehaviour.FloodgateLinks;
@@ -180,7 +183,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
         }
 
-        public void ChangeThresholdSlider(ChangeEvent<float> changeEvent, int index, int sliderIndex)
+        /// <summary>
+        /// Generic logic for when a threshold slider is changed
+        /// </summary>
+        /// <param name="changeEvent"></param>
+        /// <param name="index"></param>
+        /// <param name="sliderIndex"></param>
+        public void ChangeThresholdSlider(ChangeEvent<float> changeEvent, 
+                                          int index, 
+                                          int sliderIndex)
         {
             Slider slider;
             if (sliderIndex == 0)
@@ -196,23 +207,33 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             slider.SetValueWithoutNotify(changeEvent.newValue);
         }
 
+        /// <summary>
+        /// Generic logic for when a height slider is changed
+        /// </summary>
+        /// <param name="changeEvent"></param>
+        /// <param name="index"></param>
+        /// <param name="heightIndex"></param>
         public void ChangeHeightSlider(ChangeEvent<float> changeEvent, int index, int heightIndex)
         {
             Slider slider;
             if (heightIndex == 0)
             {
                 slider = _settingsList[index].Item6;
-                var num = UpdateDroughtStartedSliderValue(slider, changeEvent.newValue);
+                var num = UpdateHeightSliderValue(slider, changeEvent.newValue);
                 _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Height1 = num;
             }
             else
             {
                 slider = _settingsList[index].Rest.Item1;
-                var num = UpdateDroughtStartedSliderValue(slider, changeEvent.newValue);
+                var num = UpdateHeightSliderValue(slider, changeEvent.newValue);
                 _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Height2 = num;
             }
         }
 
+        /// <summary>
+        /// Removes the existing link views and builds
+        /// them again
+        /// </summary>
         public void ResetLinks()
         {
             RemoveAllStreamGaugeViews();
@@ -220,12 +241,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             UpdateFragment();
         }
 
+        /// <summary>
+        /// Removes all the existing link views
+        /// </summary>
         public void RemoveAllStreamGaugeViews()
         {
             _linksScrollView.Clear();
         }
-
-        private float UpdateDroughtStartedSliderValue(Slider slider, float value)
+        
+        /// <summary>
+        /// Makes the height slider work in increments of 0.5
+        /// </summary>
+        /// <param name="slider"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private float UpdateHeightSliderValue(Slider slider, float value)
         {
             float num = Mathf.Round(value * 2f) / 2f;
             slider.SetValueWithoutNotify(num);
