@@ -5,8 +5,8 @@ when a Drought starts or ends, based on a basic schedule or based on a Streamgau
 # Usage
 The will add a simple UI fragment on the Floodgate UI. Example images below.
 
-![BasicTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/streamgauge/attachments/BasicTab.PNG?raw=true)
-![AdvancedTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/streamgauge/attachments/AdvancedTab.PNG)
+![BasicTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/BasicTab.PNG?raw=true)
+![AdvancedTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/AdvancedTab.PNG)
 
 Bear in mind that it is possible to create some very janky setups with enabling multiple triggers on the same floodgates. Automation is
 nice, but it isn't magic. Be careful, or you'll end up drying/flooding everything!
@@ -19,7 +19,7 @@ The fist settings on the Basic tab are related to Droughts. The available settin
 - The height to set when drought starts
 
 ## Schedule
-The basic tab also contains the settings for automatiing floodgates based on a schedule.
+The basic tab also contains the settings for automating floodgates based on a schedule.
 - Enable Schedule based setting of height
 - Optionally disable schedule during droughts
 - The times and heights for the schedule
@@ -27,12 +27,16 @@ The basic tab also contains the settings for automatiing floodgates based on a s
 	once the schedule has been running in peace for a while.
 
 ## Linking a StreamGauge
-On the Advanced you can link a Floodgate with a StreamGauge. This allows you to control the Floodagte based on the water depth 
+On the Advanced you can link a Floodgate with a StreamGauge. This allows you to control the Floodgate based on the water depth 
 recorded by the  StreamGauge. The available settins are:
 - Low threshold: Set the floodgate height when water depth is below this value
 - Low threshold height: The height to set when the water depth is below the chosen low threshold
 - High threshold: Set the floodgate height when water depth is above this value
 - High threshold height: The height to set when the water depth is above the chosen high threshold
+
+IMPORTANT! Be aware that if a StreamGauge is linked, then the Floodgate's height will be set always when below low or above high threshold, instead
+of triggering once when the thresholds are crossed.
+
 Curretly you can only link a single StreamGague with a Floodgate. However, there is no limit with how many Floodgates can be connected to a certain StreamGauge.
 
 # Known Limitations
@@ -49,12 +53,12 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 # Changelog
 
 ## 1.0.0 - 29.3.2022
--Added option to link Floodgates with StreamGauges
-	-This allows to set Floodgate's height when StreamGagues depth is below or above chosen thresholds
--UI Overhaul
-	-Added 2 tabs: Basic and Advanced
-	-Basic tab contains Drought and Schedule settings
-	-Advanced tab contains StreamGague links
+- Added option to link Floodgates with StreamGauges
+	- This allows to set Floodgate's height when StreamGagues depth is below or above chosen thresholds
+- UI Overhaul
+	- Added 2 tabs: Basic and Advanced
+	- Basic tab contains Drought and Schedule settings
+	- Advanced tab contains StreamGague links
 
 ## 0.2.0 - 22.3.2022
 - Added Schedule based setting of Floodgate height
