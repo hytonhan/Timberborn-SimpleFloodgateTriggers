@@ -16,7 +16,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     /// <summary>
     /// Custom UI Fragment that is added to Floodgate UI
     /// </summary>
-    public class FloodGateUIFragment : IEntityPanelFragment
+    public class FloodGateUIFragment
     {
         private readonly UIBuilder _builder;
         private VisualElement _root;
@@ -109,24 +109,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// Initial stuff to do when fragment is shown
         /// </summary>
         /// <param name="entity"></param>
-        public void ShowFragment(GameObject entity)
-        {
-            var component = entity.GetComponent<Floodgate>();
-            if ((bool)component)
-            {
-                var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
-                if ((bool)triggerComponent)
-                {
-                    _droughtEndedSlider.highValue = component.MaxHeight;
-                    _droughtEndedSlider.SetValueWithoutNotify(triggerComponent.DroughtEndedHeight);
-
-                    _droughtStartedSlider.highValue = component.MaxHeight;
-                    _droughtStartedSlider.SetValueWithoutNotify(triggerComponent.DroughtStartedHeight);
-                }
-                _floodgateTriggerComponent = triggerComponent;
-            }
-            _floodgate = component;
-        }
         public void ShowFragment(Floodgate floodgate,
                                  FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
         {

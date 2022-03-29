@@ -65,7 +65,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _attachToStreamGaugeButton.Initialize(parent, () => _floodgateTriggerMonoBehaviour, delegate
             {
                 RemoveAllStreamGaugeViews();
-                AddAllStreamGaugeViews();
+                //AddAllStreamGaugeViews();
+                ShowFragment(_floodgateTriggerMonoBehaviour);
             });
 
             _noLinks = _builder.CreateComponentBuilder()
