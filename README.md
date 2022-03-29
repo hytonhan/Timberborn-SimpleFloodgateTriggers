@@ -37,7 +37,7 @@ recorded by the  StreamGauge. The available settins are:
 IMPORTANT! Be aware that if a StreamGauge is linked, then the Floodgate's height will be set always when below low or above high threshold, instead
 of triggering once when the thresholds are crossed.
 
-Curretly you can only link a single StreamGague with a Floodgate. However, there is no limit with how many Floodgates can be connected to a certain StreamGauge.
+Curretly you can only link a single StreamGauge with a Floodgate. However, there is no limit with how many Floodgates can be connected to a certain StreamGauge.
 
 # Known Limitations
 1. The trigger settings are NOT synchronized to neighboring Floodgates. This might be fixed in the future
