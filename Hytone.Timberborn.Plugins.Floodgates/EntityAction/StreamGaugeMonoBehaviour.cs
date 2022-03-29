@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
+using Timberborn.TickSystem;
+using Timberborn.WaterBuildings;
 using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
@@ -10,12 +12,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     /// <summary>
     /// Custom behaviour we want to add for StreamGauges
     /// </summary>
-    public class StreamGaugeMonoBehaviour : MonoBehaviour, IRegisteredComponent, IFinishedStateListener
+    public class StreamGaugeMonoBehaviour : TickableComponent, IRegisteredComponent, IFinishedStateListener
 	{
         private List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
         public ReadOnlyCollection<StreamGaugeFloodgateLink> FloodgateLinks { get; private set; }
 
         private EntityComponentRegistry _entityComponentRegistry;
+
+        private StreamGauge _streamGauge;
 		
         [Inject]
         public void InjectDependencies(
@@ -55,6 +59,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             base.enabled = true;
             _entityComponentRegistry.Register(this);
+            _streamGauge = this.GetComponent<StreamGauge>();
         }
 
         public void OnExitFinishedState()
@@ -62,6 +67,30 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             base.enabled = false;
             _entityComponentRegistry.Unregister(this);
             DetachAllFloodgates();
+            _streamGauge = null;
+        }
+
+        /// <summary>
+        /// Check every tick if streamgauge is linked to a floodagte
+        /// and if the floodgate's height should be altered
+        /// </summary>
+        public override void Tick()
+        {
+            var currHeight = _streamGauge.WaterLevel;
+            foreach(var link in FloodgateLinks)
+            {
+                if (currHeight <= link.Threshold1)
+                {
+                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
+                    floodgate.SetHeight(link.Height1);
+                    continue;
+                }
+                if (currHeight >= link.Threshold2)
+                {
+                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
+                    floodgate.SetHeight(link.Height2);
+                }
+            }
         }
     }
 }
