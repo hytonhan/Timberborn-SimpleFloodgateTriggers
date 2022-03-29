@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
+﻿namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
 {
     public interface IScheduleTrigger
     {

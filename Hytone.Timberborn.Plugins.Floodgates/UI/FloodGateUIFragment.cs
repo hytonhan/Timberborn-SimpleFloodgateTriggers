@@ -2,7 +2,6 @@
 using System;
 using System.Globalization;
 using Timberborn.CoreUI;
-using Timberborn.EntityPanelSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;

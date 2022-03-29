@@ -4,20 +4,12 @@ using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using Hytone.Timberborn.Plugins.Floodgates.Schedule;
 using Hytone.Timberborn.Plugins.Floodgates.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Timberborn.DistributionSystem;
-using Timberborn.EntitySystem;
-using Timberborn.PickObjectToolSystem;
-using Timberborn.WaterBuildings;
 using TimberbornAPI;
 using TimberbornAPI.Common;
-using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates
 {
-    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "0.2.0")]
+    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "1.0.0")]
     [BepInDependency("com.timberapi.timberapi")]
     [HarmonyPatch]
     public class FloodGatesPlugin : BaseUnityPlugin

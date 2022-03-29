@@ -7,7 +7,6 @@ using TimberbornAPI.UIBuilderSystem;
 using static UnityEngine.UIElements.Length.Unit;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
-using Timberborn.Localization;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
