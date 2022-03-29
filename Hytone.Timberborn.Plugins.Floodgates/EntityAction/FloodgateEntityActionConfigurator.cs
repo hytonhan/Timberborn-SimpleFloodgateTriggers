@@ -10,8 +10,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     {
         public void Configure(IContainerDefinition containerDefinition)
         {
+            containerDefinition.Bind<StreamGaugeFloodgateLinkSerializer>().AsSingleton();
             containerDefinition.Bind<EventListeners>().AsSingleton();
-            containerDefinition.MultiBind<IEntityAction>().To<FloodgateEntityAction>().AsSingleton();
+            containerDefinition.MultiBind<IEntityAction>().To<EntityActions>().AsSingleton();
         }
     }
 }

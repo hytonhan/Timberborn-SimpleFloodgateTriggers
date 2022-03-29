@@ -2,7 +2,6 @@
 using System;
 using System.Globalization;
 using Timberborn.CoreUI;
-using Timberborn.EntityPanelSystem;
 using Timberborn.SingletonSystem;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
@@ -16,7 +15,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     /// <summary>
     /// Custom UI Fragment that is added to Floodgate UI
     /// </summary>
-    public class FloodGateUIFragment : IEntityPanelFragment
+    public class FloodGateUIFragment
     {
         private readonly UIBuilder _builder;
         private VisualElement _root;
@@ -42,7 +41,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             _floodgate = null;
             _floodgateTriggerComponent = null;
-            _root.ToggleDisplayStyle(false);
         }
 
         /// <summary>
@@ -52,7 +50,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public VisualElement InitializeFragment()
         {
             _root =
-                _builder.CreateFragmentBuilder()
+                _builder.CreateComponentBuilder()
+                        .CreateVisualElement()
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtEnded",
                                                                          name: "DroughtEndedEnabled",
@@ -89,7 +88,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
                         .BuildAndInitialize();
-            this._root.ToggleDisplayStyle(false);
 
             _droughtEndedSlider = _root.Q<Slider>("DroughtEndedSlider");
             _droughtEndedEnabledToggle = _root.Q<Toggle>("DroughtEndedEnabled");
@@ -110,28 +108,24 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// Initial stuff to do when fragment is shown
         /// </summary>
         /// <param name="entity"></param>
-        public void ShowFragment(GameObject entity)
+        public void ShowFragment(Floodgate floodgate,
+                                 FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
         {
-            var component = entity.GetComponent<Floodgate>();
-            if ((bool)component)
+            if ((bool)floodgate)
             {
-                var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
-                if ((bool)triggerComponent)
+                if ((bool)floodgateTriggerMonoBehaviour)
                 {
-                    _droughtEndedSlider.highValue = component.MaxHeight;
-                    _droughtEndedSlider.SetValueWithoutNotify(triggerComponent.DroughtEndedHeight);
+                    _droughtEndedSlider.highValue = floodgate.MaxHeight;
+                    _droughtEndedSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.DroughtEndedHeight);
 
-                    _droughtStartedSlider.highValue = component.MaxHeight;
-                    _droughtStartedSlider.SetValueWithoutNotify(triggerComponent.DroughtStartedHeight);
+                    _droughtStartedSlider.highValue = floodgate.MaxHeight;
+                    _droughtStartedSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.DroughtStartedHeight);
                 }
-                _floodgateTriggerComponent = triggerComponent;
+                _floodgateTriggerComponent = floodgateTriggerMonoBehaviour;
             }
-            _floodgate = component;
+            _floodgate = floodgate;
         }
 
-        /// <summary>
-        /// Update ui elements when fragment is updated
-        /// </summary>
         public void UpdateFragment()
         {
             if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
@@ -141,21 +135,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 _droughtStartedLabel.text = "Height: " + _droughtStartedSlider.value.ToString(CultureInfo.InvariantCulture);
                 _droughtStartedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtStartedEnabled);
-
-                _root.ToggleDisplayStyle(visible: true);
-            }
-            else
-            {
-                _root.ToggleDisplayStyle(visible: false);
             }
         }
 
-        //TODO: METHODS BELOW SHOULD BE REFACTORED
-
-        /// <summary>
-        /// Store value when Drought Ended toggle is toggled
-        /// </summary>
-        /// <param name="changeEvent"></param>
         private void ToggleDroughtEnded(ChangeEvent<bool> changeEvent)
         {
             _floodgateTriggerComponent.DroughtEndedEnabled = changeEvent.newValue;

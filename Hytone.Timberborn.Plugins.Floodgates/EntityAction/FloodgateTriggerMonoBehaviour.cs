@@ -1,8 +1,10 @@
 ﻿using Bindito.Core;
 using Hytone.Timberborn.Plugins.Floodgates.Schedule;
 using Timberborn.ConstructibleSystem;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Timberborn.Persistence;
-using Timberborn.TimeSystem;
 using Timberborn.WaterBuildings;
 using Timberborn.WeatherSystem;
 using UnityEngine;
@@ -28,9 +30,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<bool> ScheduleEnabledKey = new PropertyKey<bool>(nameof(ScheduleEnabled));
         private static readonly PropertyKey<bool> DisableScheduleOnDroughtKey = new PropertyKey<bool>(nameof(DisableScheduleOnDrought));
 
+        private static readonly ListKey<StreamGaugeFloodgateLink> FloodgateLinksKey = new ListKey<StreamGaugeFloodgateLink>(nameof(FloodgateLinks));
+
         private IScheduleTriggerFactory _scheduleTriggerFactory;
         private IScheduleTrigger _scheduleTrigger;
         private DroughtService _droughtServíce;
+
+        private readonly List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
+        public ReadOnlyCollection<StreamGaugeFloodgateLink> FloodgateLinks { get; private set; }
 
         public bool DroughtEndedEnabled { get; set; }
         public float DroughtEndedHeight { get; set; }
@@ -44,6 +51,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public float SecondScheduleTime { get; set; }
         public float SecondScheduleHeight { get; set; }
 
+        public int MaxStreamGaugeLinks = 1;
+
         [Inject]
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
@@ -51,6 +60,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
             _droughtServíce = droughtService;
+        }
+
+        public void Awake()
+        {
+            FloodgateLinks = _floodgateLinks.AsReadOnly();
         }
 
         public void OnEnterFinishedState()
@@ -84,6 +98,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             component.Set(SecondScheduleHeightKey, SecondScheduleHeight);
             component.Set(ScheduleEnabledKey, ScheduleEnabled);
             component.Set(DisableScheduleOnDroughtKey, DisableScheduleOnDrought);
+            component.Set(FloodgateLinksKey, FloodgateLinks);
         }
 
         /// <summary>
@@ -136,6 +151,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if (component.Has(DisableScheduleOnDroughtKey))
             {
                 DisableScheduleOnDrought = component.Get(DisableScheduleOnDroughtKey);
+            }
+            if (component.Has(FloodgateLinksKey))
+            {
+                _floodgateLinks.AddRange(component.Get(FloodgateLinksKey));
+
+                foreach(var link in FloodgateLinks)
+                {
+                    PostAttachLink(link);
+                }
             }
         }
 
@@ -231,6 +255,52 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 floodgate.SetHeight(SecondScheduleHeight);
             }
+        }
+
+        /// <summary>
+        /// Creates a link between a Floodgate and Streamgauge
+        /// </summary>
+        /// <param name="floodgate"></param>
+        /// <param name="streamGauge"></param>
+        public void AttachLink(FloodgateTriggerMonoBehaviour floodgate,
+                               StreamGaugeMonoBehaviour streamGauge)
+        {
+
+            var link = new StreamGaugeFloodgateLink(floodgate, streamGauge);
+            _floodgateLinks.Add(link);
+            PostAttachLink(link);
+        }
+
+        /// <summary>
+        /// Do the linking at the streamgauge's end too
+        /// </summary>
+        /// <param name="link"></param>
+        public void PostAttachLink(StreamGaugeFloodgateLink link)
+        {
+            link.StreamGauge.AttachFloodgate(link);
+        }
+
+        /// <summary>
+        /// Deletes a link between a Floodgate and Streamgauge
+        /// </summary>
+        /// <param name="link"></param>
+        /// <exception cref="InvalidOperationException"></exception>
+        public void DetachLink(StreamGaugeFloodgateLink link)
+        {
+            if(!_floodgateLinks.Remove(link))
+            {
+                throw new InvalidOperationException($"Coudln't remove {link} from {this}, it wasn't added.");
+            }
+            PostDetachLink(link);
+        }
+
+        /// <summary>
+        /// Remvoes the link from Streamgauge's end too
+        /// </summary>
+        /// <param name="link"></param>
+        private void PostDetachLink(StreamGaugeFloodgateLink link)
+        {
+            link.StreamGauge.DetachFloodgate(link);
         }
     }
 }

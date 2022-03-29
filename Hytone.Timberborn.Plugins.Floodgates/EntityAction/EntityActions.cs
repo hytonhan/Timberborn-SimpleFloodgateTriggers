@@ -5,27 +5,29 @@ using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
-    public class FloodgateEntityAction : IEntityAction
+    public class EntityActions : IEntityAction
     {
         private readonly IInstantiator _instantiator;
 
-        public FloodgateEntityAction(IInstantiator instantiator)
+        public EntityActions(IInstantiator instantiator)
         {
             _instantiator = instantiator;
         }
 
         /// <summary>
-        /// Add our custom trigger class to all Floodgates
+        /// Add our custom classes to all Floodgates and StreamGauges
         /// </summary>
         /// <param name="entity"></param>
         public void ApplyToEntity(GameObject entity)
         {
-            if (entity.GetComponent<Floodgate>() == null)
+            if (entity.GetComponent<Floodgate>() != null)
             {
-                return;
+                _instantiator.AddComponent<FloodgateTriggerMonoBehaviour>(entity);
             }
-
-            _instantiator.AddComponent<FloodgateTriggerMonoBehaviour>(entity);
+            if (entity.GetComponent<StreamGauge>() != null)
+            {
+                _instantiator.AddComponent<StreamGaugeMonoBehaviour>(entity);
+            }
         }
     }
 }

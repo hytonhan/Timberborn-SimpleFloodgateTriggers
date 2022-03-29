@@ -1,9 +1,6 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
 using System.Globalization;
-using Timberborn.CoreUI;
-using Timberborn.EntityPanelSystem;
-using Timberborn.SingletonSystem;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
 using TimberbornAPI.UIBuilderSystem;
@@ -13,7 +10,7 @@ using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
-    public class FloodgateScheduleFragment : IEntityPanelFragment
+    public class FloodgateScheduleFragment
     {
         private readonly UIBuilder _builder;
         private VisualElement _root;
@@ -41,12 +38,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             _floodgate = null;
             _floodgateTriggerComponent = null;
-            _root.ToggleDisplayStyle(false);
         }
+
         public VisualElement InitializeFragment()
         {
             var rootBuilder =
-                _builder.CreateFragmentBuilder()
+                _builder.CreateComponentBuilder()
+                        .CreateVisualElement()
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
                                                                          name: nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle",
@@ -100,12 +98,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    1f,
                                                                    name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
-                        ;
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))));
 
             _root = rootBuilder.BuildAndInitialize();
-
-            this._root.ToggleDisplayStyle(false);
 
             _firstScheduleTimeLabel = _root.Q<Label>(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label");
             _firstScheduleTimeSlider = _root.Q<Slider>(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider");
@@ -131,11 +126,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _scheduleEnabledToggle.RegisterValueChangedCallback(ToggleScheduleEnabled);
             _disableScheduleOnDrought.RegisterValueChangedCallback(ToggleDisableScheduleOnDrought);
 
-            //_droughtStartedSlider = _root.Q<Slider>("DroughtStartedSlider");
-            //_droughtStartedEnabledToggle = _root.Q<Toggle>("DroughtStartedEnabled");
-            //_droughtStartedLabel = _root.Q<Label>("DroughtStartedValue");
-            //_droughtStartedSlider.RegisterValueChangedCallback(ChangeDroughtStartedHeight);
-            //_droughtStartedEnabledToggle.RegisterValueChangedCallback(ToggleDroughtStarted);
 
             return _root;
         }
@@ -143,25 +133,26 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// Initial stuff to do when fragment is shown
         /// </summary>
         /// <param name="entity"></param>
-        public void ShowFragment(GameObject entity)
+        public void ShowFragment(Floodgate floodgate,
+                                 FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
         {
-            var component = entity.GetComponent<Floodgate>();
-            if ((bool)component)
+            //var component = entity.GetComponent<Floodgate>();
+            if ((bool)floodgate)
             {
-                var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
-                if ((bool)triggerComponent)
+                //var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
+                if ((bool)floodgateTriggerMonoBehaviour)
                 {
-                    _firstScheduleHeightSlider.highValue = component.MaxHeight;
-                    _firstScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleTime);
-                    _firstScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.FirstScheduleHeight);
+                    _firstScheduleHeightSlider.highValue = floodgate.MaxHeight;
+                    _firstScheduleTimeSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.FirstScheduleTime);
+                    _firstScheduleHeightSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.FirstScheduleHeight);
 
-                    _secondScheduleHeightSlider.highValue = component.MaxHeight;
-                    _secondScheduleTimeSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleTime);
-                    _secondScheduleHeightSlider.SetValueWithoutNotify(triggerComponent.SecondScheduleHeight);
+                    _secondScheduleHeightSlider.highValue = floodgate.MaxHeight;
+                    _secondScheduleTimeSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.SecondScheduleTime);
+                    _secondScheduleHeightSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.SecondScheduleHeight);
                 }
-                _floodgateTriggerComponent = triggerComponent;
+                _floodgateTriggerComponent = floodgateTriggerMonoBehaviour;
             }
-            _floodgate = component;
+            _floodgate = floodgate;
         }
 
         /// <summary>
@@ -179,12 +170,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 _scheduleEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.ScheduleEnabled);
                 _disableScheduleOnDrought.SetValueWithoutNotify(_floodgateTriggerComponent.DisableScheduleOnDrought);
-
-                _root.ToggleDisplayStyle(visible: true);
-            }
-            else
-            {
-                _root.ToggleDisplayStyle(visible: false);
             }
         }
 
