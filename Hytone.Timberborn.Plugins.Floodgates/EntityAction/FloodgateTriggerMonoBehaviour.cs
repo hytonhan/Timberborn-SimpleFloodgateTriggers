@@ -79,6 +79,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void OnExitFinishedState()
         {
             _scheduleTrigger?.Disable();
+            DetachAllLinks();
         }
 
         /// <summary>
@@ -278,6 +279,19 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void PostAttachLink(StreamGaugeFloodgateLink link)
         {
             link.StreamGauge.AttachFloodgate(link);
+        }
+
+        /// <summary>
+        /// Deletes all existing links between this floodgate and stream gauges
+        /// </summary>
+        public void DetachAllLinks()
+        {
+            foreach (var link in _floodgateLinks)
+            {
+                //_floodgateLinks.Remove(link);
+                PostDetachLink(link);
+            }
+            _floodgateLinks.Clear();
         }
 
         /// <summary>
