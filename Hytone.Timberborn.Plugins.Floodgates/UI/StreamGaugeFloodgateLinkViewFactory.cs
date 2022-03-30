@@ -61,7 +61,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                               .SetMargin(new Margin(new Length(1, Pixel), 0, 0, new Length(6, Pixel)))
                                                                               .Build())
                                                                  .AddPreset(factory => factory.Labels()
-                                                                                              .GameTextBig(text: "StreamGauge",
+                                                                                              .GameTextBig(text: "Stream Gauge",
                                                                                                            builder: builder => builder.SetWidth(new Length(100, Pixel))))
                                                                  .Build())
                                                     .AddComponent(
