@@ -128,7 +128,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public void UpdateFragment()
         {
-            if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
+            if ((bool)_floodgate && (bool)_floodgateTriggerComponent)
             {
                 _droughtEndedLabel.text = "Height: " + _droughtEndedSlider.value.ToString(CultureInfo.InvariantCulture);
                 _droughtEndedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtEndedEnabled);

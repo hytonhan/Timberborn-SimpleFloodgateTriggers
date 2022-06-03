@@ -136,10 +136,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public void ShowFragment(Floodgate floodgate,
                                  FloodgateTriggerMonoBehaviour floodgateTriggerMonoBehaviour)
         {
-            //var component = entity.GetComponent<Floodgate>();
             if ((bool)floodgate)
             {
-                //var triggerComponent = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
                 if ((bool)floodgateTriggerMonoBehaviour)
                 {
                     _firstScheduleHeightSlider.highValue = floodgate.MaxHeight;
@@ -160,7 +158,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// </summary>
         public void UpdateFragment()
         {
-            if ((bool)_floodgate && _floodgate.enabled && (bool)_floodgateTriggerComponent)
+            if ((bool)_floodgate && (bool)_floodgateTriggerComponent)
             {
                 _firstScheduleTimeLabel.text = "Time: " + _firstScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
                 _firstScheduleHeightLabel.text = "Height: " + _firstScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);

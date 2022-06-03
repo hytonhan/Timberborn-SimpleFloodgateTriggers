@@ -65,6 +65,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void Awake()
         {
             FloodgateLinks = _floodgateLinks.AsReadOnly();
+            FirstScheduleTime = 0;
+            SecondScheduleTime = 0;
         }
 
         public void OnEnterFinishedState()
@@ -220,8 +222,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void ChangeScheduleValues()
         {
-            bool wasEnabled = _scheduleTrigger.Enabled;
-            _scheduleTrigger.Disable();
+            bool wasEnabled = _scheduleTrigger?.Enabled ?? false;
+            if(_scheduleTrigger != null)
+            {
+                _scheduleTrigger.Disable();
+            }
             _scheduleTrigger = _scheduleTriggerFactory.Create(SetFirstScheduleHeight,
                                                               SetSecondScheduleHeight,
                                                               FirstScheduleTime,
