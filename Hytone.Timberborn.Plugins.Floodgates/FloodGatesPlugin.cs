@@ -9,7 +9,7 @@ using TimberbornAPI.Common;
 
 namespace Hytone.Timberborn.Plugins.Floodgates
 {
-    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "1.0.2")]
+    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "1.0.3")]
     [BepInDependency("com.timberapi.timberapi")]
     [HarmonyPatch]
     public class FloodGatesPlugin : BaseUnityPlugin

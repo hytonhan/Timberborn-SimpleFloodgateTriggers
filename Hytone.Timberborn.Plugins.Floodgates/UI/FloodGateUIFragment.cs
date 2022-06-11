@@ -115,10 +115,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 if ((bool)floodgateTriggerMonoBehaviour)
                 {
-                    _droughtEndedSlider.highValue = floodgate.MaxHeight;
+                    var height = UIHelpers.GetMaxHeight(floodgate);
+                    _droughtEndedSlider.highValue = height;
                     _droughtEndedSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.DroughtEndedHeight);
 
-                    _droughtStartedSlider.highValue = floodgate.MaxHeight;
+                    _droughtStartedSlider.highValue = height;
                     _droughtStartedSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.DroughtStartedHeight);
                 }
                 _floodgateTriggerComponent = floodgateTriggerMonoBehaviour;

@@ -52,6 +52,9 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## 1.0.3 - 11.6.2022
+- Modified so mod works on stable and golem experimental
+
 ## 1.0.2 - 3.6.2022
 - Fixed crash when setting values on unfinished floodgate and no finished floodgates were on the map
 

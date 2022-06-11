@@ -1,6 +1,6 @@
 {
   "name": "SimpleFloodgateTriggers",
-  "version_number": "1.0.2",
+  "version_number": "1.0.3",
   "website_url": "https://github.com/hytonhan/Timberborn-SimpleFloodgateTriggers",
   "description": "Automated Floodgates on basic events",
   "dependencies": [

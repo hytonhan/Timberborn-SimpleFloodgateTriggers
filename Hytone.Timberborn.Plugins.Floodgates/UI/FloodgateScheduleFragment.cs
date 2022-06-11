@@ -140,11 +140,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 if ((bool)floodgateTriggerMonoBehaviour)
                 {
-                    _firstScheduleHeightSlider.highValue = floodgate.MaxHeight;
+                    var height = UIHelpers.GetMaxHeight(floodgate);
+                    _firstScheduleHeightSlider.highValue = height;
                     _firstScheduleTimeSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.FirstScheduleTime);
                     _firstScheduleHeightSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.FirstScheduleHeight);
 
-                    _secondScheduleHeightSlider.highValue = floodgate.MaxHeight;
+                    _secondScheduleHeightSlider.highValue = height;
                     _secondScheduleTimeSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.SecondScheduleTime);
                     _secondScheduleHeightSlider.SetValueWithoutNotify(floodgateTriggerMonoBehaviour.SecondScheduleHeight);
                 }
