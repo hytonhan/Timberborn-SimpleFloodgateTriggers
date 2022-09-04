@@ -83,7 +83,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     var floodgate = link.Floodgate.GetComponent<Floodgate>();
                     if (floodgate.Height != link.Height1)
                     {
-                        floodgate.SetHeight(link.Height1);
+                        floodgate.SetHeightAndSynchronize(link.Height1);
                     }
                     continue;
                 }
@@ -92,7 +92,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     var floodgate = link.Floodgate.GetComponent<Floodgate>();
                     if (floodgate.Height != link.Height2)
                     {
-                        floodgate.SetHeight(link.Height2);
+                        floodgate.SetHeightAndSynchronize(link.Height2);
                     }
                 }
             }

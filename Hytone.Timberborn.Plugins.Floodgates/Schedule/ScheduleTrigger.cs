@@ -52,28 +52,38 @@ namespace Hytone.Timberborn.Plugins.Floodgates.Schedule
             var currTime = _dayNightCycle.HoursPassedToday;
             if (_firstSchedule <= _secondSchedule)
             {
-                if (_firstSchedule < currTime && _secondSchedule > currTime)
+                if(_firstSchedule >= currTime)
                 {
                     FirstScheduleInProgress = true;
                     SecondScheduleInProgress = false;
                 }
-                else
+                else if (_firstSchedule < currTime && _secondSchedule > currTime)
                 {
                     FirstScheduleInProgress = false;
                     SecondScheduleInProgress = true;
+                }
+                else
+                {
+                    FirstScheduleInProgress = true;
+                    SecondScheduleInProgress = false;
                 }
             }
             else
             {
-                if (_secondSchedule < currTime && _firstSchedule > currTime)
+                if (_secondSchedule >= currTime)
                 {
                     FirstScheduleInProgress = false;
                     SecondScheduleInProgress = true;
                 }
-                else
+                else if (_secondSchedule < currTime && _firstSchedule > currTime)
                 {
                     FirstScheduleInProgress = true;
                     SecondScheduleInProgress = false;
+                }
+                else
+                {
+                    FirstScheduleInProgress = false;
+                    SecondScheduleInProgress = true;
                 }
             }
             _scheduleTriggerService.Add(this, _firstSchedule, _secondSchedule);

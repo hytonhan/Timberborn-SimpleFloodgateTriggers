@@ -9,7 +9,7 @@ using TimberbornAPI.Common;
 
 namespace Hytone.Timberborn.Plugins.Floodgates
 {
-    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "1.0.3")]
+    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "1.1.0")]
     [BepInDependency("com.timberapi.timberapi")]
     [HarmonyPatch]
     public class FloodGatesPlugin : BaseUnityPlugin
@@ -40,6 +40,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.EnableOnDroughtEnded", "Set height when drought ends");
             TimberAPI.Localization.AddLabel("Floodgate.Schedule.Enable", "Set height on a schedule");
             TimberAPI.Localization.AddLabel("Floodgate.Schedule.DisableOnDrought", "Disable schedule during drought");
+            TimberAPI.Localization.AddLabel("Floodgate.Schedule.DisableOnTemperate", "Disable schedule during temperate");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.Basic", "Basic");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.Advanced", "Advanced");
             TimberAPI.Localization.AddLabel("Floodgate.Triggers.AttachToStreamGauge", "Attach Stream Gauge");

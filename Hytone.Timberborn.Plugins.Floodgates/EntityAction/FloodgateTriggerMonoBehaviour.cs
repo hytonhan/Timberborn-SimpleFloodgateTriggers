@@ -29,12 +29,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<float> SecondScheduleHeightKey = new PropertyKey<float>(nameof(SecondScheduleHeight));
         private static readonly PropertyKey<bool> ScheduleEnabledKey = new PropertyKey<bool>(nameof(ScheduleEnabled));
         private static readonly PropertyKey<bool> DisableScheduleOnDroughtKey = new PropertyKey<bool>(nameof(DisableScheduleOnDrought));
+        private static readonly PropertyKey<bool> DisableScheduleOnTemperateKey = new PropertyKey<bool>(nameof(DisableScheduleOnTemperateKey));
 
         private static readonly ListKey<StreamGaugeFloodgateLink> FloodgateLinksKey = new ListKey<StreamGaugeFloodgateLink>(nameof(FloodgateLinks));
 
         private IScheduleTriggerFactory _scheduleTriggerFactory;
         private IScheduleTrigger _scheduleTrigger;
         private DroughtService _droughtServíce;
+        private StreamGaugeFloodgateLinkSerializer _linkSerializer;
 
         private readonly List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
         public ReadOnlyCollection<StreamGaugeFloodgateLink> FloodgateLinks { get; private set; }
@@ -46,6 +48,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         public bool ScheduleEnabled { get; set; }
         public bool DisableScheduleOnDrought { get; set; }
+        public bool DisableScheduleOnTemperate { get; set; }
         public float FirstScheduleTime { get; set; }
         public float FirstScheduleHeight { get; set; }
         public float SecondScheduleTime { get; set; }
@@ -56,10 +59,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         [Inject]
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
-            DroughtService droughtService)
+            DroughtService droughtService,
+            StreamGaugeFloodgateLinkSerializer linkSerializer)
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
             _droughtServíce = droughtService;
+            _linkSerializer = linkSerializer;
         }
 
         public void Awake()
@@ -101,7 +106,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             component.Set(SecondScheduleHeightKey, SecondScheduleHeight);
             component.Set(ScheduleEnabledKey, ScheduleEnabled);
             component.Set(DisableScheduleOnDroughtKey, DisableScheduleOnDrought);
-            component.Set(FloodgateLinksKey, FloodgateLinks);
+            component.Set(DisableScheduleOnTemperateKey, DisableScheduleOnTemperate);
+            component.Set(FloodgateLinksKey, FloodgateLinks, _linkSerializer);
         }
 
         /// <summary>
@@ -155,11 +161,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 DisableScheduleOnDrought = component.Get(DisableScheduleOnDroughtKey);
             }
+            if (component.Has(DisableScheduleOnTemperateKey))
+            {
+                DisableScheduleOnTemperate = component.Get(DisableScheduleOnTemperateKey);
+            }
             if (component.Has(FloodgateLinksKey))
             {
-                _floodgateLinks.AddRange(component.Get(FloodgateLinksKey));
+                _floodgateLinks.AddRange(component.Get(FloodgateLinksKey, _linkSerializer));
+                //_floodgateLinks.AddRange(component.Get(FloodgateLinksKey));
 
-                foreach(var link in FloodgateLinks)
+                foreach (var link in FloodgateLinks)
                 {
                     PostAttachLink(link);
                 }
@@ -175,9 +186,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if (DroughtStartedEnabled == true &&
                floodgate.Height != DroughtStartedHeight)
             {
-                floodgate.SetHeight(DroughtStartedHeight);
+                floodgate.SetHeightAndSynchronize(DroughtStartedHeight);
             }
-            if (DisableScheduleOnDrought)
+            if (ScheduleEnabled && !DisableScheduleOnDrought)
+            {
+                _scheduleTrigger.Enable();
+            }
+            else if (DisableScheduleOnDrought)
             {
                 _scheduleTrigger.Disable();
             }
@@ -192,11 +207,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if (DroughtEndedEnabled == true &&
                floodgate.Height != DroughtEndedHeight)
             {
-                floodgate.SetHeight(DroughtEndedHeight);
+                floodgate.SetHeightAndSynchronize(DroughtEndedHeight);
             }
-            if (ScheduleEnabled)
+            if (ScheduleEnabled && !DisableScheduleOnTemperate)
             {
                 _scheduleTrigger.Enable();
+            }
+            else if (DisableScheduleOnTemperate)
+            {
+                _scheduleTrigger.Disable();
             }
         }
 
@@ -206,14 +225,31 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void OnChangedScheduleToggles()
         {
-            if(ScheduleEnabled &&
-               ((_droughtServíce.IsDrought && !DisableScheduleOnDrought)
-               || !_droughtServíce.IsDrought))
+            if (!ScheduleEnabled)
             {
+                _scheduleTrigger.Disable();
+                return;
+            }
+            if (_droughtServíce.IsDrought)
+            {
+                if(DisableScheduleOnDrought)
+                {
+                    _scheduleTrigger.Disable();
+                    return;
+                }
                 _scheduleTrigger.Enable();
                 return;
             }
-            _scheduleTrigger.Disable();
+            if(!_droughtServíce.IsDrought)
+            {
+                if (DisableScheduleOnTemperate)
+                {
+                    _scheduleTrigger.Disable();
+                    return;
+                }
+                _scheduleTrigger.Enable();
+                return;
+            }
         }
 
         /// <summary>
@@ -223,7 +259,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void ChangeScheduleValues()
         {
             bool wasEnabled = _scheduleTrigger?.Enabled ?? false;
-            if(_scheduleTrigger != null)
+            if (_scheduleTrigger != null)
             {
                 _scheduleTrigger.Disable();
             }
@@ -246,7 +282,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if (ScheduleEnabled == true &&
                 floodgate.Height != FirstScheduleHeight)
             {
-                floodgate.SetHeight(FirstScheduleHeight);
+                floodgate.SetHeightAndSynchronize(FirstScheduleHeight);
             }
         }
 
@@ -259,7 +295,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if (ScheduleEnabled == true &&
                 floodgate.Height != SecondScheduleHeight)
             {
-                floodgate.SetHeight(SecondScheduleHeight);
+                floodgate.SetHeightAndSynchronize(SecondScheduleHeight);
             }
         }
 
@@ -306,7 +342,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// <exception cref="InvalidOperationException"></exception>
         public void DetachLink(StreamGaugeFloodgateLink link)
         {
-            if(!_floodgateLinks.Remove(link))
+            if (!_floodgateLinks.Remove(link))
             {
                 throw new InvalidOperationException($"Coudln't remove {link} from {this}, it wasn't added.");
             }
