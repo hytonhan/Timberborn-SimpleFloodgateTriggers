@@ -15,7 +15,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     /// <summary>
     /// Custom UI Fragment that is added to Floodgate UI
     /// </summary>
-    public class FloodGateUIFragment
+    public class FloodgateDroughtFragment
     {
         private readonly UIBuilder _builder;
         private VisualElement _root;
@@ -30,9 +30,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Toggle _droughtStartedEnabledToggle;
         private Label _droughtStartedLabel;
 
-        public FloodGateUIFragment(UIBuilder builder,
-                                   VisualElementLoader visualElementLoader,
-                                   EventBus eventBus)
+        public FloodgateDroughtFragment(UIBuilder builder)
         {
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
         }

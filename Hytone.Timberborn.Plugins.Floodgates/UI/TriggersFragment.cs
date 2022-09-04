@@ -34,14 +34,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private VisualElement _floodgatesLinks;
 
         private AttachToStreamGaugeFragment _attachToStreamGaugeFragment;
-        private FloodGateUIFragment _droughtSettingsFragment;
+        private FloodgateDroughtFragment _droughtSettingsFragment;
         private FloodgateScheduleFragment _scheduleFragment;
 
         private bool _lastActiveTabWasBasic = true;
 
         public TriggersFragment(UIBuilder builder,
                                 AttachToStreamGaugeFragment attachToStreamGaugeFragment,
-                                FloodGateUIFragment floodgateUIFragment,
+                                FloodgateDroughtFragment floodgateUIFragment,
                                 FloodgateScheduleFragment scheduleFragment)
         {
             _builder = builder;

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Timberborn.WaterBuildings;
+﻿using Timberborn.WaterBuildings;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
+    /// <summary>
+    /// This is a stupid class that helped this mod to work between stable and experimental for a while in summerof 2022
+    /// </summary>
     public static class UIHelpers
     {
         private static readonly string _maxHeightName1 = "MaxHeight";

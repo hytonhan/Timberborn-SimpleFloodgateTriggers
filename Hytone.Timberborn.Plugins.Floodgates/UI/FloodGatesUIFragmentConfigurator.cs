@@ -11,7 +11,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     {
         public void Configure(IContainerDefinition containerDefinition)
         {
-            containerDefinition.Bind<FloodGateUIFragment>().AsSingleton();
+            containerDefinition.Bind<FloodgateDroughtFragment>().AsSingleton();
             containerDefinition.Bind<FloodgateScheduleFragment>().AsSingleton();
             containerDefinition.Bind<AttachToStreamGaugeButton>().AsSingleton();
             containerDefinition.Bind<AttachToStreamGaugeFragment>().AsSingleton();
@@ -26,12 +26,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// </summary>
         private class EntityPanelModuleProvider : IProvider<EntityPanelModule>
         {
-            private readonly FloodGateUIFragment _floodGateFragment;
+            private readonly FloodgateDroughtFragment _floodGateFragment;
             private readonly FloodgateScheduleFragment _floodgateScheduleFragment;
             private readonly TriggersFragment _triggersFragment;
             private readonly StreamGaugeFloodgateLinksFragment _streamGaugeFloodgateLinksFragment;
 
-            public EntityPanelModuleProvider(FloodGateUIFragment floodGateFragment,
+            public EntityPanelModuleProvider(FloodgateDroughtFragment floodGateFragment,
                                              FloodgateScheduleFragment floodgateScheduleFragment,
                                              TriggersFragment triggersFragment,
                                              StreamGaugeFloodgateLinksFragment streamGaugeFloodgateLinksFragment)
