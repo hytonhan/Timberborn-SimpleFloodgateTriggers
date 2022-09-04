@@ -52,6 +52,13 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## 1.1.0 - 
+- Upped TimberAPI dependency to 0.4.4
+- Fixed crash when game was saved and a link between floodgate and stream gauge existed
+- Fixed stream gauge high height slider not working properly with floodgates taller than 3
+- Added option to enable schedule only suring droughts
+
+
 ## 1.0.3 - 11.6.2022
 - Modified so mod works on stable and golem experimental
 
