@@ -106,8 +106,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var height = UIHelpers.GetMaxHeight(floodgate);
                 setting.Item6.highValue = height;
                 setting.Item6.SetValueWithoutNotify(link.Height1);
-                setting.Rest.Item1.SetValueWithoutNotify(link.Height2);
                 setting.Rest.Item1.highValue = height;
+                setting.Rest.Item1.SetValueWithoutNotify(link.Height2);
             }
         }
 
