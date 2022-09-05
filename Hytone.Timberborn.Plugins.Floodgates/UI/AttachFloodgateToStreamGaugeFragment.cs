@@ -16,7 +16,7 @@ using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
-    public class AttachToStreamGaugeFragment
+    public class AttachFloodgateToStreamGaugeFragment
     {
         private readonly UIBuilder _builder;
         private readonly ILoc _loc;
@@ -28,16 +28,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Sprite _streamGaugeSprite;
 
         private readonly SelectionManager _selectionManager;
-        StreamGaugeFloodgateLinkViewFactory _streamGaugeFloodgateLinkViewFactory;
+        LinkViewFactory _streamGaugeFloodgateLinkViewFactory;
 
         //There has to be a better way for this...
         private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>> _settingsList = new List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>>();
         
-        public AttachToStreamGaugeFragment(
+        public AttachFloodgateToStreamGaugeFragment(
             AttachToStreamGaugeButton attachToStreamGaugeButton,
             UIBuilder builder,
             SelectionManager selectionManager,
-            StreamGaugeFloodgateLinkViewFactory streamGaugeFloodgateLinkViewFactory,
+            LinkViewFactory streamGaugeFloodgateLinkViewFactory,
             ILoc loc)
         {
             _attachToStreamGaugeButton = attachToStreamGaugeButton;

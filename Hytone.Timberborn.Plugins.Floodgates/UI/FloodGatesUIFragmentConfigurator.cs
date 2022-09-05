@@ -14,11 +14,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<FloodgateDroughtFragment>().AsSingleton();
             containerDefinition.Bind<FloodgateScheduleFragment>().AsSingleton();
             containerDefinition.Bind<AttachToStreamGaugeButton>().AsSingleton();
-            containerDefinition.Bind<AttachToStreamGaugeFragment>().AsSingleton();
+            containerDefinition.Bind<AttachFloodgateToStreamGaugeFragment>().AsSingleton();
             containerDefinition.Bind<TriggersFragment>().AsSingleton();
-            containerDefinition.Bind<StreamGaugeFloodgateLinkViewFactory>().AsSingleton();
+            containerDefinition.Bind<LinkViewFactory>().AsSingleton();
             containerDefinition.Bind<StreamGaugeFloodgateLinksFragment>().AsSingleton();
             containerDefinition.MultiBind<EntityPanelModule>().ToProvider<EntityPanelModuleProvider>().AsSingleton();
+
+            containerDefinition.Bind<WaterPumpFragment>().AsSingleton();
+            containerDefinition.Bind<AttachWaterpumpToStreamGaugeFragment>().AsSingleton();
+            containerDefinition.Bind<WaterpumpDroughtSettingsFragment>().AsSingleton();
+            containerDefinition.Bind<WaterpumpScheduleFragment>().AsSingleton();
         }
 
         /// <summary>
@@ -26,20 +31,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// </summary>
         private class EntityPanelModuleProvider : IProvider<EntityPanelModule>
         {
-            private readonly FloodgateDroughtFragment _floodGateFragment;
-            private readonly FloodgateScheduleFragment _floodgateScheduleFragment;
-            private readonly TriggersFragment _triggersFragment;
+           private readonly TriggersFragment _triggersFragment;
             private readonly StreamGaugeFloodgateLinksFragment _streamGaugeFloodgateLinksFragment;
 
-            public EntityPanelModuleProvider(FloodgateDroughtFragment floodGateFragment,
-                                             FloodgateScheduleFragment floodgateScheduleFragment,
-                                             TriggersFragment triggersFragment,
-                                             StreamGaugeFloodgateLinksFragment streamGaugeFloodgateLinksFragment)
+            private readonly WaterPumpFragment _waterPumpFragment;
+
+            public EntityPanelModuleProvider(TriggersFragment triggersFragment,
+                                             StreamGaugeFloodgateLinksFragment streamGaugeFloodgateLinksFragment,
+                                             WaterPumpFragment waterPumpFragment)
             {
-                _floodGateFragment = floodGateFragment ?? throw new ArgumentNullException(nameof(floodGateFragment)); ;
-                _floodgateScheduleFragment = floodgateScheduleFragment;
                 _triggersFragment = triggersFragment;
                 _streamGaugeFloodgateLinksFragment = streamGaugeFloodgateLinksFragment;
+                _waterPumpFragment = waterPumpFragment;
             }
 
             public EntityPanelModule Get()
@@ -47,6 +50,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 EntityPanelModule.Builder builder = new EntityPanelModule.Builder();
                 builder.AddBottomFragment(_triggersFragment);
                 builder.AddBottomFragment(_streamGaugeFloodgateLinksFragment);
+                builder.AddBottomFragment(_waterPumpFragment);
                 return builder.Build();
             }
         }

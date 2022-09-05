@@ -1,6 +1,8 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Timberborn.Common;
 using Timberborn.CoreUI;
 using Timberborn.EntityPanelSystem;
@@ -16,20 +18,25 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private readonly UIBuilder _builder;
 
         private VisualElement _root;
-        private ScrollView _floodgatesLinks;
+        private ScrollView _links;
         private Label _noLinks;
 
         private StreamGaugeMonoBehaviour _streamGaugeMonoBehaviour;
 
         private VisualElement _linksView;
         private Sprite _floodgateSprite;
+        private Sprite _waterpumpSprite;
+        private Sprite _deepwaterpumpSprite;
+        private Sprite _mechanicalWaterpumpSprite;
+        private Sprite _deepmechanicalWaterpumpSprite;
+        private Sprite _waterdumpSprite;
 
-        StreamGaugeFloodgateLinkViewFactory _streamGaugeFloodgateLinkViewFactory;
+        LinkViewFactory _streamGaugeFloodgateLinkViewFactory;
         private readonly SelectionManager _selectionManager;
 
         public StreamGaugeFloodgateLinksFragment(
             UIBuilder builder,
-            StreamGaugeFloodgateLinkViewFactory streamGaugeFloodgateLinkViewFactory,
+            LinkViewFactory streamGaugeFloodgateLinkViewFactory,
             SelectionManager selectionManager)
         {
             _builder = builder;
@@ -41,6 +48,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             _floodgateSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
                                                 .Where(x => x.name.StartsWith("Floodgate"))
+                                                .FirstOrDefault();
+            _waterpumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
+                                                .Where(x => x.name.StartsWith("WaterPump"))
+                                                .FirstOrDefault();
+            _deepwaterpumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
+                                                    .Where(x => x.name.StartsWith("DeepWaterPump"))
+                                                    .FirstOrDefault();
+            _mechanicalWaterpumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
+                                                          .Where(x => x.name.StartsWith("MechanicalWaterPump"))
+                                                          .FirstOrDefault();
+            _deepmechanicalWaterpumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
+                                                              .Where(x => x.name.StartsWith("DeepMechanicalWaterPump"))
+                                                              .FirstOrDefault();
+            _waterdumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
+                                                .Where(x => x.name.Split('.').First().Equals("WaterDump"))
                                                 .FirstOrDefault();
             var rootbuilder =
                 _builder.CreateFragmentBuilder()
@@ -67,7 +89,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                     .BuildAndInitialize());
 
             _root = rootbuilder.BuildAndInitialize();
-            _floodgatesLinks = _root.Q<ScrollView>("FloodgateLinks");
+            _links = _root.Q<ScrollView>("FloodgateLinks");
 
             _noLinks = _builder.CreateComponentBuilder()
                                .CreateLabel()
@@ -111,13 +133,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public void UpdateLinks()
         {
             ReadOnlyCollection<StreamGaugeFloodgateLink> links = _streamGaugeMonoBehaviour.FloodgateLinks;
+            ReadOnlyCollection<WaterPumpStreamGaugeLink> waterpumplinks = _streamGaugeMonoBehaviour.WaterpumpLinks;
 
-            _floodgatesLinks.Clear();
+            _links.Clear();
 
             foreach (var link in links)
             {
                 var floodgate = link.Floodgate.gameObject;
-                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge();
+                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge("Floodgate");
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
                 var img = new Image();
@@ -136,11 +159,57 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     UpdateLinks();
                 };
 
-                _floodgatesLinks.Add(view);
+                _links.Add(view);
             }
-            if (links.IsEmpty())
+            foreach (var link in waterpumplinks)
             {
-                _floodgatesLinks.Add(_noLinks);
+                var r = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+                var waterpump = link.WaterPump.gameObject;
+                string waterpumpName = waterpump.name.Split('.').First();
+                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge($"{r.Replace(waterpumpName, " ")}");
+
+                var imageContainer = view.Q<VisualElement>("ImageContainer");
+                var img = new Image();
+                switch (waterpumpName)
+                {
+                    case "WaterPump":
+                        img.sprite = _waterpumpSprite;
+                        break;
+                    case "DeepWaterPump":
+                        img.sprite = _deepwaterpumpSprite;
+                        break;
+                    case "MechanicalWaterPump":
+                        img.sprite = _mechanicalWaterpumpSprite;
+                        break;
+                    case "DeepMechanicalWaterpump":
+                        img.sprite = _deepmechanicalWaterpumpSprite;
+                        break;
+                    case "WaterDump":
+                        img.sprite = _waterdumpSprite;
+                        break;
+                }
+                imageContainer.Add(img);
+
+                var targetButton = view.Q<Button>("Target");
+                targetButton.clicked += delegate
+                {
+                    _selectionManager.FocusOn(waterpump);
+                };
+
+                view.Q<Button>("DetachLinkButton").clicked += delegate
+                {
+                    link.WaterPump.DetachLink(link);
+                    UpdateLinks();
+                };
+
+                _links.Add(view);
+            }
+            if (links.IsEmpty() && waterpumplinks.IsEmpty())
+            {
+                _links.Add(_noLinks);
             }
             UpdateFragment();
         }

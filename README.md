@@ -2,23 +2,28 @@
 This plugin for Timberborn allows you to automate your Floodgates a little. Currently we offer automatic setting of floodgate height 
 when a Drought starts or ends, based on a basic schedule or based on a Stream Gauge depth. Pretty neat.
 
+The current version v2.0.0 only works with experimental v0.2.6.
+
 # Usage
 The will add a simple UI fragment on the Floodgate UI. Example images below.
 
 ![BasicTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/BasicTab.PNG?raw=true)
 ![AdvancedTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/AdvancedTab.PNG)
+![WaterPumpBasicTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/WaterpumpBasic.PNG)
+![WaterpumpTimerTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/WaterpumpTimer.PNG)
+![WaterpumpAdvancedTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/WaterpumpAdvanced.PNG)
 
 Bear in mind that it is possible to create some very janky setups with enabling multiple triggers on the same floodgates. Automation is
 nice, but it isn't magic. Be careful, or you'll end up drying/flooding everything!
-
-## Drought
+## Floodgate
+### Drought
 The fist settings on the Basic tab are related to Droughts. The available settings are:
 - Enable setting of height when drought ends
 - The height to set when drought ends
 - Enable setting of height when drought starts
 - The height to set when drought starts
 
-## Schedule
+### Schedule
 The basic tab also contains the settings for automating floodgates based on a schedule.
 - Enable Schedule based setting of height
 - Optionally disable schedule during droughts
@@ -26,7 +31,7 @@ The basic tab also contains the settings for automating floodgates based on a sc
 	- Normally the height is set at the selected timestamp. If you change the timestamp, then the height might get instantly changed. This should be fixed 
 	once the schedule has been running in peace for a while.
 
-## Linking a Stream Gauge
+### Linking a Stream Gauge
 On the Advanced you can link a Floodgate with a Stream Gauge. This allows you to control the Floodgate based on the water depth 
 recorded by the  Stream Gauge. The available settins are:
 - Low threshold: Set the floodgate height when water depth is below this value
@@ -37,14 +42,17 @@ recorded by the  Stream Gauge. The available settins are:
 IMPORTANT! Be aware that if a Stream Gauge is linked, then the Floodgate's height will be set always when below low or above high threshold, instead
 of triggering once when the thresholds are crossed.
 
-Curretly you can only link a single Stream Gauge with a Floodgate. However, there is no limit with how many Floodgates can be connected to a certain StreamGauge.
+## Water pumps and dumps
+Normal and mechanical water pumps and wter dumps have similar setting compared to floodgates. 
+The main difference is that instead of height, you can choose when to pause/resume the pumps.
+
+Curretly you can only link a single Stream Gauge with a Floodgate or water pump. However, there is no limit with how many Floodgates can be connected to a certain StreamGauge.
 
 # Known Limitations
 1. The trigger settings are NOT synchronized to neighboring Floodgates. This might be fixed in the future
 	- Though if you have a line of Floodgate that are synchronized, you only need to enable the trigger for one of them, as the built in synchronization will take care of
 	the neighboring height when one is set.
 1. This plugin might cause some lag spikes when a drought ends or starts. They shouldn't be too heavy though
-1. If there are lots of active triggers, it might cause general slowness. Be aware, owners of megacolonies!
 
 # Installing
 Recommended way to install this mod is through [Thunderstore](https://timberborn.thunderstore.io/). You can install this plugin manually by cloning the repo, building it
@@ -52,12 +60,12 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
-## 1.1.0 - 
+## 2.0.0 - 5.9.2022
 - Upped TimberAPI dependency to 0.4.4
 - Fixed crash when game was saved and a link between floodgate and stream gauge existed
 - Fixed stream gauge high height slider not working properly with floodgates taller than 3
-- Added option to enable schedule only suring droughts
-
+- Added option to enable schedule only during droughts
+- Added automation for water pumps and dumps!
 
 ## 1.0.3 - 11.6.2022
 - Modified so mod works on stable and golem experimental

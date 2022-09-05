@@ -1,6 +1,7 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
 using System.Globalization;
+using Timberborn.Localization;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
 using TimberbornAPI.UIBuilderSystem;
@@ -17,6 +18,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Floodgate _floodgate;
         private FloodgateTriggerMonoBehaviour _floodgateTriggerComponent;
 
+        private ILoc _loc;
+
         private Toggle _scheduleEnabledToggle;
         private Slider _firstScheduleTimeSlider;
         private Label _firstScheduleTimeLabel;
@@ -30,9 +33,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Toggle _disableScheduleOnDrought;
         private Toggle _disableScheduleOnTemperate;
 
-        public FloodgateScheduleFragment(UIBuilder builder)
+        public FloodgateScheduleFragment(
+            UIBuilder builder,
+            ILoc loc)
         {
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            _loc = loc;
         }
 
         public void ClearFragment()
@@ -69,7 +75,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                                     .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label",
-                                                                  text: "Time: ",
+                                                                  text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
                                                                   builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
                         .AddPreset(factory => factory.Sliders()
                                                      .SliderCircle(0f,
@@ -79,7 +85,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label",
-                                                                  text: "Height: ",
+                                                                  text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
                                                                   builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
                         .AddPreset(factory => factory.Sliders()
                                                      .SliderCircle(0f,
@@ -89,7 +95,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label",
-                                                                  text: "Time: ",
+                                                                  text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
                                                                   builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
                         .AddPreset(factory => factory.Sliders()
                                                      .SliderCircle(0f,
@@ -99,7 +105,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label",
-                                                                  text: "Height: ",
+                                                                  text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
                                                                   builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
                         .AddPreset(factory => factory.Sliders()
                                                      .SliderCircle(0f,
@@ -171,11 +177,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             if ((bool)_floodgate && (bool)_floodgateTriggerComponent)
             {
-                _firstScheduleTimeLabel.text = "Time: " + _firstScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
-                _firstScheduleHeightLabel.text = "Height: " + _firstScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
+                _firstScheduleTimeLabel.text = $"{_loc.T("Floodgate.Triggers.Time")}: " + _firstScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
+                _firstScheduleHeightLabel.text = $"{_loc.T("Floodgate.Triggers.Height")}: " + _firstScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
 
-                _secondScheduleTimeLabel.text = "Time: " + _secondScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
-                _secondScheduleHeightLabel.text = "Height: " + _secondScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
+                _secondScheduleTimeLabel.text = $"{_loc.T("Floodgate.Triggers.Time")}: " + _secondScheduleTimeSlider.value.ToString(CultureInfo.InvariantCulture);
+                _secondScheduleHeightLabel.text = $"{_loc.T("Floodgate.Triggers.Height")}: " + _secondScheduleHeightSlider.value.ToString(CultureInfo.InvariantCulture);
 
                 _scheduleEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.ScheduleEnabled);
                 _disableScheduleOnDrought.SetValueWithoutNotify(_floodgateTriggerComponent.DisableScheduleOnDrought);

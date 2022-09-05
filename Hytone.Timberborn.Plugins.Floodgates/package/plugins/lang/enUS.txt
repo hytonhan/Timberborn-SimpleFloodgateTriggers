@@ -4,15 +4,26 @@ Floodgate.Triggers.EnableOnDroughtEnded, Set height when drought ends
 Floodgate.Schedule.Enable, Set height on a schedule
 Floodgate.Schedule.DisableOnDrought, Disable schedule during drought
 Floodgate.Schedule.DisableOnTemperate, Disable schedule during temperate
+Floodgate.Triggers.Time, Time
+Floodgate.Triggers.Height, Height
 Floodgate.Triggers.Basic, Basic
+Floodgate.Triggers.Timer, Timer
 Floodgate.Triggers.Advanced, Advanced
 Floodgate.Triggers.AttachToStreamGauge, Attach Stream Gauge
 Floodgate.Triggers.PickStreamGaugeTitle, Pick a Stream Gauge
 Floodgate.Triggers.PickStreamGaugeTip, No really, pick any.
 Floodgates.Triggers.NoLinks, No Stream Gauges attached
-Floodgates.Triggers.NoFloodgateLinks, No Floodgates linked
-Floodgates.Triggers.LinkedFloodgates, Linked Floodgates
+Floodgates.Triggers.NoFloodgateLinks, No objects linked
+Floodgates.Triggers.LinkedFloodgates, Linked objects
 Floodgates.Triggers.Threshold1, Stream Gauge low threshold
 Floodgates.Triggers.Threshold2, Stream Gauge high threshold
 Floodgates.Triggers.HeightWhenBelowThreshold1, Floodgate height below low threshold
 Floodgates.Triggers.HeightWhenAboveThreshold2, Floodgate height above high threshold
+Floodgate.Triggers.PauseOnDroughtStart, Pause when drought starts
+Floodgate.Triggers.UnpauseOnDroughtEnded, Unpause when drought ends
+Floodgates.WaterpumpTrigger.Threshold1, Pause when below
+Floodgates.WaterpumpTrigger.Threshold2, Pause when above
+Floodgates.WaterpumpTrigger.Threshold3, Unpause when below
+Floodgates.WaterpumpTrigger.Threshold4, Unpause when above
+Floodgates.WaterpumpTrigger.PauseStartTime, Pause start time
+Floodgates.WaterpumpTrigger.ResumeStartTime, Resume start time

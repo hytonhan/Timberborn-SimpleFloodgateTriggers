@@ -7,46 +7,56 @@ using TimberbornAPI.UIBuilderSystem;
 using static UnityEngine.UIElements.Length.Unit;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
-    /// <summary>
-    /// The container fragment that holds all the trigger related
-    /// UI Element related to a Floodgate
-    /// </summary>
-    public class TriggersFragment : IEntityPanelFragment
+    public enum ActiveTab
+    {
+        Basic,
+        Timer,
+        Advanced
+    }
+
+    public class WaterPumpFragment : IEntityPanelFragment
     {
 
         private readonly UIBuilder _builder;
         private static readonly string SelectedTabButtonCLass = "distribution-post-fragment__tab-button--selected";
-
         private VisualElement _root;
 
-        private Floodgate _floodgate;
-        private FloodgateTriggerMonoBehaviour _floodgateTriggerMonoBehaviour;
+        //private WaterInput _waterInput;
+        private WaterPumpMonobehaviour _waterpumpMono;
 
         private Button _basicButton;
         private Button _advancedButton;
+        private Button _timerButton;
         private Button _newButton;
 
         private VisualElement _basicTab;
+        private VisualElement _timerTab;
         private VisualElement _advancedTab;
-        private VisualElement _floodgatesLinks;
+        //private VisualElement _floodgatesLinks;
+        private VisualElement _links;
 
-        private AttachFloodgateToStreamGaugeFragment _attachToStreamGaugeFragment;
-        private FloodgateDroughtFragment _droughtSettingsFragment;
-        private FloodgateScheduleFragment _scheduleFragment;
+        private AttachWaterpumpToStreamGaugeFragment _attachWaterpumpToStreamGaugeFragment;
+        private WaterpumpDroughtSettingsFragment _droughtSettingsFragment;
+        private WaterpumpScheduleFragment _scheduleFragment;
 
-        private bool _lastActiveTabWasBasic = true;
+        private ActiveTab _lastActiveTab = ActiveTab.Basic;
 
-        public TriggersFragment(UIBuilder builder,
-                                AttachFloodgateToStreamGaugeFragment attachToStreamGaugeFragment,
-                                FloodgateDroughtFragment floodgateUIFragment,
-                                FloodgateScheduleFragment scheduleFragment)
+
+        //private AttachWaterpumpToStreamGaugeFragment _attachWaterpumpToStreamGaugeFragment;
+
+        public WaterPumpFragment(
+            UIBuilder builder,
+            AttachWaterpumpToStreamGaugeFragment attachWaterpumpToStreamGaugeFragment,
+            WaterpumpDroughtSettingsFragment droughtSettingsFragment,
+            WaterpumpScheduleFragment scheduleFragment)
         {
             _builder = builder;
-            _attachToStreamGaugeFragment = attachToStreamGaugeFragment;
-            _droughtSettingsFragment = floodgateUIFragment;
+            _attachWaterpumpToStreamGaugeFragment = attachWaterpumpToStreamGaugeFragment;
+            _droughtSettingsFragment = droughtSettingsFragment;
             _scheduleFragment = scheduleFragment;
         }
 
@@ -66,7 +76,19 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .SetFontSize(new Length(14, Pixel))
                                                             .SetFontStyle(FontStyle.Normal)
                                                             .SetHeight(new Length(29, Pixel))
-                                                            .SetWidth(new Length(145, Pixel))
+                                                            .SetWidth(new Length(96, Pixel))
+                                                            .Build())
+                                      .AddComponent(_builder.CreateComponentBuilder()
+                                                            .CreateButton()
+                                                            .AddClass("distribution-post-fragment__tab-button")
+                                                            .AddClass("distribution-post-fragment__tab-button--selected")
+                                                            .SetName("TimerButton")
+                                                            .SetLocKey("Floodgate.Triggers.Timer")
+                                                            .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
+                                                            .SetFontSize(new Length(14, Pixel))
+                                                            .SetFontStyle(FontStyle.Normal)
+                                                            .SetHeight(new Length(29, Pixel))
+                                                            .SetWidth(new Length(96, Pixel))
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
@@ -77,12 +99,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .SetFontSize(new Length(14, Pixel))
                                                             .SetFontStyle(FontStyle.Normal)
                                                             .SetHeight(new Length(29, Pixel))
-                                                            .SetWidth(new Length(145, Pixel))
+                                                            .SetWidth(new Length(96, Pixel))
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateVisualElement()
                                                             .SetName("BasicTab")
-                                                            .SetHeight(new Length(420, Pixel))
+                                                            //.SetHeight(new Length(420, Pixel))
+                                                            .SetPadding(new Padding(new Length(8, Pixel)))
+                                                            .Build())
+                                      .AddComponent(_builder.CreateComponentBuilder()
+                                                            .CreateVisualElement()
+                                                            .SetName("TimerTab")
+                                                            //.SetHeight(new Length(420, Pixel))
                                                             .SetPadding(new Padding(new Length(8, Pixel)))
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
@@ -104,30 +132,41 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                                                   .SetHeight(new Length(29, Pixel))
                                                                                                                   .SetWidth(new Length(290, Pixel))
                                                                                                                   .Build()))
-                                                            .BuildAndInitialize());
-
+                                                            .Build());
+            
             _root = rootBuilder.BuildAndInitialize();
+
+
+            _links = _root.Q<VisualElement>("Placeholder");
+            _links.Add(_attachWaterpumpToStreamGaugeFragment.InitiliazeFragment(_root));
+
             this._root.ToggleDisplayStyle(false);
 
             _basicTab = _root.Q<VisualElement>("BasicTab");
-            _basicTab.Add(_droughtSettingsFragment.InitializeFragment());
-            _basicTab.Add(_scheduleFragment.InitializeFragment());
+            _basicTab.Add(_droughtSettingsFragment.InitiliazeFragment(_root));
+
+            _timerTab = _root.Q<VisualElement>("TimerTab");
+            _timerTab.Add(_scheduleFragment.InitializeFragment());
 
             _advancedTab = _root.Q<VisualElement>("AdvancedTab");
-            _floodgatesLinks = _root.Q<VisualElement>("Placeholder");
-            _floodgatesLinks.Add(_attachToStreamGaugeFragment.InitiliazeFragment(_root));
 
             _basicButton = _root.Q<Button>("BasicButton");
-            _basicButton.clicked += () => 
+            _basicButton.clicked += () =>
             {
-                _lastActiveTabWasBasic = true;
-                SwitchTriggerTab(_lastActiveTabWasBasic);
+                _lastActiveTab = ActiveTab.Basic;
+                SwitchTriggerTab(_lastActiveTab);
+            };
+            _timerButton = _root.Q<Button>("TimerButton");
+            _timerButton.clicked += () =>
+            {
+                _lastActiveTab = ActiveTab.Timer;
+                SwitchTriggerTab(_lastActiveTab);
             };
             _advancedButton = _root.Q<Button>("AdvancedButton");
             _advancedButton.clicked += () =>
             {
-                _lastActiveTabWasBasic = false;
-                SwitchTriggerTab(_lastActiveTabWasBasic);
+                _lastActiveTab = ActiveTab.Advanced;
+                SwitchTriggerTab(_lastActiveTab);
             };
 
             _newButton = _root.Q<Button>("NewStreamGaugeButton");
@@ -137,45 +176,49 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public void ShowFragment(GameObject entity)
         {
-            _floodgate = entity.GetComponent<Floodgate>();
-            _floodgateTriggerMonoBehaviour = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
-            if ((bool)_floodgateTriggerMonoBehaviour)
+            _waterpumpMono = entity.GetComponent<WaterPumpMonobehaviour>();
+            if ((bool)_waterpumpMono)
             {
-                _droughtSettingsFragment.ShowFragment(_floodgate, _floodgateTriggerMonoBehaviour);
-                _scheduleFragment.ShowFragment(_floodgate, _floodgateTriggerMonoBehaviour);
-                _attachToStreamGaugeFragment.ShowFragment(_floodgateTriggerMonoBehaviour);
-                SwitchTriggerTab(_lastActiveTabWasBasic);
+                _droughtSettingsFragment.ShowFragment( _waterpumpMono);
+                _attachWaterpumpToStreamGaugeFragment.ShowFragment(_waterpumpMono);
+                _scheduleFragment.ShowFragment(_waterpumpMono);
+                SwitchTriggerTab(_lastActiveTab);
             }
         }
 
         public void ClearFragment()
         {
-            _floodgateTriggerMonoBehaviour = null;
+            _waterpumpMono = null;
             _droughtSettingsFragment.ClearFragment();
+            _attachWaterpumpToStreamGaugeFragment.ClearFragment();
             _scheduleFragment.ClearFragment();
-            _attachToStreamGaugeFragment.ClearFragment();
             _root.ToggleDisplayStyle(visible: false);
         }
 
         public void UpdateFragment()
         {
-            if ((bool)_floodgateTriggerMonoBehaviour)
+            if ((bool)_waterpumpMono)
             {
                 _droughtSettingsFragment.UpdateFragment();
+                _attachWaterpumpToStreamGaugeFragment.UpdateFragment();
                 _scheduleFragment.UpdateFragment();
-                _attachToStreamGaugeFragment.UpdateFragment();
                 _root.ToggleDisplayStyle(visible: true);
+
             }
         }
 
-        public void SwitchTriggerTab(bool showBasic)
+        public void SwitchTriggerTab(ActiveTab tabToShow)
         {
-            _basicButton.EnableInClassList(SelectedTabButtonCLass, showBasic);
-            _basicTab.ToggleDisplayStyle(showBasic);
-            _advancedButton.EnableInClassList(SelectedTabButtonCLass, !showBasic);
-            _advancedTab.ToggleDisplayStyle(!showBasic);
+            _basicButton.EnableInClassList(SelectedTabButtonCLass, tabToShow == ActiveTab.Basic ? true : false);
+            _basicTab.ToggleDisplayStyle(tabToShow == ActiveTab.Basic ? true : false);
 
-            _newButton.ToggleDisplayStyle(!showBasic);
+            _timerButton.EnableInClassList(SelectedTabButtonCLass, tabToShow == ActiveTab.Timer ? true : false);
+            _timerTab.ToggleDisplayStyle(tabToShow == ActiveTab.Timer ? true : false);
+
+            _advancedButton.EnableInClassList(SelectedTabButtonCLass, tabToShow == ActiveTab.Advanced ? true : false);
+            _advancedTab.ToggleDisplayStyle(tabToShow == ActiveTab.Advanced ? true : false);
+
+            _newButton.ToggleDisplayStyle(tabToShow == ActiveTab.Advanced ? true : false);
         }
     }
 }

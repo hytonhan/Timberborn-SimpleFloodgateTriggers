@@ -1,4 +1,5 @@
-﻿using Timberborn.SingletonSystem;
+﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
+using Timberborn.SingletonSystem;
 using Timberborn.WeatherSystem;
 using TimberbornAPI.EventSystem;
 using UnityEngine;
@@ -18,6 +19,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     floodgate.OnDroughtStarted();
                 }
             }
+
+            var waterpumps = GameObject.FindObjectsOfType(typeof(WaterPumpMonobehaviour));
+            if(waterpumps != null)
+            {
+                foreach (WaterPumpMonobehaviour waterpump in waterpumps)
+                {
+                    waterpump.OnDroughtStarted();
+                }
+            }
         }
 
         [OnEvent]
@@ -29,6 +39,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 foreach(FloodgateTriggerMonoBehaviour floodgate in floodgates)
                 {
                     floodgate.OnDroughtEnded();
+                }
+            }
+            var waterpumps = GameObject.FindObjectsOfType(typeof(WaterPumpMonobehaviour));
+            if (waterpumps != null)
+            {
+                foreach(WaterPumpMonobehaviour waterpump in waterpumps)
+                {
+                    waterpump.OnDroughtEnded();
                 }
             }
         }
