@@ -7,8 +7,12 @@ The current version v2.0.0 only works with experimental v0.2.6.
 # Usage
 The will add a simple UI fragment on the Floodgate UI. Example images below.
 
+Floodgate UI
+
 ![BasicTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/BasicTab.PNG?raw=true)
 ![AdvancedTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/AdvancedTab.PNG)
+
+Water pumps UI
 ![WaterPumpBasicTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/WaterpumpBasic.PNG)
 ![WaterpumpTimerTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/WaterpumpTimer.PNG)
 ![WaterpumpAdvancedTab](https://raw.githubusercontent.com/hytonhan/Timberborn-SimpleFloodgateTriggers/main/attachments/WaterpumpAdvanced.PNG)
@@ -59,6 +63,10 @@ Recommended way to install this mod is through [Thunderstore](https://timberborn
 and adding the dll to your bepinex plugins folder. This plugin is dependent on the magnificent [TimberAPI](https://github.com/Timberborn-Modding-Central/TimberAPI).
 
 # Changelog
+
+## 2.0.1 - 6.9.2022
+- Added japanese localization
+- Fixed a line in the english localization
 
 ## 2.0.0 - 5.9.2022
 - Upped TimberAPI dependency to 0.4.4
