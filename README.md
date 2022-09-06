@@ -65,7 +65,7 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 # Changelog
 
 ## 2.0.1 - 6.9.2022
-- Added japanese localization
+- Added japanese localization (thank you sukunabikona!)
 - Fixed a line in the english localization
 
 ## 2.0.0 - 5.9.2022
