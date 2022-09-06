@@ -2,7 +2,7 @@
 This plugin for Timberborn allows you to automate your Floodgates a little. Currently we offer automatic setting of floodgate height 
 when a Drought starts or ends, based on a basic schedule or based on a Stream Gauge depth. Pretty neat.
 
-The current version v2.0.0 only works with experimental v0.2.6.
+The current version v2.0.2 only works with experimental v0.2.6.
 
 # Usage
 The will add a simple UI fragment on the Floodgate UI. Example images below.
@@ -65,28 +65,31 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
-## 2.0.1 - 6.9.2022
+## v2.0.2 - 6.9.2022
+- Minor UI fixed on water pump fragments
+
+## v2.0.1 - 6.9.2022
 - Added japanese localization (thank you sukunabikona!)
 - Fixed a line in the english localization
 
-## 2.0.0 - 5.9.2022
+## v2.0.0 - 5.9.2022
 - Upped TimberAPI dependency to 0.4.4
 - Fixed crash when game was saved and a link between floodgate and stream gauge existed
 - Fixed stream gauge high height slider not working properly with floodgates taller than 3
 - Added option to enable schedule only during droughts
 - Added automation for water pumps and dumps!
 
-## 1.0.3 - 11.6.2022
+## v1.0.3 - 11.6.2022
 - Modified so mod works on stable and golem experimental
 
-## 1.0.2 - 3.6.2022
+## v1.0.2 - 3.6.2022
 - Fixed crash when setting values on unfinished floodgate and no finished floodgates were on the map
 
-## 1.0.1 - 30.3.2022
+## v1.0.1 - 30.3.2022
 - Fixed issue where existing links were not removed when a Floodgate was deleted
 - Fixed some typos in game and in readme
 
-## 1.0.0 - 29.3.2022
+## v1.0.0 - 29.3.2022
 - Added option to link Floodgates with Stream Gauges
 	- This allows to set Floodgate's height when StreamGagues depth is below or above chosen thresholds
 - UI Overhaul
@@ -94,17 +97,17 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 	- Basic tab contains Drought and Schedule settings
 	- Advanced tab contains StreamGague links
 
-## 0.2.0 - 22.3.2022
+## v0.2.0 - 22.3.2022
 - Added Schedule based setting of Floodgate height
 	- Schedule takes two times and two heights.
 	- When the first time is hit, sets the floodgate height to the first chosen height. Do the same at second time. Repeat the next day.
 	- Schedule can optionally be disabled during Droughts.
 
-## 0.1.2 - 20.3.2022
+## v0.1.2 - 20.3.2022
 - Fixed Drought related Floodgate UI Fragment to look like fragments from the base game.
 
-## 0.1.1 - 19.3.2022
+## v0.1.1 - 19.3.2022
 - Minor tweaks to Readme
 
-## 0.1.0 - 19.3.2022
+## v0.1.0 - 19.3.2022
 - First implementation that supports setting of height when Droughts end or start.

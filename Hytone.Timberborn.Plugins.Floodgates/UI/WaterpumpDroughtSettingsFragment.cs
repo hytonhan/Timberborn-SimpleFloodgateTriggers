@@ -48,7 +48,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public VisualElement InitiliazeFragment(VisualElement parent)
         {
             var foo = _builder.CreateComponentBuilder()
-                              .CreateToggle()
+                              .CreateVisualElement()
                               .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnDroughtStart",
                                                                          name: "PauseOnDroughtStart",
@@ -57,7 +57,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
                                                                                                     .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
             var foo2 = _builder.CreateComponentBuilder()
-                               .CreateToggle()
+                               .CreateVisualElement()
                                .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnDroughtEnded",
                                                                          name: "UnpauseOnDroughtEnded",

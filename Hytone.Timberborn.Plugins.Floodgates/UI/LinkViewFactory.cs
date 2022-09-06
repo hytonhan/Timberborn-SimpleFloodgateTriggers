@@ -226,7 +226,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         public VisualElement CreateViewForWaterpump(int index)
         {
-            var foo = _builder.CreateComponentBuilder()
+            var root = _builder.CreateComponentBuilder()
                               .CreateVisualElement()
                               .AddComponent(
                                 _builder.CreateComponentBuilder()
@@ -290,7 +290,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold1Toggle{index}",
                                                                                          locKey: "Floodgates.WaterpumpTrigger.Threshold1",
-                                                                                         fontStyle: FontStyle.Normal,
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                                          builder:
                                                                                           builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                 .AddPreset(
@@ -304,7 +304,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold2Toggle{index}",
                                                                                          locKey: "Floodgates.WaterpumpTrigger.Threshold2",
-                                                                                         fontStyle: FontStyle.Normal,
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                                          builder:
                                                                                           builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                 .AddPreset(
@@ -318,7 +318,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold3Toggle{index}",
                                                                                          locKey: "Floodgates.WaterpumpTrigger.Threshold3",
-                                                                                         fontStyle: FontStyle.Normal,
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                                          builder:
                                                                                           builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                 .AddPreset(
@@ -332,7 +332,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold4Toggle{index}",
                                                                                          locKey: "Floodgates.WaterpumpTrigger.Threshold4",
-                                                                                         fontStyle: FontStyle.Normal,
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                                          builder:
                                                                                           builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                 .AddPreset(
@@ -345,7 +345,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                 .Build())
                                   .Build();
 
-            return foo;
+            return root;
         }
 
     }
