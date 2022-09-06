@@ -8,7 +8,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution items", "Solution items", "{69B22B3D-4C7E-4253-8CB9-6CCFC47DFF12}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
-		..\package\manifest.json = ..\package\manifest.json
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
