@@ -11,7 +11,7 @@ Floodgate.Triggers.Timer, Timer
 Floodgate.Triggers.Advanced, Advanced
 Floodgate.Triggers.AttachToStreamGauge, Attach Stream Gauge
 Floodgate.Triggers.PickStreamGaugeTitle, Pick a Stream Gauge
-Floodgate.Triggers.PickStreamGaugeTip, No really, pick any.
+Floodgate.Triggers.PickStreamGaugeTip, "No really, pick any."
 Floodgates.Triggers.NoLinks, No Stream Gauges attached
 Floodgates.Triggers.NoFloodgateLinks, No objects linked
 Floodgates.Triggers.LinkedFloodgates, Linked objects
