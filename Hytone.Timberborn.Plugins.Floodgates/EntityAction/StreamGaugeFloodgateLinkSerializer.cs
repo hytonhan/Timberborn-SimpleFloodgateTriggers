@@ -15,6 +15,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<float> Height1Key = new PropertyKey<float>("Height1");
         private static readonly PropertyKey<float> Height2Key = new PropertyKey<float>("Height2");
 
+        private static readonly PropertyKey<bool> DisableDuringDroughtKey = new PropertyKey<bool>("DisableDuringDrought");
+        private static readonly PropertyKey<bool> DisableDuringTemperateKey = new PropertyKey<bool>("DisableDuringTemperate");
+
         public void Serialize(StreamGaugeFloodgateLink value, IObjectSaver objectSaver)
         {
             objectSaver.Set(FloodgateKey, value.Floodgate);
@@ -23,6 +26,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             objectSaver.Set(Threshold2Key, value.Threshold2);
             objectSaver.Set(Height1Key, value.Height1);
             objectSaver.Set(Height2Key, value.Height2);
+
+            objectSaver.Set(DisableDuringDroughtKey, value.DisableDuringDrought);
+            objectSaver.Set(DisableDuringTemperateKey, value.DisableDuringTemperate);
         }
 
         public Obsoletable<StreamGaugeFloodgateLink> Deserialize(IObjectLoader objectLoader)
@@ -34,7 +40,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 Threshold1 = objectLoader.Get(Threshold1Key),
                 Threshold2 = objectLoader.Get(Threshold2Key),
                 Height1 = objectLoader.Get(Height1Key),
-                Height2 = objectLoader.Get(Height2Key)
+                Height2 = objectLoader.Get(Height2Key),
+                DisableDuringDrought = objectLoader.Has(DisableDuringDroughtKey) ? objectLoader.Get(DisableDuringDroughtKey) : false,
+                DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) ? objectLoader.Get(DisableDuringTemperateKey) : false
             };
             return link;
         }

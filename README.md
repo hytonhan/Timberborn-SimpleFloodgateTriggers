@@ -65,6 +65,10 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v2.1.0 - 7.9.2022
+- Added buttons for water pumps to pause when drought ends and unpause when drought starts
+- Added buttons to disable water 
+
 ## v2.0.2 - 6.9.2022
 - Minor UI fixed on water pump fragments
 

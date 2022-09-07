@@ -112,6 +112,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             var currHeight = _streamGauge.WaterLevel;
             foreach(var link in FloodgateLinks)
             {
+                if (_droughtServíce.IsDrought && link.DisableDuringDrought)
+                {
+                    return;
+                }
+                else if (_droughtServíce.IsDrought == false && link.DisableDuringTemperate)
+                {
+                    return;
+                }
                 if (currHeight <= link.Threshold1)
                 {
                     var floodgate = link.Floodgate.GetComponent<Floodgate>();

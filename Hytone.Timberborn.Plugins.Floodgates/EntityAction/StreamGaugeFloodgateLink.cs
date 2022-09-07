@@ -14,6 +14,9 @@
         public float Height1 { get; set; }
         public float Height2 { get; set; }
 
+        public bool DisableDuringDrought;
+        public bool DisableDuringTemperate;
+
         public StreamGaugeFloodgateLink(
             FloodgateTriggerMonoBehaviour floodgate,
             StreamGaugeMonoBehaviour streamGauge)

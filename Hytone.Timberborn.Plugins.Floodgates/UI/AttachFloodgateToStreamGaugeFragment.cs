@@ -32,7 +32,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         LinkViewFactory _streamGaugeFloodgateLinkViewFactory;
 
         //There has to be a better way for this...
-        private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>> _settingsList = new List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>>();
+        private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle>>> _settingsList = new List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle>>>();
         
         public AttachFloodgateToStreamGaugeFragment(
             AttachFloodgateToStreamGaugeButton attachToStreamGaugeButton,
@@ -109,6 +109,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 setting.Item6.SetValueWithoutNotify(link.Height1);
                 setting.Rest.Item1.highValue = height;
                 setting.Rest.Item1.SetValueWithoutNotify(link.Height2);
+
+                setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
+                setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
             }
         }
 
@@ -174,8 +177,23 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var threshold2FloodgateSlider = view.Q<Slider>($"Threshold2FloodgateHeightSlider{i}");
                 threshold2FloodgateSlider.RegisterValueChangedCallback((@event) => ChangeHeightSlider(@event, j, 1));
 
-                var foo =Tuple.Create(
-                    threshold1Label, threshold1Slider, threshold2Label, threshold2Slider, threshold1FloodgateLabel, threshold1FloodgateSlider, threshold2FloodgateLabel, threshold2FloodgateSlider);
+                var disableDuringDroughtToggle = view.Q<Toggle>($"DisableDuringDroughtToggle{i}");
+                disableDuringDroughtToggle.RegisterValueChangedCallback((@event) => ChangeDisableOnDroughtToggle(@event, j));
+                var disableDuringTemperate = view.Q<Toggle>($"DisableDuringTemperate{i}");
+                disableDuringTemperate.RegisterValueChangedCallback((@event) => ChangeDisableOnTemperateToggle(@event, j));
+
+
+                var foo = new Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle>>(
+                    threshold1Label, 
+                    threshold1Slider, 
+                    threshold2Label, 
+                    threshold2Slider, 
+                    threshold1FloodgateLabel, 
+                    threshold1FloodgateSlider, 
+                    threshold2FloodgateLabel, 
+                    new Tuple<Slider, Toggle, Toggle>(threshold2FloodgateSlider,
+                                                      disableDuringDroughtToggle,
+                                                      disableDuringTemperate));
 
                 _settingsList.Add(foo);
                 _linksScrollView.Add(view);
@@ -186,6 +204,19 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 _linksScrollView.Add(_noLinks);
             }
+        }
+
+        public void ChangeDisableOnDroughtToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Item2;
+            _floodgateTriggerMonoBehaviour.FloodgateLinks[index].DisableDuringDrought = changeEvent.newValue;
+        }
+        public void ChangeDisableOnTemperateToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Item3;
+            _floodgateTriggerMonoBehaviour.FloodgateLinks[index].DisableDuringTemperate = changeEvent.newValue;
         }
 
         /// <summary>
