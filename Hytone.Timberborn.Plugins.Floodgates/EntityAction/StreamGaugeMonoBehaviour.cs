@@ -6,7 +6,9 @@ using Timberborn.Buildings;
 using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
 using Timberborn.TickSystem;
+using Timberborn.TimeSystem;
 using Timberborn.WaterBuildings;
+using Timberborn.WeatherSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
@@ -24,12 +26,17 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private EntityComponentRegistry _entityComponentRegistry;
 
         private StreamGauge _streamGauge;
-		
+
+
+        private DroughtService _droughtServíce;
+
         [Inject]
         public void InjectDependencies(
-            EntityComponentRegistry entityComponentRegistry)
+            EntityComponentRegistry entityComponentRegistry,
+            DroughtService droughtServíce)
         {
             _entityComponentRegistry = entityComponentRegistry;
+            _droughtServíce = droughtServíce;
         }
 
 
@@ -125,6 +132,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
             foreach(var link in WaterpumpLinks)
             {
+                if(_droughtServíce.IsDrought && link.DisableDuringDrought)
+                {
+                    return;
+                }
+                else if(_droughtServíce.IsDrought == false && link.DisableDuringTemperate)
+                {
+                    return;
+                }
+
                 var pausable = link.WaterPump.GetComponent<PausableBuilding>();
                 if (currHeight <= link.Threshold1 && link.Enabled1)
                 {

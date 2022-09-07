@@ -29,3 +29,5 @@ Floodgates.WaterpumpTrigger.Threshold3, Unpause when below
 Floodgates.WaterpumpTrigger.Threshold4, Unpause when above
 Floodgates.WaterpumpTrigger.PauseStartTime, Pause start time
 Floodgates.WaterpumpTrigger.ResumeStartTime, Resume start time
+Floodgates.WaterpumpTrigger.DisableDuringDrought, Disable during drought
+Floodgates.WaterpumpTrigger.DisableDuringTemperate, Disable during temperate

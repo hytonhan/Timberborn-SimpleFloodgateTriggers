@@ -33,7 +33,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         LinkViewFactory _linkViewFactory;
 
         //There has to be a better way for this...
-        private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider>>> _settingsList = new List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider>>>();
+        private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle>>> _settingsList = new List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle>>>();
 
         public AttachWaterpumpToStreamGaugeFragment(
             AttachWaterpumpToStreamGaugeButton attachToStreamGaugeButton,
@@ -109,6 +109,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 setting.Item6.SetValueWithoutNotify(link.Threshold3);
                 setting.Item7.SetValueWithoutNotify(link.Enabled4);
                 setting.Rest.Item1.SetValueWithoutNotify(link.Threshold4);
+
+                setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
+                setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
             }
         }
 
@@ -173,8 +176,22 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var threshold4Slider = view.Q<Slider>($"Threshold4Slider{i}");
                 threshold4Slider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 3));
 
-                var foo = Tuple.Create(
-                    threshold1Toggle, threshold1Slider, threshold2Toggle, threshold2Slider, threshold3Toggle, threshold3Slider, threshold4Toggle, threshold4Slider);
+                var disableDuringDroughtToggle = view.Q<Toggle>($"DisableDuringDroughtToggle{i}");
+                disableDuringDroughtToggle.RegisterValueChangedCallback((@event) => ChangeDisableOnDroughtToggle(@event, j));
+                var disableDuringTemperate = view.Q<Toggle>($"DisableDuringTemperate{i}");
+                disableDuringTemperate.RegisterValueChangedCallback((@event) => ChangeDisableOnTemperateToggle(@event, j));
+
+                var foo = new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle>>(
+                    threshold1Toggle,
+                    threshold1Slider,
+                    threshold2Toggle,
+                    threshold2Slider,
+                    threshold3Toggle,
+                    threshold3Slider,
+                    threshold4Toggle,
+                    new Tuple<Slider, Toggle, Toggle>(threshold4Slider,
+                                                      disableDuringDroughtToggle,
+                                                      disableDuringTemperate));
 
                 _settingsList.Add(foo);
                 _linksScrollView.Add(view);
@@ -186,6 +203,20 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _linksScrollView.Add(_noLinks);
             }
         }
+
+        public void ChangeDisableOnDroughtToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Item2;
+            _waterpumpMonoBehaviour.WaterPumpLinks[index].DisableDuringDrought = changeEvent.newValue;
+        }
+        public void ChangeDisableOnTemperateToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Item3;
+            _waterpumpMonoBehaviour.WaterPumpLinks[index].DisableDuringTemperate = changeEvent.newValue;
+        }
+
         public void ChangeThresholdSlider(ChangeEvent<float> changeEvent,
                                           int index,
                                           int sliderIndex)
@@ -196,12 +227,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 slider = _settingsList[index].Item2;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Threshold1 = changeEvent.newValue;
             }
-            else if(sliderIndex == 1)
+            else if (sliderIndex == 1)
             {
                 slider = _settingsList[index].Item4;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Threshold2 = changeEvent.newValue;
             }
-            else if(sliderIndex == 2)
+            else if (sliderIndex == 2)
             {
                 slider = _settingsList[index].Item6;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Threshold3 = changeEvent.newValue;

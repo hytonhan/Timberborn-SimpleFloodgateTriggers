@@ -20,6 +20,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public bool Enabled3 { get; set; }
         public bool Enabled4 { get; set; }
 
+        public bool DisableDuringDrought;
+        public bool DisableDuringTemperate;
+
         public WaterPumpStreamGaugeLink(
             WaterPumpMonobehaviour waterPump,
             StreamGaugeMonoBehaviour streamGauge)
@@ -34,6 +37,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             Enabled2 = false;
             Enabled3 = false;
             Enabled4 = false;
+            DisableDuringDrought = false;
+            DisableDuringTemperate = false;
         }
     }
 }

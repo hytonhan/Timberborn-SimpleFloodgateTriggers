@@ -14,6 +14,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         private static readonly PropertyKey<bool> Enabled2Key = new PropertyKey<bool>("Enabled2");
         private static readonly PropertyKey<bool> Enabled3Key = new PropertyKey<bool>("Enabled3");
         private static readonly PropertyKey<bool> Enabled4Key = new PropertyKey<bool>("Enabled4");
+        private static readonly PropertyKey<bool> DisableDuringDroughtKey = new PropertyKey<bool>("DisableDuringDrought");
+        private static readonly PropertyKey<bool> DisableDuringTemperateKey = new PropertyKey<bool>("DisableDuringTemperate");
 
         public void Serialize(WaterPumpStreamGaugeLink value, IObjectSaver objectSaver)
         {
@@ -27,11 +29,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             objectSaver.Set(Enabled2Key, value.Enabled2);
             objectSaver.Set(Enabled3Key, value.Enabled3);
             objectSaver.Set(Enabled4Key, value.Enabled4);
+            objectSaver.Set(DisableDuringDroughtKey, value.DisableDuringDrought);
+            objectSaver.Set(DisableDuringTemperateKey, value.DisableDuringTemperate);
         }
 
         public Obsoletable<WaterPumpStreamGaugeLink> Deserialize(IObjectLoader objectLoader)
         {
-
             var link = new WaterPumpStreamGaugeLink(objectLoader.Get(WaterPumpKey),
                                                     objectLoader.Get(StreamGaugeKey))
             {
@@ -42,7 +45,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
                 Enabled1 = objectLoader.Get(Enabled1Key),
                 Enabled2 = objectLoader.Get(Enabled2Key),
                 Enabled3 = objectLoader.Get(Enabled3Key),
-                Enabled4 = objectLoader.Get(Enabled4Key)
+                Enabled4 = objectLoader.Get(Enabled4Key),
+                DisableDuringDrought = objectLoader.Has(DisableDuringDroughtKey) ? objectLoader.Get(DisableDuringDroughtKey) : false,
+                DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) ? objectLoader.Get(DisableDuringTemperateKey) : false
             };
             return link;
         }

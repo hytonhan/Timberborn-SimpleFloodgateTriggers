@@ -293,6 +293,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                 .CreateVisualElement()
                                                 .AddPreset(
                                                     factory => factory.Toggles()
+                                                                      .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringDrought",
+                                                                                         name: $"DisableDuringDroughtToggle{index}",
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                         builder:
+                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                .AddPreset(
+                                                    factory => factory.Toggles()
+                                                                      .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringTemperate",
+                                                                                         name: $"DisableDuringTemperate{index}",
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                         builder:
+                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                            .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(30, Pixel), 0))))
+                                                .AddPreset(
+                                                    factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold1Toggle{index}",
                                                                                          locKey: "Floodgates.WaterpumpTrigger.Threshold1",
                                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
@@ -348,7 +363,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
                                                                                                                            .SetPadding(new Padding(new Length(21, Pixel), 0))))
                                                 .Build())
-                                  .Build();
+                                  .BuildAndInitialize();
 
             return root;
         }
