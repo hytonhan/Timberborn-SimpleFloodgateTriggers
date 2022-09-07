@@ -13,7 +13,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             containerDefinition.Bind<FloodgateDroughtFragment>().AsSingleton();
             containerDefinition.Bind<FloodgateScheduleFragment>().AsSingleton();
-            containerDefinition.Bind<AttachToStreamGaugeButton>().AsSingleton();
+            containerDefinition.Bind<AttachFloodgateToStreamGaugeButton>().AsSingleton();
             containerDefinition.Bind<AttachFloodgateToStreamGaugeFragment>().AsSingleton();
             containerDefinition.Bind<TriggersFragment>().AsSingleton();
             containerDefinition.Bind<LinkViewFactory>().AsSingleton();
@@ -21,6 +21,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.MultiBind<EntityPanelModule>().ToProvider<EntityPanelModuleProvider>().AsSingleton();
 
             containerDefinition.Bind<WaterPumpFragment>().AsSingleton();
+            containerDefinition.Bind<AttachWaterpumpToStreamGaugeButton>().AsSingleton();
             containerDefinition.Bind<AttachWaterpumpToStreamGaugeFragment>().AsSingleton();
             containerDefinition.Bind<WaterpumpDroughtSettingsFragment>().AsSingleton();
             containerDefinition.Bind<WaterpumpScheduleFragment>().AsSingleton();

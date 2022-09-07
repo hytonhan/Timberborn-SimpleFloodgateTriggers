@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Timberborn.Common;
+using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.SelectionSystem;
 using Timberborn.WaterBuildings;
@@ -21,7 +22,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     {
         private readonly UIBuilder _builder;
         private readonly ILoc _loc;
-        private readonly AttachToStreamGaugeButton _attachToStreamGaugeButton;
+        private readonly AttachWaterpumpToStreamGaugeButton _attachToStreamGaugeButton;
         private WaterPumpMonobehaviour _waterpumpMonoBehaviour;
 
         private VisualElement _linksScrollView;
@@ -35,7 +36,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider>>> _settingsList = new List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider>>>();
 
         public AttachWaterpumpToStreamGaugeFragment(
-            AttachToStreamGaugeButton attachToStreamGaugeButton,
+            AttachWaterpumpToStreamGaugeButton attachToStreamGaugeButton,
             UIBuilder builder,
             SelectionManager selectionManager,
             LinkViewFactory streamGaugeFloodgateLinkViewFactory,
@@ -135,7 +136,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var j = i;
                 var link = links[i];
                 var streamGauge = link.StreamGauge.gameObject;
-                var view = _linkViewFactory.CreateViewForWaterpump(i);
+                var labeledPrefab = streamGauge.GetComponent<LabeledPrefab>();
+                var view = _linkViewFactory.CreateViewForWaterpump(i, labeledPrefab.DisplayNameLocKey);
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
                 var img = new Image();

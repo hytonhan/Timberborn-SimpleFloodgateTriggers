@@ -2,6 +2,7 @@
 using System;
 using System.Globalization;
 using Timberborn.CoreUI;
+using Timberborn.Localization;
 using Timberborn.SingletonSystem;
 using Timberborn.WaterBuildings;
 using TimberbornAPI.Common;
@@ -18,6 +19,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     public class FloodgateDroughtFragment
     {
         private readonly UIBuilder _builder;
+        private readonly ILoc _loc;
         private VisualElement _root;
         private Floodgate _floodgate;
         private FloodgateTriggerMonoBehaviour _floodgateTriggerComponent;
@@ -30,9 +32,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Toggle _droughtStartedEnabledToggle;
         private Label _droughtStartedLabel;
 
-        public FloodgateDroughtFragment(UIBuilder builder)
+        public FloodgateDroughtFragment(
+            UIBuilder builder,
+            ILoc loc)
         {
             _builder = builder ?? throw new ArgumentNullException(nameof(builder));
+            _loc = loc;
         }
 
         public void ClearFragment()
@@ -129,10 +134,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             if ((bool)_floodgate && (bool)_floodgateTriggerComponent)
             {
-                _droughtEndedLabel.text = "Height: " + _droughtEndedSlider.value.ToString(CultureInfo.InvariantCulture);
+                _droughtEndedLabel.text = $"{_loc.T("Floodgate.Triggers.Height")}: " + _droughtEndedSlider.value.ToString(CultureInfo.InvariantCulture);
                 _droughtEndedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtEndedEnabled);
 
-                _droughtStartedLabel.text = "Height: " + _droughtStartedSlider.value.ToString(CultureInfo.InvariantCulture);
+                _droughtStartedLabel.text = $"{_loc.T("Floodgate.Triggers.Height")}: " + _droughtStartedSlider.value.ToString(CultureInfo.InvariantCulture);
                 _droughtStartedEnabledToggle.SetValueWithoutNotify(_floodgateTriggerComponent.DroughtStartedEnabled);
             }
         }

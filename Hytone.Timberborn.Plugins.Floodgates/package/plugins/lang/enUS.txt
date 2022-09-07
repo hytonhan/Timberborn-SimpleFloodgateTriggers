@@ -20,7 +20,9 @@ Floodgates.Triggers.Threshold2, Stream Gauge high threshold
 Floodgates.Triggers.HeightWhenBelowThreshold1, Floodgate height below low threshold
 Floodgates.Triggers.HeightWhenAboveThreshold2, Floodgate height above high threshold
 Floodgate.Triggers.PauseOnDroughtStart, Pause when drought starts
+Floodgate.Triggers.UnpauseOnDroughtStart, Unpause when drought starts
 Floodgate.Triggers.UnpauseOnDroughtEnded, Unpause when drought ends
+Floodgate.Triggers.PauseOnDroughtEnded, Pause when drought ends
 Floodgates.WaterpumpTrigger.Threshold1, Pause when below
 Floodgates.WaterpumpTrigger.Threshold2, Pause when above
 Floodgates.WaterpumpTrigger.Threshold3, Unpause when below

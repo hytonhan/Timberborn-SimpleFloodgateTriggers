@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Timberborn.Common;
 using Timberborn.CoreUI;
 using Timberborn.EntityPanelSystem;
+using Timberborn.EntitySystem;
 using Timberborn.SelectionSystem;
 using TimberbornAPI.UIBuilderSystem;
 using UnityEngine;
@@ -140,7 +141,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             foreach (var link in links)
             {
                 var floodgate = link.Floodgate.gameObject;
-                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge("Floodgate");
+                var labeledPrefab = floodgate.GetComponent<LabeledPrefab>();
+                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
                 var img = new Image();
@@ -163,13 +165,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
             foreach (var link in waterpumplinks)
             {
-                var r = new Regex(@"
-                (?<=[A-Z])(?=[A-Z][a-z]) |
-                 (?<=[^A-Z])(?=[A-Z]) |
-                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+                //var r = new Regex(@"
+                //(?<=[A-Z])(?=[A-Z][a-z]) |
+                // (?<=[^A-Z])(?=[A-Z]) |
+                // (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
                 var waterpump = link.WaterPump.gameObject;
+                var labeledPrefab = waterpump.GetComponent<LabeledPrefab>();
                 string waterpumpName = waterpump.name.Split('.').First();
-                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge($"{r.Replace(waterpumpName, " ")}");
+                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
                 var img = new Image();

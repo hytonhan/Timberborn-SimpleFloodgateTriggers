@@ -17,6 +17,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         //Keys used in data saving/loading
         private static readonly ComponentKey WaterPumpKey = new ComponentKey(nameof(WaterPumpMonobehaviour));
         private static readonly PropertyKey<bool> PauseOnDroughtStartKey = new PropertyKey<bool>(nameof(PauseOnDroughtStart));
+        private static readonly PropertyKey<bool> UnpauseOnDroughtStartKey = new PropertyKey<bool>(nameof(UnpauseOnDroughtStart));
+        private static readonly PropertyKey<bool> PauseOnDroughtEndedKey = new PropertyKey<bool>(nameof(PauseOnDroughtEnded));
         private static readonly PropertyKey<bool> UnpauseOnDroughtEndedKey = new PropertyKey<bool>(nameof(UnpauseOnDroughtEnded));
 
         private static readonly PropertyKey<bool> ScheduleEnabledKey = new PropertyKey<bool>(nameof(ScheduleEnabled));
@@ -37,6 +39,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public ReadOnlyCollection<WaterPumpStreamGaugeLink> WaterPumpLinks { get; private set; }
 
         public bool PauseOnDroughtStart { get; set; }
+        public bool UnpauseOnDroughtStart { get; set; }
+        public bool PauseOnDroughtEnded { get; set; }
         public bool UnpauseOnDroughtEnded { get; set; }
 
 
@@ -69,7 +73,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public void Save(IEntitySaver entitySaver)
         {
             IObjectSaver component = entitySaver.GetComponent(WaterPumpKey);
+
             component.Set(PauseOnDroughtStartKey, PauseOnDroughtStart);
+            component.Set(UnpauseOnDroughtStartKey, UnpauseOnDroughtStart);
+            component.Set(PauseOnDroughtEndedKey, PauseOnDroughtEnded);
+            component.Set(UnpauseOnDroughtEndedKey, UnpauseOnDroughtEnded);
 
             component.Set(ScheduleEnabledKey, ScheduleEnabled);
             component.Set(DisableScheduleOnDroughtKey, DisableScheduleOnDrought);
@@ -77,7 +85,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             component.Set(PauseOnScheduleTimeKey, PauseOnScheduleTime);
             component.Set(ResumeOnScheduleTimeKey, ResumeOnScheduleTime);
 
-            component.Set(UnpauseOnDroughtEndedKey, UnpauseOnDroughtEnded);
             component.Set(WaterpumpLinksKey, WaterPumpLinks, _linkSerializer);
         }
 
@@ -91,6 +98,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             if (component.Has(PauseOnDroughtStartKey))
             {
                 PauseOnDroughtStart = component.Get(PauseOnDroughtStartKey);
+            }
+            if (component.Has(UnpauseOnDroughtStartKey))
+            {
+                UnpauseOnDroughtStart = component.Get(UnpauseOnDroughtStartKey);
+            }
+            if (component.Has(PauseOnDroughtEndedKey))
+            {
+                PauseOnDroughtEnded = component.Get(PauseOnDroughtEndedKey);
             }
             if (component.Has(UnpauseOnDroughtEndedKey))
             {
@@ -147,7 +162,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtStarted()
         {
-            var waterinput = GetComponent<WaterInput>();
             var pausable = GetComponent<PausableBuilding>();
 
             if (PauseOnDroughtStart == true &&
@@ -155,17 +169,24 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             {
                 pausable.Pause();
             }
+            else if (UnpauseOnDroughtStart == true && pausable.Paused == true)
+            {
+                pausable.Resume();
+            }
         }
 
         public void OnDroughtEnded()
         {
-            var waterinput = GetComponent<WaterInput>();
             var pausable = GetComponent<PausableBuilding>();
 
             if (UnpauseOnDroughtEnded == true &&
                 pausable.Paused == true)
             {
                 pausable.Resume();
+            }
+            else if(PauseOnDroughtEnded == true && pausable.Paused == false)
+            {
+                pausable.Pause();
             }
         }
 

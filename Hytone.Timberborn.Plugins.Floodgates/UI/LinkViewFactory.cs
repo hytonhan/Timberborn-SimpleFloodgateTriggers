@@ -1,4 +1,5 @@
-﻿using TimberbornAPI.Common;
+﻿using Timberborn.Localization;
+using TimberbornAPI.Common;
 using TimberbornAPI.UIBuilderSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,10 +13,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     public class LinkViewFactory
     {
         private readonly UIBuilder _builder;
+        private readonly ILoc _loc;
+
         public LinkViewFactory(
-            UIBuilder builder)
+            UIBuilder builder,
+            ILoc loc)
         {
             _builder = builder;
+            _loc = loc;
         }
 
         /// <summary>
@@ -23,7 +28,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public VisualElement CreateViewForFloodgate(int index)
+        public VisualElement CreateViewForFloodgate(int index, string streamgaugeLocKey)
         {
             var foo = _builder.CreateComponentBuilder()
                               .CreateVisualElement()
@@ -61,7 +66,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                               .SetMargin(new Margin(new Length(1, Pixel), 0, 0, new Length(6, Pixel)))
                                                                               .Build())
                                                                  .AddPreset(factory => factory.Labels()
-                                                                                              .GameTextBig(text: "Stream Gauge",
+                                                                                              .GameTextBig(text: _loc.T(streamgaugeLocKey),
                                                                                                            builder: builder => builder.SetWidth(new Length(100, Pixel))))
                                                                  .Build())
                                                     .AddComponent(
@@ -151,7 +156,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// Createa a link view that is shown on the StreamGauge's fragment
         /// </summary>
         /// <returns></returns>
-        public VisualElement CreateViewForStreamGauge(string label)
+        public VisualElement CreateViewForStreamGauge(string objectLocKey)
         {
             var foo = _builder.CreateComponentBuilder()
                                      .CreateButton()
@@ -186,7 +191,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                            .SetMargin(new Margin(new Length(1, Pixel), 0, 0, new Length(6, Pixel)))
                                                                            .Build())
                                                               .AddPreset(factory => factory.Labels()
-                                                                                           .GameTextBig(text: label,
+                                                                                           .GameTextBig(text: _loc.T(objectLocKey),
                                                                                                         builder: builder => builder.SetWidth(new Length(200, Pixel))
                                                                                                                                    .SetStyle(style =>
                                                                                                                                    {
@@ -224,7 +229,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public VisualElement CreateViewForWaterpump(int index)
+        public VisualElement CreateViewForWaterpump(int index, string streamgaugeLocKey)
         {
             var root = _builder.CreateComponentBuilder()
                               .CreateVisualElement()
@@ -262,7 +267,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                               .SetMargin(new Margin(new Length(1, Pixel), 0, 0, new Length(6, Pixel)))
                                                                               .Build())
                                                                  .AddPreset(factory => factory.Labels()
-                                                                                              .GameTextBig(text: "Stream Gauge",
+                                                                                              .GameTextBig(text: _loc.T(streamgaugeLocKey),
                                                                                                            builder: builder => builder.SetWidth(new Length(100, Pixel))))
                                                                  .Build())
                                                     .AddComponent(

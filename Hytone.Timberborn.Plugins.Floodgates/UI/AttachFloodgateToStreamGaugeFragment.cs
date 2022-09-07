@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using Timberborn.Common;
+using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.SelectionSystem;
 using Timberborn.WaterBuildings;
@@ -20,7 +21,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     {
         private readonly UIBuilder _builder;
         private readonly ILoc _loc;
-        private readonly AttachToStreamGaugeButton _attachToStreamGaugeButton;
+        private readonly AttachFloodgateToStreamGaugeButton _attachToStreamGaugeButton;
         private FloodgateTriggerMonoBehaviour _floodgateTriggerMonoBehaviour;
 
         private VisualElement _linksScrollView;
@@ -34,7 +35,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>> _settingsList = new List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider>>>();
         
         public AttachFloodgateToStreamGaugeFragment(
-            AttachToStreamGaugeButton attachToStreamGaugeButton,
+            AttachFloodgateToStreamGaugeButton attachToStreamGaugeButton,
             UIBuilder builder,
             SelectionManager selectionManager,
             LinkViewFactory streamGaugeFloodgateLinkViewFactory,
@@ -138,7 +139,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var j = i;
                 var link = links[i];
                 var streamGauge = link.StreamGauge.gameObject;
-                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i);
+                var labeledPrefab = link.StreamGauge.GetComponent<LabeledPrefab>();
+
+                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i, labeledPrefab.DisplayNameLocKey);
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
                 var img = new Image();
