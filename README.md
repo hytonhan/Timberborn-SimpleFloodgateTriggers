@@ -65,6 +65,10 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.0.0 - 23.9.2022
+- Added automation to Irrigation Tower
+- Updated to work with TimberAPI v0.5
+
 ## v2.1.0 - 7.9.2022
 - Added buttons for water pumps to pause when drought ends and unpause when drought starts
 - Added buttons to disable stream gauge link during drought or temperate

@@ -3,10 +3,9 @@ using Timberborn.CoreUI;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
-using TimberbornAPI.UIBuilderSystem;
 using static UnityEngine.UIElements.Length.Unit;
 using Timberborn.WaterBuildings;
-using TimberbornAPI.Common;
+using TimberApi.UiBuilderSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {

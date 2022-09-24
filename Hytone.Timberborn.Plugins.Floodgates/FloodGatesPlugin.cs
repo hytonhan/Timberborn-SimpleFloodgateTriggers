@@ -1,32 +1,22 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
-using Hytone.Timberborn.Plugins.Floodgates.Schedule;
-using Hytone.Timberborn.Plugins.Floodgates.UI;
-using TimberbornAPI;
-using TimberbornAPI.Common;
+using TimberApi.ConsoleSystem;
+using TimberApi.ModSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates
 {
-    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "2.0.2")]
-    [BepInDependency("com.timberapi.timberapi")]
+    [BepInPlugin("hytone.plugins.floodgatetriggers", "FloodgateTriggersPlugin", "3.0.0")]
     [HarmonyPatch]
-    public class FloodGatesPlugin : BaseUnityPlugin
+    public class FloodGatesPlugin : BaseUnityPlugin, IModEntrypoint
     {
         internal static new ManualLogSource Logger;
-        public void Awake()
+        public void Entry(IMod mod, IConsoleWriter consoleWriter)
         {
-            Logger = base.Logger;
-
             var harmony = new Harmony("hytone.plugins.floodgatetriggers");
             harmony.PatchAll();
 
-            TimberAPI.DependencyRegistry.AddConfigurator(new FloodGatesUIFragmentConfigurator(), SceneEntryPoint.InGame);
-            TimberAPI.DependencyRegistry.AddConfigurator(new FloodgateEntityActionConfigurator(), SceneEntryPoint.InGame);
-            TimberAPI.DependencyRegistry.AddConfigurator(new ScheduleSystemConfigurator(), SceneEntryPoint.InGame);
-
-            Logger.LogInfo("FloodgateTriggersPlugin is loaded.");
+            consoleWriter.LogInfo("FloodgateTriggersPlugin is loaded.");
         }
     }
 }

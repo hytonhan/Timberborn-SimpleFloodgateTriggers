@@ -1,5 +1,6 @@
 ﻿using Bindito.Core;
-using System;
+using TimberApi.ConfiguratorSystem;
+using TimberApi.SceneSystem;
 using Timberborn.EntityPanelSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
@@ -7,6 +8,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     /// <summary>
     /// Configurator for FloodgateTriggers UI stuff
     /// </summary>
+    [Configurator(SceneEntrypoint.InGame)]
     public class FloodGatesUIFragmentConfigurator : IConfigurator
     {
         public void Configure(IContainerDefinition containerDefinition)

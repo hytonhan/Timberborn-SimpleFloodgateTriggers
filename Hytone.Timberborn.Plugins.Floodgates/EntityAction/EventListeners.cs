@@ -1,13 +1,26 @@
-﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
+﻿using Bindito.Core;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using Timberborn.SingletonSystem;
 using Timberborn.WeatherSystem;
-using TimberbornAPI.EventSystem;
 using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
-    public class EventListeners : EventListener
+    public class EventListeners: ILoadableSingleton
     {
+        private EventBus _eventBus;
+        
+        [Inject]
+        public void InjectDependencies(EventBus eventBus)
+        {
+            _eventBus = eventBus;
+        }
+
+        public void Load()
+        {
+            _eventBus.Register(this);
+        }
+
         [OnEvent]
         public void OnDroughtStarted(DroughtStartedEvent droughtStartedEvent)
         {
