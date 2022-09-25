@@ -65,6 +65,9 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.0.1 - 25.9.2022
+- Added German localization (thanks juf0816!)
+
 ## v3.0.0 - 23.9.2022
 - Added automation to Irrigation Tower
 - Updated to work with TimberAPI v0.5

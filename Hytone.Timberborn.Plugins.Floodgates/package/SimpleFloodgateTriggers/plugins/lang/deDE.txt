@@ -1,0 +1,33 @@
+﻿ID,Text,Comment
+Floodgate.Triggers.EnableOnDroughtStarted, Bestimme Höhe Dürreanfang
+Floodgate.Triggers.EnableOnDroughtEnded, Bestimme Höhe Dürreende
+Floodgate.Schedule.Enable, Bestimme Höhe Zeitplan
+Floodgate.Schedule.DisableOnDrought, Kein Zeitplan Dürre
+Floodgate.Schedule.DisableOnTemperate, Kein Zeitplan gemäßigtes Wetter
+Floodgate.Triggers.Time, Zeit
+Floodgate.Triggers.Height, Höhe
+Floodgate.Triggers.Basic, Basis
+Floodgate.Triggers.Timer, Zeitplan
+Floodgate.Triggers.Advanced, Erweitert
+Floodgate.Triggers.AttachToStreamGauge, Verbinde Wasserströmungsanzeige
+Floodgate.Triggers.PickStreamGaugeTitle, Wähle eine Wasserströmungsanzeige
+Floodgate.Triggers.PickStreamGaugeTip, "Nein wirklich, wähle irgendeine."
+Floodgates.Triggers.NoLinks, Keine Wasserströmungsanzeige verbunden
+Floodgates.Triggers.NoFloodgateLinks, Keine Objekte verbunden
+Floodgates.Triggers.LinkedFloodgates, Verbundene Objekte
+Floodgates.Triggers.Threshold1, Anzeige niederer Wert
+Floodgates.Triggers.Threshold2, Anzeige hoher Wert
+Floodgates.Triggers.HeightWhenBelowThreshold1, Höhe unter niederem Wert
+Floodgates.Triggers.HeightWhenAboveThreshold2, Höhe über hohem Wert
+Floodgate.Triggers.PauseOnDroughtStart, Anhalten Dürreanfang
+Floodgate.Triggers.UnpauseOnDroughtStart, Fortsetzen Dürreanfang
+Floodgate.Triggers.UnpauseOnDroughtEnded, Fortsetzen Dürreende
+Floodgate.Triggers.PauseOnDroughtEnded, Anhalten Dürreende
+Floodgates.WaterpumpTrigger.Threshold1, Anhalten wenn unter
+Floodgates.WaterpumpTrigger.Threshold2, Anhalten wenn über
+Floodgates.WaterpumpTrigger.Threshold3, Fortsetzen wenn unter
+Floodgates.WaterpumpTrigger.Threshold4, Fortsetzen wenn über
+Floodgates.WaterpumpTrigger.PauseStartTime, Anhalten Startzeit
+Floodgates.WaterpumpTrigger.ResumeStartTime, Fortsetzen Startzeit
+Floodgates.WaterpumpTrigger.DisableDuringDrought, Anhalten Dürre
+Floodgates.WaterpumpTrigger.DisableDuringTemperate, Anhalten gemäßigtes Wetter
