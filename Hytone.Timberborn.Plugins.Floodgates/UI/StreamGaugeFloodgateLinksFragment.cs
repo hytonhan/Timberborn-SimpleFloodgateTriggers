@@ -62,7 +62,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                               .Where(x => x.name.StartsWith("DeepMechanicalWaterPump"))
                                                               .FirstOrDefault();
             _waterdumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
-                                                .Where(x => x.name.Split('.').First().Equals("WaterDump"))
+                                                .Where(x => x.name.StartsWith("WaterDump"))
                                                 .FirstOrDefault();
             var rootbuilder =
                 _builder.CreateFragmentBuilder()
