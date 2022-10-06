@@ -65,6 +65,9 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+##v3.1.0 - 
+- Fixed Water Dump sprite not showing on stream gauge fragment
+
 ## v3.0.1 - 25.9.2022
 - Added German localization (thanks juf0816!)
 
