@@ -65,8 +65,10 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
-##v3.1.0 - 
+## v3.1.0 - 7.10.2022
+- Added water level to advanced tabs when a Stream Gauge is linked
 - Fixed Water Dump sprite not showing on stream gauge fragment
+- Fixed a crash when Timer toggles were toggle on an unfinished buildings
 
 ## v3.0.1 - 25.9.2022
 - Added German localization (thanks juf0816!)

@@ -66,7 +66,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                               .Build())
                                                                  .AddPreset(factory => factory.Labels()
                                                                                               .GameTextBig(text: _loc.T(streamgaugeLocKey),
-                                                                                                           builder: builder => builder.SetWidth(new Length(100, Pixel))))
+                                                                                                           name: "StreamGaugeLabel"))
+                                                                 .AddPreset(factory => factory.Labels()
+                                                                                              .GameTextBig(name: "StreamGaugeHeightLabel",
+                                                                                                           builder: builder => builder.SetMargin(new Margin(0, 0, 0, new Length(2, Pixel)))))
                                                                  .Build())
                                                     .AddComponent(
                                                         _builder.CreateComponentBuilder()
@@ -282,7 +285,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                               .Build())
                                                                  .AddPreset(factory => factory.Labels()
                                                                                               .GameTextBig(text: _loc.T(streamgaugeLocKey),
-                                                                                                           builder: builder => builder.SetWidth(new Length(100, Pixel))))
+                                                                                                           name: "StreamGaugeLabel"))
+                                                                 .AddPreset(factory => factory.Labels()
+                                                                                              .GameTextBig(name: "StreamGaugeHeightLabel",
+                                                                                                           builder: builder => builder.SetMargin(new Margin(0, 0, 0, new Length(2, Pixel)))))
                                                                  .Build())
                                                     .AddComponent(
                                                         _builder.CreateComponentBuilder()

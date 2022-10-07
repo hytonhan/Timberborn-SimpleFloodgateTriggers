@@ -31,7 +31,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         LinkViewFactory _linkViewFactory;
 
         //There has to be a better way for this...
-        private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle>>> _settingsList = new List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle>>>();
+        private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label>>> _settingsList = new ();
 
         public AttachWaterpumpToStreamGaugeFragment(
             AttachWaterpumpToStreamGaugeButton attachToStreamGaugeButton,
@@ -125,6 +125,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     setting.Item3.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold2")}: {setting.Item4.value.ToString(CultureInfo.InvariantCulture)}";
                     setting.Item5.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold3")}: {setting.Item6.value.ToString(CultureInfo.InvariantCulture)}";
                     setting.Item7.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold4")}: {setting.Rest.Item1.value.ToString(CultureInfo.InvariantCulture)}";
+
+                    var gauge = links[i].StreamGauge.GetComponent<StreamGauge>();
+                    setting.Rest.Item4.text = $"({_loc.T("Building.StreamGauge.WaterLevel", gauge.WaterLevel.ToString("0.00"))})";
                 }
             }
         }
@@ -139,6 +142,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var streamGauge = link.StreamGauge.gameObject;
                 var labeledPrefab = streamGauge.GetComponent<LabeledPrefab>();
                 var view = _linkViewFactory.CreateViewForWaterpump(i, labeledPrefab.DisplayNameLocKey);
+
+                var gaugeHeightLabel = view.Q<Label>("StreamGaugeHeightLabel");
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
                 var img = new Image();
@@ -179,7 +184,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var disableDuringTemperate = view.Q<Toggle>($"DisableDuringTemperate{i}");
                 disableDuringTemperate.RegisterValueChangedCallback((@event) => ChangeDisableOnTemperateToggle(@event, j));
 
-                var foo = new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle>>(
+                var foo = new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label>>(
                     threshold1Toggle,
                     threshold1Slider,
                     threshold2Toggle,
@@ -187,9 +192,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     threshold3Toggle,
                     threshold3Slider,
                     threshold4Toggle,
-                    new Tuple<Slider, Toggle, Toggle>(threshold4Slider,
-                                                      disableDuringDroughtToggle,
-                                                      disableDuringTemperate));
+                    new Tuple<Slider, Toggle, Toggle, Label>(threshold4Slider,
+                                                             disableDuringDroughtToggle,
+                                                             disableDuringTemperate,
+                                                             gaugeHeightLabel));
 
                 _settingsList.Add(foo);
                 _linksScrollView.Add(view);
