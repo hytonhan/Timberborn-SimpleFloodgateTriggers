@@ -225,6 +225,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void OnChangedScheduleToggles()
         {
+            if (_scheduleTrigger == null)
+            {
+                return;
+            }
             if (!ScheduleEnabled)
             {
                 _scheduleTrigger.Disable();
