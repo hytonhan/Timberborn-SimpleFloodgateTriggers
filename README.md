@@ -65,6 +65,12 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.1.2 - 6.12.2022
+- Minnor fixes
+
+## v3.1.1 - 11.10.2022
+- Quick fix that was caused by incompatibility with PerformanceFix mod
+
 ## v3.1.0 - 7.10.2022
 - Added water level to advanced tabs when a Stream Gauge is linked
 - Fixed Water Dump sprite not showing on stream gauge fragment

@@ -1,5 +1,6 @@
 ﻿using Bindito.Core;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Timberborn.Buildings;
@@ -109,8 +110,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public override void Tick()
         {
+            if(!enabled)
+            {
+                return;
+            }
             var currHeight = _streamGauge.WaterLevel;
-            foreach(var link in FloodgateLinks)
+            foreach (var link in FloodgateLinks)
             {
                 if (_droughtServíce.IsDrought && link.DisableDuringDrought)
                 {
@@ -138,9 +143,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     }
                 }
             }
-            foreach(var link in WaterpumpLinks)
+            foreach (var link in WaterpumpLinks)
             {
-                if(_droughtServíce.IsDrought && link.DisableDuringDrought)
+                if (_droughtServíce.IsDrought && link.DisableDuringDrought)
                 {
                     return;
                 }
