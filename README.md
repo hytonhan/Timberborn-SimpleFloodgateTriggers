@@ -65,8 +65,12 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.2.0 - 16.12.2022
+- Updated TimberAPI to 0.5.3
+- Necessary changes that came with game version 0.3.4.3
+
 ## v3.1.2 - 6.12.2022
-- Minnor fixes
+- Minor fixes
 
 ## v3.1.1 - 11.10.2022
 - Quick fix that was caused by incompatibility with PerformanceFix mod

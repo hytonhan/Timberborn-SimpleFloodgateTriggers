@@ -7,6 +7,7 @@ using Timberborn.Common;
 using Timberborn.CoreUI;
 using Timberborn.EntityPanelSystem;
 using Timberborn.EntitySystem;
+using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
