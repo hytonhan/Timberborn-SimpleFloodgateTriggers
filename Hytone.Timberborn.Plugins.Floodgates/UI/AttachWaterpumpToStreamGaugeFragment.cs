@@ -8,6 +8,7 @@ using TimberApi.UiBuilderSystem;
 using Timberborn.Common;
 using Timberborn.EntitySystem;
 using Timberborn.Localization;
+using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
 using Timberborn.WaterBuildings;
 using UnityEngine;

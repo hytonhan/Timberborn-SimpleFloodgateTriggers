@@ -1,10 +1,9 @@
 {
   "name": "SimpleFloodgateTriggers",
-  "version_number": "3.1.2",
+  "version_number": "3.2.0",
   "website_url": "https://github.com/hytonhan/Timberborn-SimpleFloodgateTriggers",
   "description": "Automated Floodgates and Water pumps on basic events",
   "dependencies": [
-    "BepInEx-BepInExPack_Timberborn-5.4.19",
-    "Timberborn_Central-TimberAPI-0.5.1"
+    "Timberborn_Central-TimberAPI-0.5.3"
   ]
 }
