@@ -99,14 +99,19 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 var link = links[i];
                 var waterpump = link.WaterPump.GetComponent<WaterInput>();
+                var streamGauge = link.StreamGauge.GetComponent<StreamGauge>();
                 var setting = _settingsList[i];
                 setting.Item1.SetValueWithoutNotify(link.Enabled1);
+                setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item2.SetValueWithoutNotify(link.Threshold1);
                 setting.Item3.SetValueWithoutNotify(link.Enabled2);
+                setting.Item4.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item4.SetValueWithoutNotify(link.Threshold2);
                 setting.Item5.SetValueWithoutNotify(link.Enabled3);
+                setting.Item6.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item6.SetValueWithoutNotify(link.Threshold3);
                 setting.Item7.SetValueWithoutNotify(link.Enabled4);
+                setting.Rest.Item1.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Rest.Item1.SetValueWithoutNotify(link.Threshold4);
 
                 setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
