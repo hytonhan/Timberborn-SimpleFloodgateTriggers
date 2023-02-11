@@ -81,7 +81,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    23.5f,
                                                                    name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label",
                                                                   text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
@@ -91,7 +92,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    1f,
                                                                    name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label",
                                                                   text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
@@ -101,7 +103,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    23.5f,
                                                                    name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                         .AddPreset(factory => factory.Labels()
                                                      .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label",
                                                                   text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
@@ -111,7 +114,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    1f,
                                                                    name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))));
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")));
 
             _root = rootBuilder.BuildAndInitialize();
 
