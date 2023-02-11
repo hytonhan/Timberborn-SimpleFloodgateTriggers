@@ -30,5 +30,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
             return (int)height;
         }
+
+        public static int GetMaxHeight(StreamGauge streamGauge)
+        {
+            return (int)streamGauge._maxWaterLevel;
+        }
     }
 }

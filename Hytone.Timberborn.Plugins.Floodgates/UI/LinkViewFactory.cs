@@ -120,7 +120,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold1Slider{index}",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                                                 .AddPreset(
                                                     factory => factory.Labels()
                                                                       .GameTextBig(name: $"Threshold1FloodgateHeightLabel{index}",
@@ -134,7 +135,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold1FloodgateHeightSlider{index}",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                                                 .AddPreset(
                                                     factory => factory.Labels()
                                                                       .GameTextBig(name: $"Threshold2Label{index}",
@@ -148,7 +150,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold2Slider{index}",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                                                 .AddPreset(
                                                     factory => factory.Labels()
                                                                       .GameTextBig(name: $"Threshold2FloodgateHeightLabel{index}",
@@ -162,7 +165,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold2FloodgateHeightSlider{index}",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                                                 .Build())
                                   .BuildAndInitialize();
 
@@ -339,7 +343,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold1Slider{index}",
                                                                                     builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                           .AddClass("slider")))
                                                 .AddPreset(
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold2Toggle{index}",
@@ -353,7 +358,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold2Slider{index}",
                                                                                     builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                           .AddClass("slider")))
                                                 .AddPreset(
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold3Toggle{index}",
@@ -367,7 +373,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold3Slider{index}",
                                                                                     builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                           .AddClass("slider")))
                                                 .AddPreset(
                                                     factory => factory.Toggles()
                                                                       .CheckmarkInverted(name: $"Threshold4Toggle{index}",
@@ -381,7 +388,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                     3f,
                                                                                     name: $"Threshold4Slider{index}",
                                                                                     builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                           .AddClass("slider")))
                                                 .Build())
                                   .BuildAndInitialize();
 

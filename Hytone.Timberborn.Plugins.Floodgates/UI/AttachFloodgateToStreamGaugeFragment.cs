@@ -101,8 +101,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 var link = links[i];
                 var floodgate = link.Floodgate.GetComponent<Floodgate>();
+                var streamGauge = link.StreamGauge.GetComponent<StreamGauge>();
                 var setting = _settingsList[i];
+                setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item2.SetValueWithoutNotify(link.Threshold1);
+                setting.Item4.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item4.SetValueWithoutNotify(link.Threshold2);
                 var height = UIHelpers.GetMaxHeight(floodgate);
                 setting.Item6.highValue = height;
@@ -238,6 +241,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             Slider slider;
             if (sliderIndex == 0)
             {
+                Console.WriteLine($"change");
+                Console.WriteLine($"old value: {_floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1}");
+                Console.WriteLine($"new value: {changeEvent.newValue}");
                 slider = _settingsList[index].Item2;
                 _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1 = changeEvent.newValue;
             }

@@ -1,6 +1,7 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
 using System.Globalization;
+using System.Linq;
 using TimberApi.UiBuilderSystem;
 using Timberborn.Localization;
 using Timberborn.WaterBuildings;
@@ -49,6 +50,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         public VisualElement InitializeFragment()
         {
+            var test = (Texture2D)Resources.LoadAll("UI/Images/Core/scroll-bar-nine-slice", typeof(Texture2D))
+                                          .FirstOrDefault();
+
             _root =
                 _builder.CreateComponentBuilder()
                         .CreateVisualElement()
@@ -67,8 +71,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                      .SliderCircle(0f,
                                                                    1f,
                                                                    name: "DroughtEndedSlider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f )
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
                         .AddPreset(factory => factory.Toggles()
                                                      .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtStarted",
                                                                         name: "DroughtStartedEnabled",
@@ -86,7 +91,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    1f,
                                                                    name: "DroughtStartedSlider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))))
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          //.AddClass("floodgate-fragment__slider")
+                                                                                                          .AddClass("slider")))
                         .BuildAndInitialize();
 
             _droughtEndedSlider = _root.Q<Slider>("DroughtEndedSlider");
