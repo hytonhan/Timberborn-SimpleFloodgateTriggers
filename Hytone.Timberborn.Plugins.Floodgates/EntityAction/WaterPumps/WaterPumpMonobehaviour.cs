@@ -9,10 +9,12 @@ using Timberborn.WaterBuildings;
 using Timberborn.WeatherSystem;
 using UnityEngine;
 using Timberborn.Buildings;
+using Timberborn.BuildingsBlocking;
+using Timberborn.BaseComponentSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
-    public class WaterPumpMonobehaviour : MonoBehaviour, IPersistentEntity, IFinishedStateListener
+    public class WaterPumpMonobehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener
     {
         //Keys used in data saving/loading
         private static readonly ComponentKey WaterPumpKey = new ComponentKey(nameof(WaterPumpMonobehaviour));
@@ -162,7 +164,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtStarted()
         {
-            var pausable = GetComponent<PausableBuilding>();
+            var pausable = GetComponentFast<PausableBuilding>();
 
             if (PauseOnDroughtStart == true &&
                pausable.Paused == false)
@@ -177,7 +179,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtEnded()
         {
-            var pausable = GetComponent<PausableBuilding>();
+            var pausable = GetComponentFast<PausableBuilding>();
 
             if (UnpauseOnDroughtEnded == true &&
                 pausable.Paused == true)
@@ -278,7 +280,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void PauseBuilding()
         {
-            var pausable = GetComponent<PausableBuilding>();
+            var pausable = GetComponentFast<PausableBuilding>();
             if (ScheduleEnabled == true &&
                 pausable.Paused == false)
             {
@@ -288,7 +290,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void ResumeBuilding()
         {
-            var pausable = GetComponent<PausableBuilding>();
+            var pausable = GetComponentFast<PausableBuilding>();
             if (ScheduleEnabled == true &&
                 pausable.Paused == true)
             {

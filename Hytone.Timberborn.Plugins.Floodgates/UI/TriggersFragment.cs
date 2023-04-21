@@ -6,6 +6,7 @@ using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using static UnityEngine.UIElements.Length.Unit;
 using Timberborn.WaterBuildings;
 using TimberApi.UiBuilderSystem;
+using Timberborn.BaseComponentSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -134,10 +135,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             return _root;
         }
 
-        public void ShowFragment(GameObject entity)
+        public void ShowFragment(BaseComponent entity)
         {
-            _floodgate = entity.GetComponent<Floodgate>();
-            _floodgateTriggerMonoBehaviour = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
+            _floodgate = entity.GetComponentFast<Floodgate>();
+            _floodgateTriggerMonoBehaviour = entity.GetComponentFast<FloodgateTriggerMonoBehaviour>();
             if ((bool)_floodgateTriggerMonoBehaviour)
             {
                 _droughtSettingsFragment.ShowFragment(_floodgate, _floodgateTriggerMonoBehaviour);

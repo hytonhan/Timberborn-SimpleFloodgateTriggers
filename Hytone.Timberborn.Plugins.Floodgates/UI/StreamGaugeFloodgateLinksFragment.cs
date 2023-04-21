@@ -3,6 +3,7 @@ using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TimberApi.UiBuilderSystem;
+using Timberborn.BaseComponentSystem;
 using Timberborn.Common;
 using Timberborn.CoreUI;
 using Timberborn.EntityPanelSystem;
@@ -33,16 +34,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Sprite _waterdumpSprite;
 
         LinkViewFactory _streamGaugeFloodgateLinkViewFactory;
-        private readonly SelectionManager _selectionManager;
+        private readonly EntitySelectionService _EntitySelectionService;
 
         public StreamGaugeFloodgateLinksFragment(
             UIBuilder builder,
             LinkViewFactory streamGaugeFloodgateLinkViewFactory,
-            SelectionManager selectionManager)
+            EntitySelectionService EntitySelectionService)
         {
             _builder = builder;
             _streamGaugeFloodgateLinkViewFactory = streamGaugeFloodgateLinkViewFactory;
-            _selectionManager = selectionManager;
+            _EntitySelectionService = EntitySelectionService;
         }
 
         public VisualElement InitializeFragment()
@@ -106,9 +107,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             return _root;
         }
 
-        public void ShowFragment(GameObject entity)
+        public void ShowFragment(BaseComponent entity)
         {
-            _streamGaugeMonoBehaviour = entity.GetComponent<StreamGaugeMonoBehaviour>();
+            _streamGaugeMonoBehaviour = entity.GetComponentFast<StreamGaugeMonoBehaviour>();
             if ((bool)_streamGaugeMonoBehaviour)
             {
                 UpdateLinks();
@@ -140,7 +141,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
             foreach (var link in links)
             {
-                var floodgate = link.Floodgate.gameObject;
+                var floodgate = link.Floodgate.GameObjectFast;
                 var labeledPrefab = floodgate.GetComponent<LabeledPrefab>();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
@@ -152,7 +153,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var targetButton = view.Q<Button>("Target");
                 targetButton.clicked += delegate
                 {
-                    _selectionManager.FocusOn(floodgate);
+                    _EntitySelectionService.SelectAndFocusOn(link.Floodgate);
                 };
 
                 view.Q<Button>("DetachLinkButton").clicked += delegate
@@ -169,7 +170,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 //(?<=[A-Z])(?=[A-Z][a-z]) |
                 // (?<=[^A-Z])(?=[A-Z]) |
                 // (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
-                var waterpump = link.WaterPump.gameObject;
+                var waterpump = link.WaterPump.GameObjectFast;
                 var labeledPrefab = waterpump.GetComponent<LabeledPrefab>();
                 string waterpumpName = waterpump.name.Split('.').First();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
@@ -199,7 +200,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var targetButton = view.Q<Button>("Target");
                 targetButton.clicked += delegate
                 {
-                    _selectionManager.FocusOn(waterpump);
+                    _EntitySelectionService.SelectAndFocusOn(link.WaterPump);
                 };
 
                 view.Q<Button>("DetachLinkButton").clicked += delegate
@@ -224,5 +225,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             _linksView.Clear();
         }
+
     }
 }

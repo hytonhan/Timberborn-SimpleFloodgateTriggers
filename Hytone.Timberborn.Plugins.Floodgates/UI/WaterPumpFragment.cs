@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using static UnityEngine.UIElements.Length.Unit;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using TimberApi.UiBuilderSystem;
+using Timberborn.BaseComponentSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -171,9 +172,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             return _root;
         }
 
-        public void ShowFragment(GameObject entity)
+        public void ShowFragment(BaseComponent entity)
         {
-            _waterpumpMono = entity.GetComponent<WaterPumpMonobehaviour>();
+            _waterpumpMono = entity.GetComponentFast<WaterPumpMonobehaviour>();
             if ((bool)_waterpumpMono)
             {
                 _droughtSettingsFragment.ShowFragment( _waterpumpMono);

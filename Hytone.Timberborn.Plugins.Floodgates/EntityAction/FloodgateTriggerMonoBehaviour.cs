@@ -8,6 +8,7 @@ using Timberborn.Persistence;
 using Timberborn.WaterBuildings;
 using Timberborn.WeatherSystem;
 using UnityEngine;
+using Timberborn.BaseComponentSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
@@ -15,7 +16,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     /// This class handles the data related to Floodgate Triggers. It also holds the actions
     /// which are executed when certain events happen.
     /// </summary>
-    public class FloodgateTriggerMonoBehaviour : MonoBehaviour, IPersistentEntity, IFinishedStateListener
+    public class FloodgateTriggerMonoBehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener
     {
         //Keys used in data saving/loading
         private static readonly ComponentKey FloodgateTriggerKey = new ComponentKey(nameof(FloodgateTriggerMonoBehaviour));
@@ -182,7 +183,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void OnDroughtStarted()
         {
-            var floodgate = GetComponent<Floodgate>();
+            var floodgate = GetComponentFast<Floodgate>();
             if (DroughtStartedEnabled == true &&
                floodgate.Height != DroughtStartedHeight)
             {
@@ -203,7 +204,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void OnDroughtEnded()
         {
-            var floodgate = GetComponent<Floodgate>();
+            var floodgate = GetComponentFast<Floodgate>();
             if (DroughtEndedEnabled == true &&
                floodgate.Height != DroughtEndedHeight)
             {
@@ -282,7 +283,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void SetFirstScheduleHeight()
         {
-            var floodgate = GetComponent<Floodgate>();
+            var floodgate = GetComponentFast<Floodgate>();
             if (ScheduleEnabled == true &&
                 floodgate.Height != FirstScheduleHeight)
             {
@@ -295,7 +296,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void SetSecondScheduleHeight()
         {
-            var floodgate = GetComponent<Floodgate>();
+            var floodgate = GetComponentFast<Floodgate>();
             if (ScheduleEnabled == true &&
                 floodgate.Height != SecondScheduleHeight)
             {

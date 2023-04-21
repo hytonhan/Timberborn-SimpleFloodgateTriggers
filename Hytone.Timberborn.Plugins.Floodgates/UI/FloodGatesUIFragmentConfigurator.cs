@@ -1,6 +1,7 @@
 ﻿using Bindito.Core;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.SceneSystem;
+using TimberApi.ObjectSelectionSystem;
 using Timberborn.EntityPanelSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
@@ -27,6 +28,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<AttachWaterpumpToStreamGaugeFragment>().AsSingleton();
             containerDefinition.Bind<WaterpumpDroughtSettingsFragment>().AsSingleton();
             containerDefinition.Bind<WaterpumpScheduleFragment>().AsSingleton();
+
+            //containerDefinition.Bind<PickObjectTool>().AsSingleton();
         }
 
         /// <summary>

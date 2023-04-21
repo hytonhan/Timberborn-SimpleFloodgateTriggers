@@ -28,7 +28,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Label _noLinks;
         private Sprite _streamGaugeSprite;
 
-        private readonly SelectionManager _selectionManager;
+        private readonly EntitySelectionService _EntitySelectionService;
         LinkViewFactory _linkViewFactory;
 
         //There has to be a better way for this...
@@ -37,13 +37,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public AttachWaterpumpToStreamGaugeFragment(
             AttachWaterpumpToStreamGaugeButton attachToStreamGaugeButton,
             UIBuilder builder,
-            SelectionManager selectionManager,
+            EntitySelectionService EntitySelectionService,
             LinkViewFactory streamGaugeFloodgateLinkViewFactory,
             ILoc loc)
         {
             _attachToStreamGaugeButton = attachToStreamGaugeButton;
             _builder = builder;
-            _selectionManager = selectionManager;
+            _EntitySelectionService = EntitySelectionService;
             _linkViewFactory = streamGaugeFloodgateLinkViewFactory;
             _loc = loc;
         }
@@ -98,8 +98,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             for (int i = 0; i < links.Count(); i++)
             {
                 var link = links[i];
-                var waterpump = link.WaterPump.GetComponent<WaterInput>();
-                var streamGauge = link.StreamGauge.GetComponent<StreamGauge>();
+                var waterpump = link.WaterPump.GetComponentFast<WaterInput>();
+                var streamGauge = link.StreamGauge.GetComponentFast<StreamGauge>();
                 var setting = _settingsList[i];
                 setting.Item1.SetValueWithoutNotify(link.Enabled1);
                 setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
@@ -132,7 +132,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     setting.Item5.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold3")}: {setting.Item6.value.ToString(CultureInfo.InvariantCulture)}";
                     setting.Item7.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold4")}: {setting.Rest.Item1.value.ToString(CultureInfo.InvariantCulture)}";
 
-                    var gauge = links[i].StreamGauge.GetComponent<StreamGauge>();
+                    var gauge = links[i].StreamGauge.GetComponentFast<StreamGauge>();
                     setting.Rest.Item4.text = $"({_loc.T("Building.StreamGauge.WaterLevel", gauge.WaterLevel.ToString("0.00"))})";
                 }
             }
@@ -145,7 +145,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 var j = i;
                 var link = links[i];
-                var streamGauge = link.StreamGauge.gameObject;
+                var streamGauge = link.StreamGauge.GameObjectFast;
                 var labeledPrefab = streamGauge.GetComponent<LabeledPrefab>();
                 var view = _linkViewFactory.CreateViewForWaterpump(i, labeledPrefab.DisplayNameLocKey);
 
@@ -159,7 +159,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var targetButton = view.Q<Button>("Target");
                 targetButton.clicked += delegate
                 {
-                    _selectionManager.FocusOn(streamGauge);
+                    _EntitySelectionService.SelectAndFocusOn(link.StreamGauge);
                 };
 
                 view.Q<Button>("DetachLinkButton").clicked += delegate

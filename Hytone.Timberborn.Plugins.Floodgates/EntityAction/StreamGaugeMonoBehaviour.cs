@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Timberborn.Buildings;
+using Timberborn.BuildingsBlocking;
 using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
 using Timberborn.TickSystem;
@@ -92,7 +93,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             base.enabled = true;
             _entityComponentRegistry.Register(this);
-            _streamGauge = this.GetComponent<StreamGauge>();
+            _streamGauge = this.GetComponentFast<StreamGauge>();
         }
 
         public void OnExitFinishedState()
@@ -127,7 +128,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 }
                 if (currHeight <= link.Threshold1)
                 {
-                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
+                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
                     if (floodgate.Height != link.Height1)
                     {
                         floodgate.SetHeightAndSynchronize(link.Height1);
@@ -136,7 +137,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 }
                 if (currHeight >= link.Threshold2)
                 {
-                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
+                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
                     if (floodgate.Height != link.Height2)
                     {
                         floodgate.SetHeightAndSynchronize(link.Height2);
@@ -154,7 +155,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     return;
                 }
 
-                var pausable = link.WaterPump.GetComponent<PausableBuilding>();
+                var pausable = link.WaterPump.GetComponentFast<PausableBuilding>();
                 if (currHeight <= link.Threshold1 && link.Enabled1)
                 {
                     if (pausable.Paused == false)
