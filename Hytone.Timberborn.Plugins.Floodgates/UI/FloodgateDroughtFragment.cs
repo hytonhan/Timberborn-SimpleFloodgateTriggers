@@ -56,6 +56,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _root =
                 _builder.CreateComponentBuilder()
                         .CreateVisualElement()
+                        .SetMargin(new Margin(0, 0, new Length(10, Pixel), 0))
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtEnded",
                                                                          name: "DroughtEndedEnabled",
@@ -92,8 +93,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                    name: "DroughtStartedSlider",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .SetMargin(new Margin(0, 0, new Length(20, Pixel), 0))
                                                                                                           //.AddClass("floodgate-fragment__slider")
                                                                                                           .AddClass("slider")))
+                        
                         .BuildAndInitialize();
 
             _droughtEndedSlider = _root.Q<Slider>("DroughtEndedSlider");

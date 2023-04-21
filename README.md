@@ -65,6 +65,9 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.3.2 - 21.4.2023
+- Fixed a slider going under a textlabel on Chinese
+
 ## v3.3.1 - 21.4.2023
 - Added Chinese translations (thx ALiangLiang!)
 
