@@ -65,6 +65,12 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.3.2 - 21.4.2023
+- Fixed a slider going under a textlabel on Chinese
+
+## v3.3.1 - 21.4.2023
+- Added Chinese translations (thx ALiangLiang!)
+
 ## v3.3.0 - 11.2.2023
 - Fixed slider backgrounds
 - Fixed streamgauge threshholds if stream gauge is more than 3 height
