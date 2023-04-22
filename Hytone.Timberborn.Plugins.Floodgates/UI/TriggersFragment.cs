@@ -66,8 +66,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                        .SetJustifyContent(Justify.Center))
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass("distribution-post-fragment__tab-button")
-                                                            //.AddClass("distribution-post-fragment__tab-button--selected")
                                                             .SetName("BasicButton")
                                                             .SetLocKey("Floodgate.Triggers.Basic")
                                                             .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
@@ -79,7 +77,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass("distribution-post-fragment__tab-button")
                                                             .SetName("AdvancedButton")
                                                             .SetLocKey("Floodgate.Triggers.Advanced")
                                                             .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
@@ -187,9 +184,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 ? _buttonGameActiveImage
                 : _buttonGameImage;
 
-            //_basicButton.EnableInClassList(SelectedTabButtonCLass, showBasic);
             _basicTab.ToggleDisplayStyle(showBasic);
-            //_advancedButton.EnableInClassList(SelectedTabButtonCLass, !showBasic);
             _advancedTab.ToggleDisplayStyle(!showBasic);
 
             _newButton.ToggleDisplayStyle(!showBasic);

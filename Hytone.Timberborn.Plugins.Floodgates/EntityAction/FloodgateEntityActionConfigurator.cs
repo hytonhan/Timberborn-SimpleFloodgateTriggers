@@ -1,5 +1,4 @@
 ﻿using Bindito.Core;
-using Bindito.Unity;
 using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
@@ -11,13 +10,9 @@ using Timberborn.EntitySystem;
 using Timberborn.IrrigationSystem;
 using Timberborn.TemplateSystem;
 using Timberborn.WaterBuildings;
-using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
-    /// <summary>
-    /// Configurator for FloodgateTriggers
-    /// </summary>
 
     [Configurator(SceneEntrypoint.InGame)]
     public class FloodgateEntityActionConfigurator : IConfigurator
@@ -47,12 +42,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             if ((__result.GetComponentFast<WaterInput>() != null || __result.GetComponentFast<WaterOutput>() != null || __result.GetComponentFast<IrrigationTower>())
                 && __result.name.ToLower().Contains("shower") == false)
             {
-                //var instantiator = DependencyContainer.GetInstance<IInstantiator>();
-                //instantiator.AddComponent<WaterPumpMonobehaviour>(__result);
-
-                var foo = DependencyContainer.GetInstance<BaseInstantiator>();
-                foo.AddComponent<WaterPumpMonobehaviour>(__result.GameObjectFast);
-                //var 
+                var baseInstantiator = DependencyContainer.GetInstance<BaseInstantiator>();
+                baseInstantiator.AddComponent<WaterPumpMonobehaviour>(__result.GameObjectFast);
             }
         }
     }

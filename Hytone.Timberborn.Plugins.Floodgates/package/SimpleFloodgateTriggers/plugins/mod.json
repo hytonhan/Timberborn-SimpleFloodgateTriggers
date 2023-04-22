@@ -1,8 +1,8 @@
 {
   "Name": "FloodgateTriggersPlugin",
-  "Version": "3.3.2",
+  "Version": "3.4.0",
   "UniqueId": "hytone.plugins.floodgatetriggers",
-  "MinimumApiVersion": "0.5.3",
-  "MinimumGameVersion": "0.3.4",
+  "MinimumApiVersion": "0.5.4",
+  "MinimumGameVersion": "0.4.1",
   "EntryDll": "Hytone.Timberborn.Plugins.Floodgates.dll"
 }

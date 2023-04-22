@@ -11,8 +11,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     {
         private readonly UIBuilder _builder;
         private VisualElement _root;
-        private readonly ILoc _loc;
-        //private WaterPumpMonobehaviour _waterpumpMonoBehaviour;
 
 
         private Toggle _droughtStartedPauseToggle;
@@ -23,12 +21,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private WaterPumpMonobehaviour _waterPumpMonobehaviour;
 
 
-        public WaterpumpDroughtSettingsFragment(
-            UIBuilder builder,
-            ILoc loc)
+        public WaterpumpDroughtSettingsFragment(UIBuilder builder)
         {
             _builder = builder;
-            _loc = loc;
         }
 
 

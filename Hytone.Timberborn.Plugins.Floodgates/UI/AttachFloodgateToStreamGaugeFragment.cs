@@ -242,9 +242,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             Slider slider;
             if (sliderIndex == 0)
             {
-                Console.WriteLine($"change");
-                Console.WriteLine($"old value: {_floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1}");
-                Console.WriteLine($"new value: {changeEvent.newValue}");
                 slider = _settingsList[index].Item2;
                 _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1 = changeEvent.newValue;
             }

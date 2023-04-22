@@ -24,7 +24,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private static readonly string SelectedTabButtonCLass = "distribution-post-fragment__tab-button--selected";
         private VisualElement _root;
 
-        //private WaterInput _waterInput;
         private WaterPumpMonobehaviour _waterpumpMono;
 
         private Button _basicButton;
@@ -35,7 +34,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private VisualElement _basicTab;
         private VisualElement _timerTab;
         private VisualElement _advancedTab;
-        //private VisualElement _floodgatesLinks;
         private VisualElement _links;
 
         private AttachWaterpumpToStreamGaugeFragment _attachWaterpumpToStreamGaugeFragment;
@@ -46,8 +44,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private readonly Texture2D _buttonGameImage;
         private readonly Texture2D _buttonGameActiveImage;
-
-        //private AttachWaterpumpToStreamGaugeFragment _attachWaterpumpToStreamGaugeFragment;
 
         public WaterPumpFragment(
             UIBuilder builder,
@@ -60,31 +56,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _droughtSettingsFragment = droughtSettingsFragment;
             _scheduleFragment = scheduleFragment;
 
-            Console.WriteLine($"loading images");
             _buttonGameImage = Resources.Load<Texture2D>("ui/images/buttons/button-game");
             _buttonGameActiveImage = Resources.Load<Texture2D>("ui/images/buttons/button-game-active");
         }
 
         public VisualElement InitializeFragment()
         {
-
-            Console.WriteLine($"init");
-            if (_buttonGameImage == null)
-            {
-                Console.WriteLine($"_buttonGameImage is null");
-            }
-            if (_buttonGameActiveImage == null)
-            {
-                Console.WriteLine($"_buttonGameActiveImage is null");
-            }
             var rootBuilder = _builder.CreateFragmentBuilder()
                                       .ModifyWrapper(builder => builder.SetFlexDirection(FlexDirection.Row)
                                                                        .SetFlexWrap(Wrap.Wrap)
                                                                        .SetJustifyContent(Justify.Center))
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass("distribution-post-fragment__tab-button")
-                                                            //.AddClass("distribution-post-fragment__tab-button--selected")
                                                             .SetName("BasicButton")
                                                             .SetLocKey("Floodgate.Triggers.Basic")
                                                             .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
@@ -96,8 +79,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass("distribution-post-fragment__tab-button")
-                                                            //.AddClass("distribution-post-fragment__tab-button--selected")
                                                             .SetName("TimerButton")
                                                             .SetLocKey("Floodgate.Triggers.Timer")
                                                             .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
@@ -109,7 +90,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateButton()
-                                                            //.AddClass("distribution-post-fragment__tab-button")
                                                             .SetName("AdvancedButton")
                                                             .SetLocKey("Floodgate.Triggers.Advanced")
                                                             .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
@@ -122,13 +102,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateVisualElement()
                                                             .SetName("BasicTab")
-                                                            //.SetHeight(new Length(420, Pixel))
                                                             .SetPadding(new Padding(new Length(8, Pixel)))
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()
                                                             .CreateVisualElement()
                                                             .SetName("TimerTab")
-                                                            //.SetHeight(new Length(420, Pixel))
                                                             .SetPadding(new Padding(new Length(8, Pixel)))
                                                             .Build())
                                       .AddComponent(_builder.CreateComponentBuilder()

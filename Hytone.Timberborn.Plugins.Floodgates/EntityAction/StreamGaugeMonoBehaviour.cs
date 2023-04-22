@@ -3,12 +3,10 @@ using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Timberborn.Buildings;
 using Timberborn.BuildingsBlocking;
 using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
 using Timberborn.TickSystem;
-using Timberborn.TimeSystem;
 using Timberborn.WaterBuildings;
 using Timberborn.WeatherSystem;
 
@@ -25,8 +23,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private List<WaterPumpStreamGaugeLink> _waterpumpsLinks = new List<WaterPumpStreamGaugeLink>();
         public ReadOnlyCollection<WaterPumpStreamGaugeLink> WaterpumpLinks { get; private set; }
 
-        private EntityComponentRegistry _entityComponentRegistry;
-
         private StreamGauge _streamGauge;
 
 
@@ -34,10 +30,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         [Inject]
         public void InjectDependencies(
-            EntityComponentRegistry entityComponentRegistry,
             DroughtService droughtServíce)
         {
-            _entityComponentRegistry = entityComponentRegistry;
             _droughtServíce = droughtServíce;
         }
 
@@ -92,14 +86,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void OnEnterFinishedState()
         {
             base.enabled = true;
-            _entityComponentRegistry.Register(this);
             _streamGauge = this.GetComponentFast<StreamGauge>();
         }
 
         public void OnExitFinishedState()
         {
             base.enabled = false;
-            _entityComponentRegistry.Unregister(this);
             DetachAllFloodgates();
             DetachAllWaterpumps();
             _streamGauge = null;

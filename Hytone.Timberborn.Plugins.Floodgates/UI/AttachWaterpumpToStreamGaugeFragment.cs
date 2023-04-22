@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using TimberApi.UiBuilderSystem;
 using Timberborn.Common;
-using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;

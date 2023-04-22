@@ -1,5 +1,4 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
-using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using Timberborn.Localization;
 using Timberborn.SelectionSystem;
@@ -7,7 +6,6 @@ using Timberborn.ToolSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
 using TimberApi.ObjectSelectionSystem;
-using Timberborn.BaseComponentSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
