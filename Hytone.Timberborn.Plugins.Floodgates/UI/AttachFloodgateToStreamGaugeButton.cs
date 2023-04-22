@@ -1,12 +1,11 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
-using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using Timberborn.Localization;
-using Timberborn.PickObjectToolSystem;
 using Timberborn.SelectionSystem;
 using Timberborn.ToolSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
+using TimberApi.ObjectSelectionSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -22,18 +21,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private readonly ILoc _loc;
         private readonly PickObjectTool _pickObjectTool;
-        private readonly SelectionManager _selectionManager;
+        private readonly EntitySelectionService _EntitySelectionService;
         private readonly ToolManager _toolManager;
         private Button _button;
 
         public AttachFloodgateToStreamGaugeButton(ILoc loc, 
                                          PickObjectTool pickObjectTool, 
-                                         SelectionManager selectionManager, 
+                                         EntitySelectionService EntitySelectionService, 
                                          ToolManager toolManager)
         {
             _loc = loc;
             _pickObjectTool = pickObjectTool;
-            _selectionManager = selectionManager;
+            _EntitySelectionService = EntitySelectionService;
             _toolManager = toolManager;
         }
 
@@ -76,7 +75,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 FinishStreamGaugeSelection(floodgate, streamGauge, createdLinkCallback);
             });
-            _selectionManager.Select(floodgate.gameObject);
+            _EntitySelectionService.Select(floodgate);
         }
 
         /// <summary>

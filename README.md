@@ -65,6 +65,9 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.4.0 - 22.4.2023
+- Updated to work with game version 0.4.1.1
+
 ## v3.3.2 - 21.4.2023
 - Fixed a slider going under a textlabel on Chinese
 

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using TimberApi.UiBuilderSystem;
+using Timberborn.BaseComponentSystem;
 using Timberborn.Common;
 using Timberborn.EntitySystem;
 using Timberborn.Localization;
@@ -28,7 +29,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Label _noLinks;
         private Sprite _streamGaugeSprite;
 
-        private readonly SelectionManager _selectionManager;
+        private readonly EntitySelectionService _EntitySelectionService;
         LinkViewFactory _streamGaugeFloodgateLinkViewFactory;
 
         //There has to be a better way for this...
@@ -37,13 +38,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public AttachFloodgateToStreamGaugeFragment(
             AttachFloodgateToStreamGaugeButton attachToStreamGaugeButton,
             UIBuilder builder,
-            SelectionManager selectionManager,
+            EntitySelectionService EntitySelectionService,
             LinkViewFactory streamGaugeFloodgateLinkViewFactory,
             ILoc loc)
         {
             _attachToStreamGaugeButton = attachToStreamGaugeButton;
             _builder = builder;
-            _selectionManager = selectionManager;
+            _EntitySelectionService = EntitySelectionService;
             _streamGaugeFloodgateLinkViewFactory = streamGaugeFloodgateLinkViewFactory;
             _loc = loc;
         }
@@ -100,8 +101,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             for (int i = 0; i < links.Count(); i++)
             {
                 var link = links[i];
-                var floodgate = link.Floodgate.GetComponent<Floodgate>();
-                var streamGauge = link.StreamGauge.GetComponent<StreamGauge>();
+                var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                var streamGauge = link.StreamGauge.GetComponentFast<StreamGauge>();
                 var setting = _settingsList[i];
                 setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item2.SetValueWithoutNotify(link.Threshold1);
@@ -131,7 +132,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     setting.Item5.text = $"{_loc.T("Floodgates.Triggers.HeightWhenBelowThreshold1")}: {setting.Item6.value.ToString(CultureInfo.InvariantCulture)}";
                     setting.Item7.text = $"{_loc.T("Floodgates.Triggers.HeightWhenAboveThreshold2")}: {setting.Rest.Item1.value.ToString(CultureInfo.InvariantCulture)}";
 
-                    var gauge = links[i].StreamGauge.GetComponent<StreamGauge>();
+                    var gauge = links[i].StreamGauge.GetComponentFast<StreamGauge>();
                     setting.Rest.Item4.text = $"({_loc.T("Building.StreamGauge.WaterLevel", gauge.WaterLevel.ToString("0.00"))})";
                 }
             }
@@ -147,8 +148,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 var j = i;
                 var link = links[i];
-                var streamGauge = link.StreamGauge.gameObject;
-                var labeledPrefab = link.StreamGauge.GetComponent<LabeledPrefab>();
+                var streamGauge = link.StreamGauge.GameObjectFast;
+                var labeledPrefab = link.StreamGauge.GetComponentFast<LabeledPrefab>();
 
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i, labeledPrefab.DisplayNameLocKey);
 
@@ -162,7 +163,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var targetButton = view.Q<Button>("Target");
                 targetButton.clicked += delegate
                 {
-                    _selectionManager.FocusOn(streamGauge);
+                    _EntitySelectionService.SelectAndFocusOn(link.StreamGauge);
                 };
 
                 view.Q<Button>("DetachLinkButton").clicked += delegate
@@ -241,9 +242,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             Slider slider;
             if (sliderIndex == 0)
             {
-                Console.WriteLine($"change");
-                Console.WriteLine($"old value: {_floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1}");
-                Console.WriteLine($"new value: {changeEvent.newValue}");
                 slider = _settingsList[index].Item2;
                 _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1 = changeEvent.newValue;
             }

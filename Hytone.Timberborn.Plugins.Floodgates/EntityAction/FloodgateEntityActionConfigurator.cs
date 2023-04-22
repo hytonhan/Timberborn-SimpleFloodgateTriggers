@@ -1,22 +1,18 @@
 ﻿using Bindito.Core;
-using Bindito.Unity;
 using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using TimberApi.ConfiguratorSystem;
 using TimberApi.DependencyContainerSystem;
 using TimberApi.SceneSystem;
+using Timberborn.BaseComponentSystem;
 using Timberborn.EntitySystem;
 using Timberborn.IrrigationSystem;
 using Timberborn.TemplateSystem;
 using Timberborn.WaterBuildings;
-using UnityEngine;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
-    /// <summary>
-    /// Configurator for FloodgateTriggers
-    /// </summary>
 
     [Configurator(SceneEntrypoint.InGame)]
     public class FloodgateEntityActionConfigurator : IConfigurator
@@ -38,16 +34,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         }
     }
 
-    [HarmonyPatch(typeof(EntityService), "Instantiate", typeof(GameObject), typeof(Guid))]
+    [HarmonyPatch(typeof(EntityService), "Instantiate", typeof(BaseComponent), typeof(Guid))]
     class MinWindStrengthPatch
     {
-        public static void Postfix(GameObject __result)
+        public static void Postfix(BaseComponent __result)
         {
-            if ((__result.GetComponent<WaterInput>() != null || __result.GetComponent<WaterOutput>() != null || __result.GetComponent<IrrigationTower>())
+            if ((__result.GetComponentFast<WaterInput>() != null || __result.GetComponentFast<WaterOutput>() != null || __result.GetComponentFast<IrrigationTower>())
                 && __result.name.ToLower().Contains("shower") == false)
             {
-                var instantiator = DependencyContainer.GetInstance<IInstantiator>();
-                instantiator.AddComponent<WaterPumpMonobehaviour>(__result);
+                var baseInstantiator = DependencyContainer.GetInstance<BaseInstantiator>();
+                baseInstantiator.AddComponent<WaterPumpMonobehaviour>(__result.GameObjectFast);
             }
         }
     }
