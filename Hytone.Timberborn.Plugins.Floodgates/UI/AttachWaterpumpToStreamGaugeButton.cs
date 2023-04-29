@@ -77,7 +77,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 FinishStreamGaugeSelection(waterpump, streamGauge, createdLinkCallback);
             });
-            _EntitySelectionService.Select(waterpump.GetComponentFast<BaseComponent>());
+            _EntitySelectionService.Select(waterpump);
         }
 
         /// <summary>
