@@ -45,7 +45,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _builder.CreateComponentBuilder()
                         .CreateVisualElement()
                         .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
+                                                      .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnSchedule",
                                                                          name: nameof(WaterPumpMonobehaviour.ScheduleEnabled) + "Toggle",
                                                                          fontStyle: FontStyle.Normal,
                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),

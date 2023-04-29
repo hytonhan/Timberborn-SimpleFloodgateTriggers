@@ -65,6 +65,10 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.4.4 - 29.4.2023
+- Fixed waterpumps being paused by triggers when they were unfinished
+- Fixed incorrect text in waterpump schedule tab
+
 ## v3.4.3 - 29.4.2023
 - Fixed waterpumps again
 

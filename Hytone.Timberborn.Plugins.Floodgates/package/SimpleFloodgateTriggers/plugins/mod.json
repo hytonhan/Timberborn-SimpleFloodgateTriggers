@@ -1,6 +1,6 @@
 {
   "Name": "FloodgateTriggersPlugin",
-  "Version": "3.4.3",
+  "Version": "3.4.4",
   "UniqueId": "hytone.plugins.floodgatetriggers",
   "MinimumApiVersion": "0.5.4",
   "MinimumGameVersion": "0.4.1",

@@ -8,6 +8,7 @@ using Timberborn.Persistence;
 using Timberborn.WeatherSystem;
 using Timberborn.BuildingsBlocking;
 using Timberborn.BaseComponentSystem;
+using Timberborn.DeconstructionSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
@@ -161,6 +162,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtStarted()
         {
+            var constructible = GetComponentFast<Constructible>();
+            if (constructible.IsUnfinished)
+            {
+                return;
+            }
             var pausable = GetComponentFast<PausableBuilding>();
 
             if (PauseOnDroughtStart == true &&
@@ -176,6 +182,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtEnded()
         {
+            var constructible = GetComponentFast<Constructible>();
+            if (constructible.IsUnfinished)
+            {
+                return;
+            }
             var pausable = GetComponentFast<PausableBuilding>();
 
             if (UnpauseOnDroughtEnded == true &&
@@ -278,8 +289,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public void PauseBuilding()
         {
             var pausable = GetComponentFast<PausableBuilding>();
+            var constructible = GetComponentFast<Constructible>();
+
+            Console.WriteLine($"{this.name}: constructible: {constructible}. IsFinished: {constructible.IsFinished}");
+
             if (ScheduleEnabled == true &&
-                pausable.Paused == false)
+                pausable.Paused == false &&
+                constructible.IsFinished)
             {
                 pausable.Pause();
             }
@@ -288,8 +304,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public void ResumeBuilding()
         {
             var pausable = GetComponentFast<PausableBuilding>();
+            var constructible = GetComponentFast<Constructible>();
             if (ScheduleEnabled == true &&
-                pausable.Paused == true)
+                pausable.Paused == true &&
+                constructible.IsFinished)
             {
                 pausable.Resume();
             }

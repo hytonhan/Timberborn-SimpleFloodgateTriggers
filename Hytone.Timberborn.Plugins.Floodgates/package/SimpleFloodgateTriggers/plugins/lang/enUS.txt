@@ -31,3 +31,4 @@ Floodgates.WaterpumpTrigger.PauseStartTime, Pause start time
 Floodgates.WaterpumpTrigger.ResumeStartTime, Resume start time
 Floodgates.WaterpumpTrigger.DisableDuringDrought, Disable during drought
 Floodgates.WaterpumpTrigger.DisableDuringTemperate, Disable during temperate
+Floodgate.Triggers.PauseOnSchedule, Pause on a schedule

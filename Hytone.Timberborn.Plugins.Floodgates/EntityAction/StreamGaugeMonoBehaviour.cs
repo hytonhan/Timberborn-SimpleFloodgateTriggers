@@ -147,6 +147,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     continue;
                 }
 
+                var constructible = link.WaterPump.GetComponentFast<Constructible>();
+                if (constructible.IsUnfinished)
+                {
+                    continue;
+                }
                 var pausable = link.WaterPump.GetComponentFast<PausableBuilding>();
                 if (currHeight <= link.Threshold1 && link.Enabled1)
                 {
