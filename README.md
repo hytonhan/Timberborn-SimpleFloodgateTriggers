@@ -65,6 +65,12 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.4.2 - 29.4.2023
+- Fixed advanced settings not working on floodgates
+
+## v3.4.1 - 22.4.2023
+- Fixed crash when trying to link water pumps with stream gauges
+
 ## v3.4.0 - 22.4.2023
 - Updated to work with game version 0.4.1.1
 
