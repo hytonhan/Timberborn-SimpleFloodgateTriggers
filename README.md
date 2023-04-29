@@ -65,6 +65,9 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v3.4.3 - 29.4.2023
+- Fixed waterpumps again
+
 ## v3.4.2 - 29.4.2023
 - Fixed advanced settings not working on floodgates
 
