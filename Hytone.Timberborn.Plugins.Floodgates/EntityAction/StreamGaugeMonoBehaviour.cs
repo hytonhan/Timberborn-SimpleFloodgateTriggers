@@ -112,11 +112,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 if (_droughtServíce.IsDrought && link.DisableDuringDrought)
                 {
-                    return;
+                    continue;
                 }
                 else if (_droughtServíce.IsDrought == false && link.DisableDuringTemperate)
                 {
-                    return;
+                    continue;
                 }
                 if (currHeight <= link.Threshold1)
                 {
@@ -140,11 +140,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 if (_droughtServíce.IsDrought && link.DisableDuringDrought)
                 {
-                    return;
+                    continue;
                 }
                 else if(_droughtServíce.IsDrought == false && link.DisableDuringTemperate)
                 {
-                    return;
+                    continue;
                 }
 
                 var pausable = link.WaterPump.GetComponentFast<PausableBuilding>();
