@@ -13,7 +13,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     {
         public void Configure(IContainerDefinition containerDefinition)
         {
-            containerDefinition.Bind<FloodgateDroughtFragment>().AsSingleton();
+            containerDefinition.Bind<FloodgateHazardFragment>().AsSingleton();
             containerDefinition.Bind<FloodgateScheduleFragment>().AsSingleton();
             containerDefinition.Bind<AttachFloodgateToStreamGaugeButton>().AsSingleton();
             containerDefinition.Bind<AttachFloodgateToStreamGaugeFragment>().AsSingleton();
@@ -51,9 +51,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             public EntityPanelModule Get()
             {
                 EntityPanelModule.Builder builder = new EntityPanelModule.Builder();
-                builder.AddBottomFragment(_triggersFragment);
-                builder.AddBottomFragment(_streamGaugeFloodgateLinksFragment);
-                builder.AddBottomFragment(_waterPumpFragment);
+                builder.AddMiddleFragment(_triggersFragment);
+                builder.AddMiddleFragment(_streamGaugeFloodgateLinksFragment);
+                builder.AddMiddleFragment(_waterPumpFragment);
                 return builder.Build();
             }
         }

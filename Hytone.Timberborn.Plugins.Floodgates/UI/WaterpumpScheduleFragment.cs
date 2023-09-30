@@ -20,6 +20,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private Toggle _scheduleEnabledToggle;
         private Toggle _disableScheduleOnDrought;
         private Toggle _disableScheduleOnTemperate;
+        private Toggle _disableScheduleOnBadtide;
 
         private Label _pauseStartLabel;
         private Slider _pauseStartSlider;
@@ -50,17 +51,24 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                          fontStyle: FontStyle.Normal,
                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnDrought",
                                                                          name: nameof(WaterPumpMonobehaviour.DisableScheduleOnDrought) + "Toggle",
                                                                          fontStyle: FontStyle.Normal,
                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnTemperate",
                                                                          name: nameof(WaterPumpMonobehaviour.DisableScheduleOnTemperate) + "Toggle",
+                                                                         fontStyle: FontStyle.Normal,
+                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
+                        .AddPreset(factory => factory.Toggles()
+                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnBadtide",
+                                                                         name: nameof(WaterPumpMonobehaviour.DisableScheduleOnBadtide) + "Toggle",
                                                                          fontStyle: FontStyle.Normal,
                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
@@ -102,10 +110,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _scheduleEnabledToggle = _root.Q<Toggle>(nameof(WaterPumpMonobehaviour.ScheduleEnabled) + "Toggle");
             _disableScheduleOnDrought = _root.Q<Toggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnDrought) + "Toggle");
             _disableScheduleOnTemperate = _root.Q<Toggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnTemperate) + "Toggle");
+            _disableScheduleOnBadtide = _root.Q<Toggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnBadtide) + "Toggle");
 
             _scheduleEnabledToggle.RegisterValueChangedCallback(ToggleScheduleEnabled);
             _disableScheduleOnDrought.RegisterValueChangedCallback(ToggleDisableScheduleOnDrought);
             _disableScheduleOnTemperate.RegisterValueChangedCallback(ToggleDisableScheduleOnTemperate);
+            _disableScheduleOnBadtide.RegisterValueChangedCallback(ToggleDisableScheduleOnBadtide);
 
 
             return _root;
@@ -178,6 +188,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private void ToggleDisableScheduleOnTemperate(ChangeEvent<bool> changeEvent)
         {
             _waterPumpMonobehaviour.DisableScheduleOnTemperate = changeEvent.newValue;
+            _waterPumpMonobehaviour.OnChangedScheduleToggles();
+        }
+        private void ToggleDisableScheduleOnBadtide(ChangeEvent<bool> changeEvent)
+        {
+            _waterPumpMonobehaviour.DisableScheduleOnBadtide = changeEvent.newValue;
             _waterPumpMonobehaviour.OnChangedScheduleToggles();
         }
     }

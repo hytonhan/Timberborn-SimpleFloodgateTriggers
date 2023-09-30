@@ -9,6 +9,7 @@ using Timberborn.WeatherSystem;
 using Timberborn.BuildingsBlocking;
 using Timberborn.BaseComponentSystem;
 using Timberborn.DeconstructionSystem;
+using Timberborn.HazardousWeatherSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
@@ -18,12 +19,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         private static readonly ComponentKey WaterPumpKey = new ComponentKey(nameof(WaterPumpMonobehaviour));
         private static readonly PropertyKey<bool> PauseOnDroughtStartKey = new PropertyKey<bool>(nameof(PauseOnDroughtStart));
         private static readonly PropertyKey<bool> UnpauseOnDroughtStartKey = new PropertyKey<bool>(nameof(UnpauseOnDroughtStart));
-        private static readonly PropertyKey<bool> PauseOnDroughtEndedKey = new PropertyKey<bool>(nameof(PauseOnDroughtEnded));
-        private static readonly PropertyKey<bool> UnpauseOnDroughtEndedKey = new PropertyKey<bool>(nameof(UnpauseOnDroughtEnded));
+        private static readonly PropertyKey<bool> PauseOnDroughtEndedKey = new PropertyKey<bool>(nameof(PauseOnTemperateStarted));
+        private static readonly PropertyKey<bool> UnpauseOnDroughtEndedKey = new PropertyKey<bool>(nameof(UnpauseOnTemperateStarted));
+        private static readonly PropertyKey<bool> PauseOnBadtideStartedKey = new PropertyKey<bool>(nameof(PauseOnBadtideStarted));
+        private static readonly PropertyKey<bool> UnpauseOnBadtideStartedKey = new PropertyKey<bool>(nameof(UnpauseOnBadtideStarted));
 
         private static readonly PropertyKey<bool> ScheduleEnabledKey = new PropertyKey<bool>(nameof(ScheduleEnabled));
         private static readonly PropertyKey<bool> DisableScheduleOnDroughtKey = new PropertyKey<bool>(nameof(DisableScheduleOnDrought));
         private static readonly PropertyKey<bool> DisableScheduleOnTemperateKey = new PropertyKey<bool>(nameof(DisableScheduleOnTemperate));
+        private static readonly PropertyKey<bool> DisableScheduleOnBadtideKey = new PropertyKey<bool>(nameof(DisableScheduleOnBadtide));
 
         private static readonly PropertyKey<float> PauseOnScheduleTimeKey = new PropertyKey<float>(nameof(PauseOnScheduleTime));
         private static readonly PropertyKey<float> ResumeOnScheduleTimeKey = new PropertyKey<float>(nameof(ResumeOnScheduleTime));
@@ -32,7 +36,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         private IScheduleTriggerFactory _scheduleTriggerFactory;
         private IScheduleTrigger _scheduleTrigger;
-        private DroughtService _droughtServíce;
+        private WeatherService _weatherServíce;
         private WaterpumpStreamGaugeLinkSerializer _linkSerializer;
 
         private readonly List<WaterPumpStreamGaugeLink> _waterpumpLinks = new List<WaterPumpStreamGaugeLink>();
@@ -40,13 +44,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public bool PauseOnDroughtStart { get; set; }
         public bool UnpauseOnDroughtStart { get; set; }
-        public bool PauseOnDroughtEnded { get; set; }
-        public bool UnpauseOnDroughtEnded { get; set; }
+        public bool PauseOnTemperateStarted { get; set; }
+        public bool UnpauseOnTemperateStarted { get; set; }
+        public bool PauseOnBadtideStarted { get; set; }
+        public bool UnpauseOnBadtideStarted { get; set; }
 
 
         public bool ScheduleEnabled { get; set; }
         public bool DisableScheduleOnDrought { get; set; }
         public bool DisableScheduleOnTemperate { get; set; }
+        public bool DisableScheduleOnBadtide { get; set; }
 
         public float PauseOnScheduleTime { get; set; }
         public float ResumeOnScheduleTime { get; set; }
@@ -57,11 +64,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         [Inject]
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
-            DroughtService droughtService,
+            WeatherService weatherService,
             WaterpumpStreamGaugeLinkSerializer linkSerializer)
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
-            _droughtServíce = droughtService;
+            _weatherServíce = weatherService;
             _linkSerializer = linkSerializer;
         }
 
@@ -76,12 +83,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
             component.Set(PauseOnDroughtStartKey, PauseOnDroughtStart);
             component.Set(UnpauseOnDroughtStartKey, UnpauseOnDroughtStart);
-            component.Set(PauseOnDroughtEndedKey, PauseOnDroughtEnded);
-            component.Set(UnpauseOnDroughtEndedKey, UnpauseOnDroughtEnded);
+            component.Set(PauseOnDroughtEndedKey, PauseOnTemperateStarted);
+            component.Set(UnpauseOnDroughtEndedKey, UnpauseOnTemperateStarted);
+            component.Set(PauseOnBadtideStartedKey, PauseOnBadtideStarted);
+            component.Set(UnpauseOnBadtideStartedKey, UnpauseOnBadtideStarted);
 
             component.Set(ScheduleEnabledKey, ScheduleEnabled);
             component.Set(DisableScheduleOnDroughtKey, DisableScheduleOnDrought);
             component.Set(DisableScheduleOnTemperateKey, DisableScheduleOnTemperate);
+            component.Set(DisableScheduleOnBadtideKey, DisableScheduleOnBadtide);
             component.Set(PauseOnScheduleTimeKey, PauseOnScheduleTime);
             component.Set(ResumeOnScheduleTimeKey, ResumeOnScheduleTime);
 
@@ -105,11 +115,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             }
             if (component.Has(PauseOnDroughtEndedKey))
             {
-                PauseOnDroughtEnded = component.Get(PauseOnDroughtEndedKey);
+                PauseOnTemperateStarted = component.Get(PauseOnDroughtEndedKey);
             }
             if (component.Has(UnpauseOnDroughtEndedKey))
             {
-                UnpauseOnDroughtEnded = component.Get(UnpauseOnDroughtEndedKey);
+                UnpauseOnTemperateStarted = component.Get(UnpauseOnDroughtEndedKey);
             }
             if (component.Has(ScheduleEnabledKey))
             {
@@ -139,6 +149,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
                 {
                     PostAttachLink(link);
                 }
+            }
+            if (component.Has(PauseOnBadtideStartedKey))
+            {
+                PauseOnBadtideStarted = component.Get(PauseOnBadtideStartedKey);
+            }
+            if (component.Has(UnpauseOnBadtideStartedKey))
+            {
+                UnpauseOnBadtideStarted = component.Get(UnpauseOnBadtideStartedKey);
+            }
+            if (component.Has(DisableScheduleOnBadtideKey))
+            {
+                DisableScheduleOnBadtide = component.Get(DisableScheduleOnBadtideKey);
             }
         }
 
@@ -180,7 +202,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             }
         }
 
-        public void OnDroughtEnded()
+        public void OnBadtideStarted()
         {
             var constructible = GetComponentFast<Constructible>();
             if (constructible.IsUnfinished)
@@ -189,12 +211,32 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             }
             var pausable = GetComponentFast<PausableBuilding>();
 
-            if (UnpauseOnDroughtEnded == true &&
+            if (PauseOnBadtideStarted == true &&
+                pausable.Paused == false)
+            {
+                pausable.Pause();
+            }
+            else if (UnpauseOnBadtideStarted == true && pausable.Paused == true)
+            {
+                pausable.Resume();
+            }
+        }
+
+        public void OnTemperateStarted()
+        {
+            var constructible = GetComponentFast<Constructible>();
+            if (constructible.IsUnfinished)
+            {
+                return;
+            }
+            var pausable = GetComponentFast<PausableBuilding>();
+
+            if (UnpauseOnTemperateStarted == true &&
                 pausable.Paused == true)
             {
                 pausable.Resume();
             }
-            else if(PauseOnDroughtEnded == true && pausable.Paused == false)
+            else if(PauseOnTemperateStarted == true && pausable.Paused == false)
             {
                 pausable.Pause();
             }
@@ -264,9 +306,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
                 _scheduleTrigger.Disable();
                 return;
             }
-            if (_droughtServíce.IsDrought)
+            if (_weatherServíce.IsHazardousWeather)
             {
-                if (DisableScheduleOnDrought)
+                var hazardType = _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType();
+                if (hazardType == typeof(DroughtWeather) &&
+                    DisableScheduleOnDrought)
+                {
+                    _scheduleTrigger.Disable();
+                    return;
+                }
+                else if(hazardType == typeof(BadtideWeather))
                 {
                     _scheduleTrigger.Disable();
                     return;
@@ -290,8 +339,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         {
             var pausable = GetComponentFast<PausableBuilding>();
             var constructible = GetComponentFast<Constructible>();
-
-            Console.WriteLine($"{this.name}: constructible: {constructible}. IsFinished: {constructible.IsFinished}");
 
             if (ScheduleEnabled == true &&
                 pausable.Paused == false &&

@@ -65,6 +65,11 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v4.0.0 - 30.9.2023
+- Updated Timber API to v0.6.2
+- Necessary changes after breaking changed to game version 0.5
+- Added various options to control buildings on badtide or contamination level on a stream gauge
+
 ## v3.4.4 - 29.4.2023
 - Fixed waterpumps being paused by triggers when they were unfinished
 - Fixed incorrect text in waterpump schedule tab

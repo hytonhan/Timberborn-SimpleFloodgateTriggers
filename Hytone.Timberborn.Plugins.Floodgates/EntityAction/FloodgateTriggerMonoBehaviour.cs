@@ -9,6 +9,7 @@ using Timberborn.WaterBuildings;
 using Timberborn.WeatherSystem;
 using UnityEngine;
 using Timberborn.BaseComponentSystem;
+using Timberborn.HazardousWeatherSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
@@ -31,12 +32,17 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<bool> ScheduleEnabledKey = new PropertyKey<bool>(nameof(ScheduleEnabled));
         private static readonly PropertyKey<bool> DisableScheduleOnDroughtKey = new PropertyKey<bool>(nameof(DisableScheduleOnDrought));
         private static readonly PropertyKey<bool> DisableScheduleOnTemperateKey = new PropertyKey<bool>(nameof(DisableScheduleOnTemperateKey));
+        private static readonly PropertyKey<bool> DisableScheduleOnBadtideKey = new PropertyKey<bool>(nameof(DisableScheduleOnBadtideKey));
+        private static readonly PropertyKey<bool> BadtideEndedEnabledKey = new PropertyKey<bool>(nameof(BadtideEndedEnabledKey));
+        private static readonly PropertyKey<float> BadtideEndedHeightKey = new PropertyKey<float>(nameof(BadtideEndedHeightKey));
+        private static readonly PropertyKey<bool> BadtideStartedEnabledKey = new PropertyKey<bool>(nameof(BadtideStartedEnabledKey));
+        private static readonly PropertyKey<float> BadtideStartedHeightKey = new PropertyKey<float>(nameof(BadtideStartedHeightKey));
 
         private static readonly ListKey<StreamGaugeFloodgateLink> FloodgateLinksKey = new ListKey<StreamGaugeFloodgateLink>(nameof(FloodgateLinks));
 
         private IScheduleTriggerFactory _scheduleTriggerFactory;
         private IScheduleTrigger _scheduleTrigger;
-        private DroughtService _droughtServíce;
+        private WeatherService _weatherServíce;
         private StreamGaugeFloodgateLinkSerializer _linkSerializer;
 
         private readonly List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
@@ -47,9 +53,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public bool DroughtStartedEnabled { get; set; }
         public float DroughtStartedHeight { get; set; }
 
+        public bool BadtideEndedEnabled { get; set; }
+        public float BadtideEndedHeight { get; set; }
+        public bool BadtideStartedEnabled { get; set; }
+        public float BadtideStartedHeight { get; set; }
+
         public bool ScheduleEnabled { get; set; }
         public bool DisableScheduleOnDrought { get; set; }
         public bool DisableScheduleOnTemperate { get; set; }
+        public bool DisableScheduleOnBadtide { get; set; }
         public float FirstScheduleTime { get; set; }
         public float FirstScheduleHeight { get; set; }
         public float SecondScheduleTime { get; set; }
@@ -60,11 +72,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         [Inject]
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
-            DroughtService droughtService,
+            WeatherService weatherServíce,
             StreamGaugeFloodgateLinkSerializer linkSerializer)
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
-            _droughtServíce = droughtService;
+            _weatherServíce = weatherServíce;
             _linkSerializer = linkSerializer;
         }
 
@@ -108,7 +120,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             component.Set(ScheduleEnabledKey, ScheduleEnabled);
             component.Set(DisableScheduleOnDroughtKey, DisableScheduleOnDrought);
             component.Set(DisableScheduleOnTemperateKey, DisableScheduleOnTemperate);
+            component.Set(DisableScheduleOnBadtideKey, DisableScheduleOnBadtide);
             component.Set(FloodgateLinksKey, FloodgateLinks, _linkSerializer);
+            component.Set(BadtideEndedEnabledKey, BadtideEndedEnabled);
+            component.Set(BadtideEndedHeightKey, BadtideEndedHeight);
+            component.Set(BadtideStartedEnabledKey, BadtideStartedEnabled);
+            component.Set(BadtideStartedHeightKey, BadtideStartedHeight);
         }
 
         /// <summary>
@@ -166,6 +183,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 DisableScheduleOnTemperate = component.Get(DisableScheduleOnTemperateKey);
             }
+            if (component.Has(DisableScheduleOnBadtideKey))
+            {
+                DisableScheduleOnTemperate = component.Get(DisableScheduleOnBadtideKey);
+            }
             if (component.Has(FloodgateLinksKey))
             {
                 _floodgateLinks.AddRange(component.Get(FloodgateLinksKey, _linkSerializer));
@@ -175,6 +196,22 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 {
                     PostAttachLink(link);
                 }
+            }
+            if (component.Has(BadtideEndedEnabledKey))
+            {
+                BadtideEndedEnabled = component.Get(BadtideEndedEnabledKey);
+            }
+            if (component.Has(BadtideEndedHeightKey))
+            {
+                BadtideEndedHeight = component.Get(BadtideEndedHeightKey);
+            }
+            if (component.Has(BadtideStartedEnabledKey))
+            {
+                BadtideStartedEnabled = component.Get(BadtideStartedEnabledKey);
+            }
+            if (component.Has(BadtideStartedHeightKey))
+            {
+                BadtideStartedHeight = component.Get(BadtideStartedHeightKey);
             }
         }
 
@@ -194,6 +231,24 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 _scheduleTrigger.Enable();
             }
             else if (DisableScheduleOnDrought)
+            {
+                _scheduleTrigger.Disable();
+            }
+        }
+
+        public void OnBadtideStarted()
+        {
+            var floodgate = GetComponentFast<Floodgate>();
+            if (BadtideStartedEnabled == true &&
+               floodgate.Height != BadtideStartedHeight)
+            {
+                floodgate.SetHeightAndSynchronize(BadtideStartedHeight);
+            }
+            if (ScheduleEnabled && !DisableScheduleOnBadtide)
+            {
+                _scheduleTrigger.Enable();
+            }
+            else if (DisableScheduleOnBadtide)
             {
                 _scheduleTrigger.Disable();
             }
@@ -220,6 +275,24 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
         }
 
+        public void OnBadtideEnded()
+        {
+            var floodgate = GetComponentFast<Floodgate>();
+            if (BadtideEndedEnabled == true &&
+               floodgate.Height != BadtideEndedHeight)
+            {
+                floodgate.SetHeightAndSynchronize(BadtideEndedHeight);
+            }
+            if (ScheduleEnabled && !DisableScheduleOnBadtide)
+            {
+                _scheduleTrigger.Enable();
+            }
+            else if (DisableScheduleOnTemperate)
+            {
+                _scheduleTrigger.Disable();
+            }
+        }
+
         /// <summary>
         /// When toggles related to Schedules are changed,
         /// then check if triggers need to be enabled/disabled
@@ -235,7 +308,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 _scheduleTrigger.Disable();
                 return;
             }
-            if (_droughtServíce.IsDrought)
+            if (_weatherServíce.IsHazardousWeather &&
+                _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType() == typeof(DroughtWeather))
             {
                 if(DisableScheduleOnDrought)
                 {
@@ -245,7 +319,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 _scheduleTrigger.Enable();
                 return;
             }
-            if(!_droughtServíce.IsDrought)
+            else if (_weatherServíce.IsHazardousWeather &&
+                     _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType() == typeof(BadtideWeather))
+            {
+                if (DisableScheduleOnBadtide)
+                {
+                    _scheduleTrigger.Disable();
+                    return;
+                }
+                _scheduleTrigger.Enable();
+                return;
+            }
+            if (!_weatherServíce.IsHazardousWeather)
             {
                 if (DisableScheduleOnTemperate)
                 {

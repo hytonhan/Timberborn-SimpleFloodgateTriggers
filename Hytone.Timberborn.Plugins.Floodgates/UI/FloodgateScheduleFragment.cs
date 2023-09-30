@@ -31,6 +31,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private Toggle _disableScheduleOnDrought;
         private Toggle _disableScheduleOnTemperate;
+        private Toggle _disableScheduleOnBadtide;
 
         public FloodgateScheduleFragment(
             UIBuilder builder,
@@ -61,6 +62,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         .AddPreset(factory => factory.Toggles()
                                                       .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnDrought",
                                                                          name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle",
+                                                                         fontStyle: FontStyle.Normal,
+                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+                        .AddPreset(factory => factory.Toggles()
+                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnBadtide",
+                                                                         name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle",
                                                                          fontStyle: FontStyle.Normal,
                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
@@ -134,6 +142,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _scheduleEnabledToggle = _root.Q<Toggle>(nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle");
             _disableScheduleOnDrought = _root.Q<Toggle>(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle");
             _disableScheduleOnTemperate = _root.Q<Toggle>(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnTemperate) + "Toggle");
+            _disableScheduleOnBadtide = _root.Q<Toggle>(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle");
 
             _firstScheduleHeightSlider.RegisterValueChangedCallback(x => ChangeHeight(x, ref _firstScheduleHeightSlider));
             _firstScheduleTimeSlider.RegisterValueChangedCallback(x => ChangeHeight(x, ref _firstScheduleTimeSlider));
@@ -144,6 +153,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _scheduleEnabledToggle.RegisterValueChangedCallback(ToggleScheduleEnabled);
             _disableScheduleOnDrought.RegisterValueChangedCallback(ToggleDisableScheduleOnDrought);
             _disableScheduleOnTemperate.RegisterValueChangedCallback(ToggleDisableScheduleOnTemperate);
+            _disableScheduleOnBadtide.RegisterValueChangedCallback(ToggleDisableScheduleOnBadtide);
 
 
             return _root;
@@ -202,9 +212,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _floodgateTriggerComponent.DisableScheduleOnDrought = changeEvent.newValue;
             _floodgateTriggerComponent.OnChangedScheduleToggles();
         }
+
         private void ToggleDisableScheduleOnTemperate(ChangeEvent<bool> changeEvent)
         {
             _floodgateTriggerComponent.DisableScheduleOnTemperate = changeEvent.newValue;
+            _floodgateTriggerComponent.OnChangedScheduleToggles();
+        }
+
+        private void ToggleDisableScheduleOnBadtide(ChangeEvent<bool> changeEvent)
+        {
+            _floodgateTriggerComponent.DisableScheduleOnBadtide = changeEvent.newValue;
             _floodgateTriggerComponent.OnChangedScheduleToggles();
         }
 

@@ -11,6 +11,7 @@ using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
+using Timberborn.UIFormatters;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -33,7 +34,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         LinkViewFactory _streamGaugeFloodgateLinkViewFactory;
 
         //There has to be a better way for this...
-        private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle, Label>>> _settingsList = new ();
+        private List<Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle, Label, Toggle, Label, Slider, Tuple<Label, Slider, Toggle, Slider, Toggle, Slider>>>> _settingsList = new ();
         
         public AttachFloodgateToStreamGaugeFragment(
             AttachFloodgateToStreamGaugeButton attachToStreamGaugeButton,
@@ -116,9 +117,22 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
                 setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
+                setting.Rest.Item5.SetValueWithoutNotify(link.DisableDuringBadtide);
+
+                //setting.Rest.Item7.highValue = UIHelpers.GetMaxHeight(streamGauge);
+                setting.Rest.Item7.SetValueWithoutNotify(link.ContaminationThresholdLow);
+                //setting.Rest.Rest.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
+                setting.Rest.Rest.Item2.SetValueWithoutNotify(link.ContaminationThresholdHigh);
+                setting.Rest.Rest.Item4.highValue = height;
+                setting.Rest.Rest.Item4.SetValueWithoutNotify(link.ContaminationHeight1);
+                setting.Rest.Rest.Item6.highValue = height;
+                setting.Rest.Rest.Item6.SetValueWithoutNotify(link.ContaminationHeight2);
+
+                setting.Rest.Rest.Item3.SetValueWithoutNotify(link.EnableContaminationLow);
+                setting.Rest.Rest.Item5.SetValueWithoutNotify(link.EnableContaminationHigh);
             }
         }
-
+        
         public void UpdateFragment()
         {
             if ((bool)_floodgateTriggerMonoBehaviour)
@@ -127,13 +141,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 for (int i = 0; i < links.Count(); i++)
                 {
                     var setting = _settingsList[i];
-                    setting.Item1.text = $"{_loc.T("Floodgates.Triggers.Threshold1")}: {setting.Item2.value.ToString(CultureInfo.InvariantCulture)}";
-                    setting.Item3.text = $"{_loc.T("Floodgates.Triggers.Threshold2")}: {setting.Item4.value.ToString(CultureInfo.InvariantCulture)}";
+                    setting.Item1.text = $"{_loc.T("Floodgates.Triggers.Threshold1")}: {setting.Item2.value.ToString(CultureInfo.InvariantCulture)}m";
+                    setting.Item3.text = $"{_loc.T("Floodgates.Triggers.Threshold2")}: {setting.Item4.value.ToString(CultureInfo.InvariantCulture)}m";
                     setting.Item5.text = $"{_loc.T("Floodgates.Triggers.HeightWhenBelowThreshold1")}: {setting.Item6.value.ToString(CultureInfo.InvariantCulture)}";
                     setting.Item7.text = $"{_loc.T("Floodgates.Triggers.HeightWhenAboveThreshold2")}: {setting.Rest.Item1.value.ToString(CultureInfo.InvariantCulture)}";
 
+                    setting.Rest.Item6.text = $"{_loc.T("Floodgates.Triggers.ContaminationThresholdLow")}: {NumberFormatter.FormatAsPercentRounded(setting.Rest.Item7.value)}";
+                    setting.Rest.Rest.Item1.text = $"{_loc.T("Floodgates.Triggers.ContaminationThresholdHigh")}: {NumberFormatter.FormatAsPercentRounded(setting.Rest.Rest.Item2.value)}";
+                    setting.Rest.Rest.Item3.text = $"{_loc.T("Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow")}: {setting.Rest.Rest.Item4.value.ToString(CultureInfo.InvariantCulture)}";
+                    setting.Rest.Rest.Item5.text = $"{_loc.T("Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh")}: {setting.Rest.Rest.Item6.value.ToString(CultureInfo.InvariantCulture)}";
+
                     var gauge = links[i].StreamGauge.GetComponentFast<StreamGauge>();
-                    setting.Rest.Item4.text = $"({_loc.T("Building.StreamGauge.WaterLevel", gauge.WaterLevel.ToString("0.00"))})";
+                    setting.Rest.Item4.text = $"({gauge.WaterLevel.ToString("0.00")}m, {NumberFormatter.FormatAsPercentRounded(gauge.ContaminationLevel)})";
                 }
             }
         }
@@ -190,9 +209,27 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 disableDuringDroughtToggle.RegisterValueChangedCallback((@event) => ChangeDisableOnDroughtToggle(@event, j));
                 var disableDuringTemperate = view.Q<Toggle>($"DisableDuringTemperate{i}");
                 disableDuringTemperate.RegisterValueChangedCallback((@event) => ChangeDisableOnTemperateToggle(@event, j));
+                var disableDuringBadtideToggle = view.Q<Toggle>($"DisableDuringBadtideToggle{i}");
+                disableDuringBadtideToggle.RegisterValueChangedCallback((@event) => ChangeDisableOnBadtideToggle(@event, j));
 
 
-                var foo = new Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle, Label>>(
+                var contaminationLowLabel = view.Q<Label>($"ContaminationThresholdLowLabel{i}");
+                var contaminationLowSlider = view.Q<Slider>($"ContaminationThresholdLowSlider{i}");
+                contaminationLowSlider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 2));
+                var contaminationHighLabel = view.Q<Label>($"ContaminationThresholdHighLabel{i}");
+                var contaminationHighSlider = view.Q<Slider>($"ContaminationThresholdHighSlider{i}");
+                contaminationHighSlider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 3));
+
+                var contaminationLowFloodgateToggle = view.Q<Toggle>($"ContaminationThresholdLowFloodgateHeightToggle{i}");
+                contaminationLowFloodgateToggle.RegisterValueChangedCallback((@event) => ChangeContaminationLowToggle(@event, j));
+                var contaminationLowFloodgateSlider = view.Q<Slider>($"ContaminationThresholdLowFloodgateHeightSlider{i}");
+                contaminationLowFloodgateSlider.RegisterValueChangedCallback((@event) => ChangeHeightSlider(@event, j, 2));
+                var contaminationHighFloodgateToggle = view.Q<Toggle>($"ContaminationThresholdHighFloodgateHeightToggle{i}");
+                contaminationHighFloodgateToggle.RegisterValueChangedCallback((@event) => ChangeContaminationHighToggle(@event, j));
+                var contaminationHighFloodgateSlider = view.Q<Slider>($"ContaminationThresholdHighFloodgateHeightSlider{i}");
+                contaminationHighFloodgateSlider.RegisterValueChangedCallback((@event) => ChangeHeightSlider(@event, j, 3));
+
+                var foo = new Tuple<Label, Slider, Label, Slider, Label, Slider, Label, Tuple<Slider, Toggle, Toggle, Label, Toggle, Label, Slider, Tuple<Label, Slider, Toggle, Slider, Toggle, Slider>>>(
                     threshold1Label, 
                     threshold1Slider, 
                     threshold2Label, 
@@ -200,10 +237,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     threshold1FloodgateLabel, 
                     threshold1FloodgateSlider, 
                     threshold2FloodgateLabel, 
-                    new Tuple<Slider, Toggle, Toggle, Label>(threshold2FloodgateSlider,
-                                                             disableDuringDroughtToggle,
-                                                             disableDuringTemperate,
-                                                             gaugeHeightLabel));
+                    new Tuple<Slider, Toggle, Toggle, Label, Toggle, Label, Slider, Tuple<Label, Slider, Toggle, Slider, Toggle, Slider>>(
+                        threshold2FloodgateSlider,
+                        disableDuringDroughtToggle,
+                        disableDuringTemperate,
+                        gaugeHeightLabel,
+                        disableDuringBadtideToggle,
+                        contaminationLowLabel,
+                        contaminationLowSlider,
+                        new Tuple<Label, Slider, Toggle, Slider, Toggle, Slider>(
+                            contaminationHighLabel,
+                            contaminationHighSlider,
+                            contaminationLowFloodgateToggle,
+                            contaminationLowFloodgateSlider,
+                            contaminationHighFloodgateToggle,
+                            contaminationHighFloodgateSlider)));
 
                 _settingsList.Add(foo);
                 _linksScrollView.Add(view);
@@ -221,6 +269,24 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             Toggle toggle = _settingsList[index].Rest.Item2;
             _floodgateTriggerMonoBehaviour.FloodgateLinks[index].DisableDuringDrought = changeEvent.newValue;
+        }
+        public void ChangeContaminationLowToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Rest.Item3;
+            _floodgateTriggerMonoBehaviour.FloodgateLinks[index].EnableContaminationLow = changeEvent.newValue;
+        }
+        public void ChangeContaminationHighToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Rest.Item5;
+            _floodgateTriggerMonoBehaviour.FloodgateLinks[index].EnableContaminationHigh = changeEvent.newValue;
+        }
+        public void ChangeDisableOnBadtideToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Item5;
+            _floodgateTriggerMonoBehaviour.FloodgateLinks[index].DisableDuringBadtide = changeEvent.newValue;
         }
         public void ChangeDisableOnTemperateToggle(ChangeEvent<bool> changeEvent,
                                                  int index)
@@ -240,15 +306,26 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                           int sliderIndex)
         {
             Slider slider;
-            if (sliderIndex == 0)
+            switch (sliderIndex)
             {
-                slider = _settingsList[index].Item2;
-                _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1 = changeEvent.newValue;
-            }
-            else
-            {
-                slider = _settingsList[index].Item4;
-                _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold2 = changeEvent.newValue;
+                case 0:
+                    slider = _settingsList[index].Item2;
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold1 = changeEvent.newValue;
+                    break;
+                case 1:
+                    slider = _settingsList[index].Item4;
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Threshold2 = changeEvent.newValue;
+                    break;
+                case 2:
+                    slider = _settingsList[index].Rest.Item7;
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].ContaminationThresholdLow = changeEvent.newValue;
+                    break;
+                case 3:
+                    slider = _settingsList[index].Rest.Rest.Item2;
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].ContaminationThresholdHigh = changeEvent.newValue;
+                    break;
+                default:
+                    return;
             }
             slider.SetValueWithoutNotify(changeEvent.newValue);
         }
@@ -262,17 +339,29 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public void ChangeHeightSlider(ChangeEvent<float> changeEvent, int index, int heightIndex)
         {
             Slider slider;
-            if (heightIndex == 0)
+
+            switch (heightIndex)
             {
-                slider = _settingsList[index].Item6;
-                var num = UpdateHeightSliderValue(slider, changeEvent.newValue);
-                _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Height1 = num;
-            }
-            else
-            {
-                slider = _settingsList[index].Rest.Item1;
-                var num = UpdateHeightSliderValue(slider, changeEvent.newValue);
-                _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Height2 = num;
+                case 0:
+                    slider = _settingsList[index].Item6;
+                    var num = UpdateHeightSliderValue(slider, changeEvent.newValue);
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Height1 = num;
+                    break;
+                case 1:
+                    slider = _settingsList[index].Rest.Item1;
+                    var num2 = UpdateHeightSliderValue(slider, changeEvent.newValue);
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].Height2 = num2;
+                    break;
+                case 2:
+                    slider = _settingsList[index].Rest.Rest.Item4;
+                    var num3 = UpdateHeightSliderValue(slider, changeEvent.newValue);
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].ContaminationHeight1 = num3;
+                    break;
+                case 3:
+                    slider = _settingsList[index].Rest.Rest.Item6;
+                    var num4 = UpdateHeightSliderValue(slider, changeEvent.newValue);
+                    _floodgateTriggerMonoBehaviour.FloodgateLinks[index].ContaminationHeight2 = num4;
+                    break;
             }
         }
 
