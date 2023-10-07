@@ -416,7 +416,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .SetJustifyContent(Justify.Center)
                                                             .AddPreset(factory =>
                                                                 factory.Labels()
-                                                                        .GameTextHeading(text: "Depth",
+                                                                        .GameTextHeading(locKey: "Floodgates.Triggers.Depth",
                                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                             
                                                             .AddPreset(
@@ -487,7 +487,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                             .SetJustifyContent(Justify.Center)
                                                             .AddPreset(factory =>
                                                                 factory.Labels()
-                                                                        .GameTextHeading(text: "Contamination",
+                                                                        .GameTextHeading(locKey: "Floodgates.Triggers.Contamination",
                                                                                          builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                             .AddPreset(
                                                                 factory => factory.Toggles()

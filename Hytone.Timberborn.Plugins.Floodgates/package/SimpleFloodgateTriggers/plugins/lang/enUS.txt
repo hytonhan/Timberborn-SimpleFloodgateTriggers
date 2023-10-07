@@ -21,8 +21,8 @@ Floodgates.Triggers.HeightWhenBelowThreshold1, Floodgate height below low thresh
 Floodgates.Triggers.HeightWhenAboveThreshold2, Floodgate height above high threshold
 Floodgate.Triggers.PauseOnDroughtStart, Pause when drought starts
 Floodgate.Triggers.UnpauseOnDroughtStart, Unpause when drought starts
-Floodgate.Triggers.UnpauseOnTemperateStart, Unpause when temperate ends
-Floodgate.Triggers.PauseOnTemperateStart, Pause when drought ends
+Floodgate.Triggers.UnpauseOnTemperateStart, Unpause when temperate starts
+Floodgate.Triggers.PauseOnTemperateStart, Pause when temperate starts
 Floodgates.WaterpumpTrigger.Threshold1, Pause <
 Floodgates.WaterpumpTrigger.Threshold2, Pause >
 Floodgates.WaterpumpTrigger.Threshold3, Unpause <
@@ -42,3 +42,5 @@ Floodgates.Triggers.ContaminationThresholdLow, Contamination low threshold
 Floodgates.Triggers.ContaminationThresholdHigh, Contamination high threshold
 Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow, Set height below low contamination
 Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh, Set height above high contamination
+Floodgates.Triggers.Depth,Depth
+Floodgates.Triggers.Contamination,Contamination

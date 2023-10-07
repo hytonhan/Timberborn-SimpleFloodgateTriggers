@@ -194,7 +194,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _waterPumpMonobehaviour.PauseOnBadtideStarted = changeEvent.newValue;
             if (changeEvent.newValue == true && _badtideStartedPauseToggle.value == true)
             {
-                _badtideStartedPauseToggle.value = false;
+                _badtideStartedResumeToggle.value = false;
                 _waterPumpMonobehaviour.UnpauseOnBadtideStarted = false;
             }
         }

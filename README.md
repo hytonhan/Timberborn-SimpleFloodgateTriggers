@@ -65,6 +65,14 @@ and adding the dll to your bepinex plugins folder. This plugin is dependent on t
 
 # Changelog
 
+## v4.0.2 - 6.10.2023
+- Fixed Depth and Contamination labels to localization
+- Fixed "Pause when Badtide starts" button
+
+## v4.0.1 - 6.10.2023
+- Fixed temperate labels on waterpump basic tab
+- Added German translations for new lines (thx to juf0816)
+
 ## v4.0.0 - 30.9.2023
 - Updated Timber API to v0.6.2
 - Necessary changes after breaking changed to game version 0.5

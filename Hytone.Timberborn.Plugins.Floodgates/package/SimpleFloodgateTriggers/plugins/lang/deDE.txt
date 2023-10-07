@@ -21,13 +21,26 @@ Floodgates.Triggers.HeightWhenBelowThreshold1, Höhe unter niederem Wert
 Floodgates.Triggers.HeightWhenAboveThreshold2, Höhe über hohem Wert
 Floodgate.Triggers.PauseOnDroughtStart, Anhalten Dürreanfang
 Floodgate.Triggers.UnpauseOnDroughtStart, Fortsetzen Dürreanfang
-Floodgate.Triggers.UnpauseOnDroughtEnded, Fortsetzen Dürreende
-Floodgate.Triggers.PauseOnDroughtEnded, Anhalten Dürreende
-Floodgates.WaterpumpTrigger.Threshold1, Anhalten wenn unter
-Floodgates.WaterpumpTrigger.Threshold2, Anhalten wenn über
-Floodgates.WaterpumpTrigger.Threshold3, Fortsetzen wenn unter
-Floodgates.WaterpumpTrigger.Threshold4, Fortsetzen wenn über
+Floodgate.Triggers.UnpauseOnTemperateStart, Fortsetzen gemäßigter Wetteranfang
+Floodgate.Triggers.PauseOnTemperateStart, Anhalten gemäßigter Wetteranfang
+Floodgates.WaterpumpTrigger.Threshold1, Anhalten <
+Floodgates.WaterpumpTrigger.Threshold2, Anhalten >
+Floodgates.WaterpumpTrigger.Threshold3, Fortsetzen <
+Floodgates.WaterpumpTrigger.Threshold4, Fortsetzen >
 Floodgates.WaterpumpTrigger.PauseStartTime, Anhalten Startzeit
 Floodgates.WaterpumpTrigger.ResumeStartTime, Fortsetzen Startzeit
 Floodgates.WaterpumpTrigger.DisableDuringDrought, Anhalten Dürre
 Floodgates.WaterpumpTrigger.DisableDuringTemperate, Anhalten gemäßigtes Wetter
+Floodgate.Triggers.PauseOnSchedule, Anhalten Zeitplan
+Floodgate.Triggers.EnableOnBadtideStarted, Bestimme Höhe Faulwasserflutanfang
+Floodgate.Triggers.EnableOnBadtideEnded, Bestimme Höhe Faulwasserflutende
+Floodgate.Schedule.DisableOnBadtide, Kein Zeitplan Faulwasserflut
+Floodgates.WaterpumpTrigger.DisableDuringBadtide, Anhalten Faulwasserflut
+Floodgate.Triggers.PauseOnBadtideStart, Anhalten Faulwasserflutstart
+Floodgate.Triggers.UnpauseOnBadtideStart, Fortsetzen Faulwasserflutstart
+Floodgates.Triggers.ContaminationThresholdLow, Kontamination niederer Wert
+Floodgates.Triggers.ContaminationThresholdHigh, Kontamination hoher Wert
+Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow, Höhe unter niederer Kontamination
+Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh, Höhe über hoher Kontamination
+Floodgates.Triggers.Depth,Tiefe
+Floodgates.Triggers.Contamination,Kontamination
