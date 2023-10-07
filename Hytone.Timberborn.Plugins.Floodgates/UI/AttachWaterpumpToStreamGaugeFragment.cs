@@ -9,6 +9,7 @@ using Timberborn.Common;
 using Timberborn.Localization;
 using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
+using Timberborn.UIFormatters;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,7 +32,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         LinkViewFactory _linkViewFactory;
 
         //There has to be a better way for this...
-        private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label>>> _settingsList = new ();
+        private List<Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label, Toggle, Toggle, Slider, Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider>>>> _settingsList = new ();
 
         public AttachWaterpumpToStreamGaugeFragment(
             AttachWaterpumpToStreamGaugeButton attachToStreamGaugeButton,
@@ -115,6 +116,20 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
                 setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
+
+                setting.Rest.Item6.SetValueWithoutNotify(link.ContaminationPauseBelowEnabled);
+                setting.Rest.Item7.highValue = UIHelpers.GetMaxHeight(streamGauge);
+                setting.Rest.Item7.SetValueWithoutNotify(link.ContaminationPauseBelowThreshold);
+                setting.Rest.Rest.Item1.SetValueWithoutNotify(link.ContaminationPauseAboveEnabled);
+                setting.Rest.Rest.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
+                setting.Rest.Rest.Item2.SetValueWithoutNotify(link.ContaminationPauseAboveThreshold);
+
+                setting.Rest.Rest.Item3.SetValueWithoutNotify(link.ContaminationUnpauseBelowEnabled);
+                setting.Rest.Rest.Item4.highValue = UIHelpers.GetMaxHeight(streamGauge);
+                setting.Rest.Rest.Item4.SetValueWithoutNotify(link.ContaminationUnpauseBelowThreshold);
+                setting.Rest.Rest.Item5.SetValueWithoutNotify(link.ContaminationUnpauseAboveEnabled);
+                setting.Rest.Rest.Item6.highValue = UIHelpers.GetMaxHeight(streamGauge);
+                setting.Rest.Rest.Item6.SetValueWithoutNotify(link.ContaminationUnpauseAboveThreshold);
             }
         }
 
@@ -126,13 +141,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 for (int i = 0; i < links.Count(); i++)
                 {
                     var setting = _settingsList[i];
-                    setting.Item1.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold1")}: {setting.Item2.value.ToString(CultureInfo.InvariantCulture)}";
-                    setting.Item3.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold2")}: {setting.Item4.value.ToString(CultureInfo.InvariantCulture)}";
-                    setting.Item5.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold3")}: {setting.Item6.value.ToString(CultureInfo.InvariantCulture)}";
-                    setting.Item7.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold4")}: {setting.Rest.Item1.value.ToString(CultureInfo.InvariantCulture)}";
+                    setting.Item1.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold1")} {setting.Item2.value.ToString(CultureInfo.InvariantCulture)}m";
+                    setting.Item3.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold2")} {setting.Item4.value.ToString(CultureInfo.InvariantCulture)}m";
+                    setting.Item5.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold3")} {setting.Item6.value.ToString(CultureInfo.InvariantCulture)}m";
+                    setting.Item7.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold4")} {setting.Rest.Item1.value.ToString(CultureInfo.InvariantCulture)}m";
+
+                    setting.Rest.Item6.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold1")} {NumberFormatter.FormatAsPercentRounded(setting.Rest.Item7.value)}";
+                    setting.Rest.Rest.Item1.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold2")} {NumberFormatter.FormatAsPercentRounded(setting.Rest.Rest.Item2.value)}";
+                    setting.Rest.Rest.Item3.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold3")} {NumberFormatter.FormatAsPercentRounded(setting.Rest.Rest.Item4.value)}";
+                    setting.Rest.Rest.Item5.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold4")} {NumberFormatter.FormatAsPercentRounded(setting.Rest.Rest.Item6.value)}";
 
                     var gauge = links[i].StreamGauge.GetComponentFast<StreamGauge>();
-                    setting.Rest.Item4.text = $"({_loc.T("Building.StreamGauge.WaterLevel", gauge.WaterLevel.ToString("0.00"))})";
+                    setting.Rest.Item4.text = $"({gauge.WaterLevel.ToString("0.00")}m, {NumberFormatter.FormatAsPercentRounded(gauge.ContaminationLevel)})";
                 }
             }
         }
@@ -184,12 +204,31 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var threshold4Slider = view.Q<Slider>($"Threshold4Slider{i}");
                 threshold4Slider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 3));
 
+                var contaminationPauseBelowToggle = view.Q<Toggle>($"ContaminationPauseBelowToggle{i}");
+                contaminationPauseBelowToggle.RegisterValueChangedCallback((@event) => ChangeThresholdToggle(@event, j, 4));
+                var contaminationPauseBelowSlider = view.Q<Slider>($"ContaminationPauseBelowSlider{i}");
+                contaminationPauseBelowSlider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 4));
+                var contaminationPauseAboveToggle = view.Q<Toggle>($"ContaminationPauseAboveToggle{i}");
+                contaminationPauseAboveToggle.RegisterValueChangedCallback((@event) => ChangeThresholdToggle(@event, j, 5));
+                var contaminationPauseAboveSlider = view.Q<Slider>($"ContaminationPauseAboveSlider{i}");
+                contaminationPauseAboveSlider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 5));
+                var contaminationUnpauseBelowToggle = view.Q<Toggle>($"ContaminationUnpauseBelowToggle{i}");
+                contaminationUnpauseBelowToggle.RegisterValueChangedCallback((@event) => ChangeThresholdToggle(@event, j, 6));
+                var contaminationUnpauseBelowSlider = view.Q<Slider>($"ContaminationUnpauseBelowSlider{i}");
+                contaminationUnpauseBelowSlider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 6));
+                var contaminationUnpauseAboveToggle = view.Q<Toggle>($"ContaminationUnpauseAboveToggle{i}");
+                contaminationUnpauseAboveToggle.RegisterValueChangedCallback((@event) => ChangeThresholdToggle(@event, j, 7));
+                var contaminationUnpauseAboveSlider = view.Q<Slider>($"ContaminationUnpauseAboveSlider{i}");
+                contaminationUnpauseAboveSlider.RegisterValueChangedCallback((@event) => ChangeThresholdSlider(@event, j, 7));
+
                 var disableDuringDroughtToggle = view.Q<Toggle>($"DisableDuringDroughtToggle{i}");
                 disableDuringDroughtToggle.RegisterValueChangedCallback((@event) => ChangeDisableOnDroughtToggle(@event, j));
                 var disableDuringTemperate = view.Q<Toggle>($"DisableDuringTemperate{i}");
                 disableDuringTemperate.RegisterValueChangedCallback((@event) => ChangeDisableOnTemperateToggle(@event, j));
+                var disableDuringBadtide = view.Q<Toggle>($"DisableDuringBadtide{i}");
+                disableDuringBadtide.RegisterValueChangedCallback((@event) => ChangeDisableOnBadtideToggle(@event, j));
 
-                var foo = new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label>>(
+                var foo = new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label, Toggle, Toggle, Slider, Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider>>>(
                     threshold1Toggle,
                     threshold1Slider,
                     threshold2Toggle,
@@ -197,10 +236,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     threshold3Toggle,
                     threshold3Slider,
                     threshold4Toggle,
-                    new Tuple<Slider, Toggle, Toggle, Label>(threshold4Slider,
-                                                             disableDuringDroughtToggle,
-                                                             disableDuringTemperate,
-                                                             gaugeHeightLabel));
+                    new Tuple<Slider, Toggle, Toggle, Label, Toggle, Toggle, Slider, Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider>>(
+                        threshold4Slider,
+                        disableDuringDroughtToggle,
+                        disableDuringTemperate,
+                        gaugeHeightLabel,
+                        disableDuringBadtide,
+                        contaminationPauseBelowToggle,
+                        contaminationPauseBelowSlider,
+                        new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider>(
+                            contaminationPauseAboveToggle,
+                            contaminationPauseAboveSlider,
+                            contaminationUnpauseBelowToggle,
+                            contaminationUnpauseBelowSlider,
+                            contaminationUnpauseAboveToggle,
+                            contaminationUnpauseAboveSlider)));
 
                 _settingsList.Add(foo);
                 _linksScrollView.Add(view);
@@ -218,6 +268,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         {
             Toggle toggle = _settingsList[index].Rest.Item2;
             _waterpumpMonoBehaviour.WaterPumpLinks[index].DisableDuringDrought = changeEvent.newValue;
+        }
+        public void ChangeDisableOnBadtideToggle(ChangeEvent<bool> changeEvent,
+                                                 int index)
+        {
+            Toggle toggle = _settingsList[index].Rest.Item5;
+            _waterpumpMonoBehaviour.WaterPumpLinks[index].DisableDuringBadtide = changeEvent.newValue;
         }
         public void ChangeDisableOnTemperateToggle(ChangeEvent<bool> changeEvent,
                                                  int index)
@@ -246,10 +302,30 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 slider = _settingsList[index].Item6;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Threshold3 = changeEvent.newValue;
             }
-            else
+            else if(sliderIndex == 3)
             {
                 slider = _settingsList[index].Rest.Item1;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Threshold4 = changeEvent.newValue;
+            }
+            else if (sliderIndex == 4)
+            {
+                slider = _settingsList[index].Rest.Item7;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationPauseBelowThreshold = changeEvent.newValue;
+            }
+            else if (sliderIndex == 5)
+            {
+                slider = _settingsList[index].Rest.Rest.Item2;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationPauseAboveThreshold = changeEvent.newValue;
+            }
+            else if (sliderIndex == 6)
+            {
+                slider = _settingsList[index].Rest.Rest.Item4;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationUnpauseBelowThreshold = changeEvent.newValue;
+            }
+            else
+            {
+                slider = _settingsList[index].Rest.Rest.Item6;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationUnpauseAboveThreshold = changeEvent.newValue;
             }
             slider.SetValueWithoutNotify(changeEvent.newValue);
         }
@@ -274,10 +350,30 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 toggle = _settingsList[index].Item5;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Enabled3 = changeEvent.newValue;
             }
-            else
+            else if(toggleIndex == 3)
             {
                 toggle = _settingsList[index].Item7;
                 _waterpumpMonoBehaviour.WaterPumpLinks[index].Enabled4 = changeEvent.newValue;
+            }
+            else if(toggleIndex == 4)
+            {
+                toggle = _settingsList[index].Rest.Item6;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationPauseBelowEnabled = changeEvent.newValue;
+            }
+            else if(toggleIndex == 5)
+            {
+                toggle = _settingsList[index].Rest.Rest.Item1;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationPauseAboveEnabled = changeEvent.newValue;
+            }
+            else if(toggleIndex == 6)
+            {
+                toggle = _settingsList[index].Rest.Rest.Item3;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationUnpauseBelowEnabled = changeEvent.newValue;
+            }
+            else if(toggleIndex == 7)
+            {
+                toggle = _settingsList[index].Rest.Rest.Item5;
+                _waterpumpMonoBehaviour.WaterPumpLinks[index].ContaminationUnpauseAboveEnabled = changeEvent.newValue;
             }
         }
 

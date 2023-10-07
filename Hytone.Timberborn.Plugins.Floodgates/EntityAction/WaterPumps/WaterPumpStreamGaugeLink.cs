@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
+﻿namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
     public class WaterPumpStreamGaugeLink
     {
@@ -20,8 +16,19 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public bool Enabled3 { get; set; }
         public bool Enabled4 { get; set; }
 
+        public float ContaminationPauseBelowThreshold { get; set; }
+        public float ContaminationPauseAboveThreshold { get; set; }
+        public float ContaminationUnpauseBelowThreshold { get; set; }
+        public float ContaminationUnpauseAboveThreshold { get; set; }
+
+        public bool ContaminationPauseBelowEnabled { get; set; }
+        public bool ContaminationPauseAboveEnabled { get; set; }
+        public bool ContaminationUnpauseBelowEnabled { get; set; }
+        public bool ContaminationUnpauseAboveEnabled { get; set; }
+
         public bool DisableDuringDrought;
         public bool DisableDuringTemperate;
+        public bool DisableDuringBadtide;
 
         public WaterPumpStreamGaugeLink(
             WaterPumpMonobehaviour waterPump,
@@ -39,6 +46,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             Enabled4 = false;
             DisableDuringDrought = false;
             DisableDuringTemperate = false;
-        }
+            DisableDuringBadtide = false;
+            ContaminationPauseBelowEnabled = false;
+            ContaminationPauseAboveEnabled = false;
+            ContaminationUnpauseBelowEnabled = false;
+            ContaminationUnpauseAboveEnabled = false;
+            ContaminationPauseBelowThreshold = 0f;
+            ContaminationPauseAboveThreshold = 0f;
+            ContaminationUnpauseBelowThreshold = 0f;
+            ContaminationUnpauseAboveThreshold = 0f;
+    }
     }
 }

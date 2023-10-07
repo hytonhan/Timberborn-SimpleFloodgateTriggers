@@ -16,6 +16,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         private static readonly PropertyKey<bool> Enabled4Key = new PropertyKey<bool>("Enabled4");
         private static readonly PropertyKey<bool> DisableDuringDroughtKey = new PropertyKey<bool>("DisableDuringDrought");
         private static readonly PropertyKey<bool> DisableDuringTemperateKey = new PropertyKey<bool>("DisableDuringTemperate");
+        private static readonly PropertyKey<bool> DisableDuringBadtideKey = new PropertyKey<bool>("DisableDuringBadtide");
+
+        private static readonly PropertyKey<bool> ContaminationPauseBelowEnabledKey = new PropertyKey<bool>("ContaminationPauseBelowEnabled");
+        private static readonly PropertyKey<bool> ContaminationPauseAboveEnabledKey = new PropertyKey<bool>("ContaminationPauseAboveEnabled");
+        private static readonly PropertyKey<bool> ContaminationUnpauseBelowEnabledKey = new PropertyKey<bool>("ContaminationUnpauseBelowEnabled");
+        private static readonly PropertyKey<bool> ContaminationUnpauseAboveEnabledKey = new PropertyKey<bool>("ContaminationUnpauseAboveEnabled");
+        private static readonly PropertyKey<float> ContaminationPauseBelowThresholdKey = new PropertyKey<float>("ContaminationPauseBelowThreshold");
+        private static readonly PropertyKey<float> ContaminationPauseAboveThresholdKey = new PropertyKey<float>("ContaminationPauseAboveThreshold");
+        private static readonly PropertyKey<float> ContaminationUnpauseBelowThresholdKey = new PropertyKey<float>("ContaminationUnpauseBelowThreshold");
+        private static readonly PropertyKey<float> ContaminationUnpauseAboveThresholdKey = new PropertyKey<float>("ContaminationUnpauseAboveThreshold");
 
         public void Serialize(WaterPumpStreamGaugeLink value, IObjectSaver objectSaver)
         {
@@ -31,6 +41,17 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             objectSaver.Set(Enabled4Key, value.Enabled4);
             objectSaver.Set(DisableDuringDroughtKey, value.DisableDuringDrought);
             objectSaver.Set(DisableDuringTemperateKey, value.DisableDuringTemperate);
+            objectSaver.Set(DisableDuringBadtideKey, value.DisableDuringBadtide);
+
+            objectSaver.Set(ContaminationPauseBelowThresholdKey, value.ContaminationPauseBelowThreshold);
+            objectSaver.Set(ContaminationPauseAboveThresholdKey, value.ContaminationPauseAboveThreshold);
+            objectSaver.Set(ContaminationUnpauseBelowThresholdKey, value.ContaminationUnpauseBelowThreshold);
+            objectSaver.Set(ContaminationUnpauseAboveThresholdKey, value.ContaminationUnpauseAboveThreshold);
+
+            objectSaver.Set(ContaminationPauseBelowEnabledKey, value.ContaminationPauseBelowEnabled);
+            objectSaver.Set(ContaminationPauseAboveEnabledKey, value.ContaminationPauseAboveEnabled);
+            objectSaver.Set(ContaminationUnpauseBelowEnabledKey, value.ContaminationUnpauseBelowEnabled);
+            objectSaver.Set(ContaminationUnpauseAboveEnabledKey, value.ContaminationUnpauseAboveEnabled);
         }
 
         public Obsoletable<WaterPumpStreamGaugeLink> Deserialize(IObjectLoader objectLoader)
@@ -47,7 +68,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
                 Enabled3 = objectLoader.Get(Enabled3Key),
                 Enabled4 = objectLoader.Get(Enabled4Key),
                 DisableDuringDrought = objectLoader.Has(DisableDuringDroughtKey) ? objectLoader.Get(DisableDuringDroughtKey) : false,
-                DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) ? objectLoader.Get(DisableDuringTemperateKey) : false
+                DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) ? objectLoader.Get(DisableDuringTemperateKey) : false,
+                DisableDuringBadtide = objectLoader.Has(DisableDuringBadtideKey) ? objectLoader.Get(DisableDuringBadtideKey) : false,
+                ContaminationPauseBelowThreshold = objectLoader.Has(ContaminationPauseBelowThresholdKey) ? objectLoader.Get(ContaminationPauseBelowThresholdKey) : 0f,
+                ContaminationPauseAboveThreshold = objectLoader.Has(ContaminationPauseAboveThresholdKey) ? objectLoader.Get(ContaminationPauseAboveThresholdKey) : 0f,
+                ContaminationUnpauseBelowThreshold = objectLoader.Has(ContaminationUnpauseBelowThresholdKey) ? objectLoader.Get(ContaminationUnpauseBelowThresholdKey) : 0f,
+                ContaminationUnpauseAboveThreshold = objectLoader.Has(ContaminationUnpauseAboveThresholdKey) ? objectLoader.Get(ContaminationUnpauseAboveThresholdKey) : 0f,
+                ContaminationPauseBelowEnabled = objectLoader.Has(ContaminationPauseBelowEnabledKey) ? objectLoader.Get(ContaminationPauseBelowEnabledKey) : false,
+                ContaminationPauseAboveEnabled = objectLoader.Has(ContaminationPauseAboveEnabledKey) ? objectLoader.Get(ContaminationPauseAboveEnabledKey) : false,
+                ContaminationUnpauseBelowEnabled = objectLoader.Has(ContaminationUnpauseBelowEnabledKey) ? objectLoader.Get(ContaminationUnpauseBelowEnabledKey) : false,
+                ContaminationUnpauseAboveEnabled = objectLoader.Has(ContaminationUnpauseAboveEnabledKey) ? objectLoader.Get(ContaminationUnpauseAboveEnabledKey) : false
             };
             return link;
         }

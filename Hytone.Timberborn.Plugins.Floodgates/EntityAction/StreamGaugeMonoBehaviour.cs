@@ -3,9 +3,11 @@ using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using Timberborn.BuildingsBlocking;
 using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
+using Timberborn.HazardousWeatherSystem;
 using Timberborn.TickSystem;
 using Timberborn.WaterBuildings;
 using Timberborn.WeatherSystem;
@@ -26,13 +28,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private StreamGauge _streamGauge;
 
 
-        private DroughtService _droughtServíce;
+        private WeatherService _weatherServíce;
 
         [Inject]
         public void InjectDependencies(
-            DroughtService droughtServíce)
+            WeatherService weatherServíce)
         {
-            _droughtServíce = droughtServíce;
+            _weatherServíce = weatherServíce;
         }
 
 
@@ -108,16 +110,45 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 return;
             }
             var currHeight = _streamGauge.WaterLevel;
+            var currContamination = _streamGauge.ContaminationLevel;
+            var currentHazardType = _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType();
             foreach (var link in FloodgateLinks)
             {
-                if (_droughtServíce.IsDrought && link.DisableDuringDrought)
+                if (_weatherServíce.IsHazardousWeather)
+                {
+                    if (currentHazardType == typeof(DroughtWeather) && link.DisableDuringDrought)
+                    {
+                        continue;
+                    }
+                    else if (currentHazardType == typeof(BadtideWeather) && link.DisableDuringBadtide)
+                    {
+                        continue;
+                    }
+                }
+                else if (_weatherServíce.IsHazardousWeather == false && link.DisableDuringTemperate)
                 {
                     continue;
                 }
-                else if (_droughtServíce.IsDrought == false && link.DisableDuringTemperate)
+
+                if(currContamination < link.ContaminationThresholdLow && link.EnableContaminationLow)
                 {
+                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                    if (floodgate.Height != link.ContaminationHeight1)
+                    {
+                        floodgate.SetHeightAndSynchronize(link.ContaminationHeight1);
+                    }
                     continue;
                 }
+                if (currContamination > link.ContaminationThresholdHigh && link.EnableContaminationHigh)
+                {
+                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                    if (floodgate.Height != link.ContaminationHeight2)
+                    {
+                        floodgate.SetHeightAndSynchronize(link.ContaminationHeight2);
+                    }
+                    continue;
+                }
+
                 if (currHeight <= link.Threshold1)
                 {
                     var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
@@ -138,11 +169,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
             foreach (var link in WaterpumpLinks)
             {
-                if (_droughtServíce.IsDrought && link.DisableDuringDrought)
+                if (_weatherServíce.IsHazardousWeather)
                 {
-                    continue;
+                    if(currentHazardType == typeof(DroughtWeather) && link.DisableDuringDrought)
+                    {
+                        continue;
+                    }
+                    else if(currentHazardType == typeof(BadtideWeather) && link.DisableDuringBadtide)
+                    {
+                        continue;
+                    }
                 }
-                else if(_droughtServíce.IsDrought == false && link.DisableDuringTemperate)
+                else if(_weatherServíce.IsHazardousWeather == false && link.DisableDuringTemperate)
                 {
                     continue;
                 }
@@ -175,6 +213,34 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     }
                 }
                 else if (currHeight >= link.Threshold4 && link.Enabled4)
+                {
+                    if (pausable.Paused)
+                    {
+                        pausable.Resume();
+                    }
+                }
+                if (currContamination <= link.ContaminationPauseBelowThreshold && link.ContaminationPauseBelowEnabled)
+                {
+                    if (pausable.Paused == false)
+                    {
+                        pausable.Pause();
+                    }
+                }
+                else if (currContamination >= link.ContaminationPauseAboveThreshold && link.ContaminationPauseAboveEnabled)
+                {
+                    if (pausable.Paused == false)
+                    {
+                        pausable.Pause();
+                    }
+                }
+                else if (currContamination <= link.ContaminationUnpauseBelowThreshold && link.ContaminationUnpauseBelowEnabled)
+                {
+                    if (pausable.Paused)
+                    {
+                        pausable.Resume();
+                    }
+                }
+                else if (currContamination >= link.ContaminationUnpauseAboveThreshold && link.ContaminationUnpauseAboveEnabled)
                 {
                     if (pausable.Paused)
                     {

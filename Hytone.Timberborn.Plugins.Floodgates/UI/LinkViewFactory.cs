@@ -101,6 +101,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                                           builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
                                                 .AddPreset(
                                                     factory => factory.Toggles()
+                                                                      .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringBadtide",
+                                                                                         name: $"DisableDuringBadtideToggle{index}",
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                         builder:
+                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                .AddPreset(
+                                                    factory => factory.Toggles()
                                                                       .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringTemperate",
                                                                                          name: $"DisableDuringTemperate{index}",
                                                                                          color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
@@ -164,6 +171,68 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                                       .SliderCircle(0f,
                                                                                     3f,
                                                                                     name: $"Threshold2FloodgateHeightSlider{index}",
+                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
+                                                .AddPreset(
+                                                    factory => factory.Labels()
+                                                                      .GameTextBig(name: $"ContaminationThresholdLowLabel{index}",
+                                                                                   locKey: "Floodgates.Triggers.ContaminationThresholdLow",
+                                                                                   builder:
+                                                                                    builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                      .SetMargin(new Margin(new Length(5, Pixel), 0, 0, 0))))
+                                                .AddPreset(
+                                                    factory => factory.Sliders()
+                                                                      .SliderCircle(0f,
+                                                                                    1f,
+                                                                                    name: $"ContaminationThresholdLowSlider{index}",
+                                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
+                                                .AddPreset(
+                                                    factory => factory.Toggles()
+                                                                      .CheckmarkInverted(name: $"ContaminationThresholdLowFloodgateHeightToggle{index}",
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                         locKey: "Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow",
+                                                                                         builder:
+                                                                                          builder => builder.SetStyle(
+                                                                                              style => style.alignSelf = Align.Center)))
+                                                .AddPreset(
+                                                    factory => factory.Sliders()
+                                                                      .SliderCircle(0f,
+                                                                                    3f,
+                                                                                    name: $"ContaminationThresholdLowFloodgateHeightSlider{index}",
+                                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
+                                                .AddPreset(
+                                                    factory => factory.Labels()
+                                                                      .GameTextBig(name: $"ContaminationThresholdHighLabel{index}",
+                                                                                   locKey: "Floodgates.Triggers.ContaminationThresholdHigh",
+                                                                                   builder:
+                                                                                    builder => builder.SetStyle(
+                                                                                        style => style.alignSelf = Align.Center)))
+                                                .AddPreset(
+                                                    factory => factory.Sliders()
+                                                                      .SliderCircle(0f,
+                                                                                    1f,
+                                                                                    name: $"ContaminationThresholdHighSlider{index}",
+                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                          .AddClass("slider")))
+                                                .AddPreset(
+                                                    factory => factory.Toggles()
+                                                                      .CheckmarkInverted(name: $"ContaminationThresholdHighFloodgateHeightToggle{index}",
+                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                         locKey: "Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh",
+                                                                                         builder:
+                                                                                          builder => builder.SetStyle(
+                                                                                              style => style.alignSelf = Align.Center)))
+                                                .AddPreset(
+                                                    factory => factory.Sliders()
+                                                                      .SliderCircle(0f,
+                                                                                    3f,
+                                                                                    name: $"ContaminationThresholdHighFloodgateHeightSlider{index}",
                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
                                                                                                           .AddClass("slider")))
@@ -312,84 +381,180 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                               .Build())
                                                     .Build())
                                               .Build())
+                                  .AddPreset(
+                                        factory => factory.Toggles()
+                                                            .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringDrought",
+                                                                                name: $"DisableDuringDroughtToggle{index}",
+                                                                                color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                builder:
+                                                                                builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                    .AddPreset(
+                                        factory => factory.Toggles()
+                                                            .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringBadtide",
+                                                                                name: $"DisableDuringBadtideToggle{index}",
+                                                                                color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                builder:
+                                                                                builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                    .AddPreset(
+                                        factory => factory.Toggles()
+                                                            .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringTemperate",
+                                                                                name: $"DisableDuringTemperate{index}",
+                                                                                color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                builder:
+                                                                                builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(10, Pixel), 0))))
                                   .AddComponent(
                                         _builder.CreateComponentBuilder()
                                                 .CreateVisualElement()
-                                                .AddPreset(
-                                                    factory => factory.Toggles()
-                                                                      .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringDrought",
-                                                                                         name: $"DisableDuringDroughtToggle{index}",
-                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                         builder:
-                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
-                                                .AddPreset(
-                                                    factory => factory.Toggles()
-                                                                      .CheckmarkInverted(locKey: "Floodgates.WaterpumpTrigger.DisableDuringTemperate",
-                                                                                         name: $"DisableDuringTemperate{index}",
-                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                         builder:
-                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                            .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(30, Pixel), 0))))
-                                                .AddPreset(
-                                                    factory => factory.Toggles()
-                                                                      .CheckmarkInverted(name: $"Threshold1Toggle{index}",
-                                                                                         locKey: "Floodgates.WaterpumpTrigger.Threshold1",
-                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                         builder:
-                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
-                                                .AddPreset(
-                                                    factory => factory.Sliders()
-                                                                      .SliderCircle(0f,
-                                                                                    3f,
-                                                                                    name: $"Threshold1Slider{index}",
-                                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                                           .AddClass("slider")))
-                                                .AddPreset(
-                                                    factory => factory.Toggles()
-                                                                      .CheckmarkInverted(name: $"Threshold2Toggle{index}",
-                                                                                         locKey: "Floodgates.WaterpumpTrigger.Threshold2",
-                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                         builder:
-                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
-                                                .AddPreset(
-                                                    factory => factory.Sliders()
-                                                                      .SliderCircle(0f,
-                                                                                    3f,
-                                                                                    name: $"Threshold2Slider{index}",
-                                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                                           .AddClass("slider")))
-                                                .AddPreset(
-                                                    factory => factory.Toggles()
-                                                                      .CheckmarkInverted(name: $"Threshold3Toggle{index}",
-                                                                                         locKey: "Floodgates.WaterpumpTrigger.Threshold3",
-                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                         builder:
-                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
-                                                .AddPreset(
-                                                    factory => factory.Sliders()
-                                                                      .SliderCircle(0f,
-                                                                                    3f,
-                                                                                    name: $"Threshold3Slider{index}",
-                                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                                           .AddClass("slider")))
-                                                .AddPreset(
-                                                    factory => factory.Toggles()
-                                                                      .CheckmarkInverted(name: $"Threshold4Toggle{index}",
-                                                                                         locKey: "Floodgates.WaterpumpTrigger.Threshold4",
-                                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                         builder:
-                                                                                          builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
-                                                .AddPreset(
-                                                    factory => factory.Sliders()
-                                                                      .SliderCircle(0f,
-                                                                                    3f,
-                                                                                    name: $"Threshold4Slider{index}",
-                                                                                    builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                                           .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                                           .AddClass("slider")))
+                                                .SetFlexWrap(Wrap.Wrap)
+                                                .SetFlexDirection(FlexDirection.Row)
+                                                .SetJustifyContent(Justify.Center)
+                                                .AddComponent(
+                                                    _builder.CreateComponentBuilder()
+                                                            .CreateVisualElement()
+                                                            .SetWidth(145)
+                                                            .SetJustifyContent(Justify.Center)
+                                                            .AddPreset(factory =>
+                                                                factory.Labels()
+                                                                        .GameTextHeading(locKey: "Floodgates.Triggers.Depth",
+                                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"Threshold1Toggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold1",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                3f,
+                                                                                                name: $"Threshold1Slider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"Threshold2Toggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold2",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                3f,
+                                                                                                name: $"Threshold2Slider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"Threshold3Toggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold3",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                3f,
+                                                                                                name: $"Threshold3Slider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"Threshold4Toggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold4",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                3f,
+                                                                                                name: $"Threshold4Slider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .BuildAndInitialize())
+                                                .AddComponent(
+                                                    _builder.CreateComponentBuilder()
+                                                            .CreateVisualElement()
+                                                            .SetWidth(145)
+                                                            .SetJustifyContent(Justify.Center)
+                                                            .AddPreset(factory =>
+                                                                factory.Labels()
+                                                                        .GameTextHeading(locKey: "Floodgates.Triggers.Contamination",
+                                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"ContaminationPauseBelowToggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold1",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                1f,
+                                                                                                name: $"ContaminationPauseBelowSlider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"ContaminationPauseAboveToggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold2",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                1f,
+                                                                                                name: $"ContaminationPauseAboveSlider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"ContaminationUnpauseBelowToggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold3",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                1f,
+                                                                                                name: $"ContaminationUnpauseBelowSlider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .AddPreset(
+                                                                factory => factory.Toggles()
+                                                                                  .CheckmarkInverted(name: $"ContaminationUnpauseAboveToggle{index}",
+                                                                                                     locKey: "Floodgates.WaterpumpTrigger.Threshold4",
+                                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                                     builder:
+                                                                                                      builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+                                                            .AddPreset(
+                                                                factory => factory.Sliders()
+                                                                                  .SliderCircle(0f,
+                                                                                                1f,
+                                                                                                name: $"ContaminationUnpauseAboveSlider{index}",
+                                                                                                builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+                                                                                                                                       .SetPadding(new Padding(new Length(21, Pixel), 0))
+                                                                                                                                       .AddClass("slider")))
+                                                            .BuildAndInitialize())
+                                                .Build())
+                                  .AddComponent(
+                                        _builder.CreateComponentBuilder()
+                                                .CreateVisualElement()
+                                                
                                                 .Build())
                                   .BuildAndInitialize();
 

@@ -15,8 +15,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private Toggle _droughtStartedPauseToggle;
         private Toggle _droughtStartedResumeToggle;
-        private Toggle _droughtEndedPauseToggle;
-        private Toggle _droughtEndedResumeToggle;
+
+        private Toggle _temperateStartedPauseToggle;
+        private Toggle _temperateStartedResumeToggle;
+
+        private Toggle _badtideStartedPauseToggle;
+        private Toggle _badtideStartedResumeToggle;
 
         private WaterPumpMonobehaviour _waterPumpMonobehaviour;
 
@@ -51,8 +55,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             var unpauseOnTemperate = _builder.CreateComponentBuilder()
                                              .CreateVisualElement()
                                              .AddPreset(factory => factory.Toggles()
-                                                                    .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnDroughtEnded",
-                                                                                       name: "UnpauseOnDroughtEndedToggle",
+                                                                    .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnTemperateStart",
+                                                                                       name: "UnpauseOnTemperateStartToggle",
                                                                                        fontStyle: FontStyle.Normal,
                                                                                        color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                                        builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
@@ -61,12 +65,31 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             var pauseOnTemperate = _builder.CreateComponentBuilder()
                                            .CreateVisualElement()
                                            .AddPreset(factory => factory.Toggles()
-                                                                  .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnDroughtEnded",
-                                                                                     name: "PauseOnDroughtEndedToggle",
+                                                                  .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnTemperateStart",
+                                                                                     name: "PauseOnTemperateStartToggle",
                                                                                      fontStyle: FontStyle.Normal,
                                                                                      color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
                                                                                      builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
                                                                                                                 .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+            var unpauseOnBadtide = _builder.CreateComponentBuilder()
+                                           .CreateVisualElement()
+                                           .AddPreset(factory => factory.Toggles()
+                                                                  .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnBadtideStart",
+                                                                                     name: "UnpauseOnBadtideStartToggle",
+                                                                                     fontStyle: FontStyle.Normal,
+                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                     builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                                .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+
+            var pauseOnBadtide = _builder.CreateComponentBuilder()
+                                         .CreateVisualElement()
+                                         .AddPreset(factory => factory.Toggles()
+                                                                .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnBadtideStart",
+                                                                                   name: "PauseOnBadtideStartToggle",
+                                                                                   fontStyle: FontStyle.Normal,
+                                                                                   color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+                                                                                   builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+                                                                                                              .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
 
             var root = _builder.CreateComponentBuilder()
                                .CreateVisualElement();
@@ -75,6 +98,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             root.AddComponent(unpauseOnDrought.Build());
             root.AddComponent(pauseOnTemperate.Build());
             root.AddComponent(unpauseOnTemperate.Build());
+            root.AddComponent(pauseOnBadtide.Build());
+            root.AddComponent(unpauseOnBadtide.Build());
 
             _root = root.BuildAndInitialize();
 
@@ -84,11 +109,17 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _droughtStartedResumeToggle = _root.Q<Toggle>("UnpauseOnDroughtStartToggle");
             _droughtStartedResumeToggle.RegisterValueChangedCallback(ToggleUnpauseDroughtStarted);
 
-            _droughtEndedPauseToggle = _root.Q<Toggle>("PauseOnDroughtEndedToggle");
-            _droughtEndedPauseToggle.RegisterValueChangedCallback(TogglePauseDroughtEnded);
+            _temperateStartedPauseToggle = _root.Q<Toggle>("PauseOnTemperateStartToggle");
+            _temperateStartedPauseToggle.RegisterValueChangedCallback(TogglePauseTemperateStarted);
 
-            _droughtEndedResumeToggle = _root.Q<Toggle>("UnpauseOnDroughtEndedToggle");
-            _droughtEndedResumeToggle.RegisterValueChangedCallback(ToggleUnpauseDroughtEnded);
+            _temperateStartedResumeToggle = _root.Q<Toggle>("UnpauseOnTemperateStartToggle");
+            _temperateStartedResumeToggle.RegisterValueChangedCallback(ToggleUnpauseTemperateStarted);
+
+            _badtideStartedPauseToggle = _root.Q<Toggle>("PauseOnBadtideStartToggle");
+            _badtideStartedPauseToggle.RegisterValueChangedCallback(TogglePauseBadtideStarted);
+
+            _badtideStartedResumeToggle = _root.Q<Toggle>("UnpauseOnBadtideStartToggle");
+            _badtideStartedResumeToggle.RegisterValueChangedCallback(ToggleUnpauseBadtideStarted);
 
             return _root;
         }
@@ -107,8 +138,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 _droughtStartedPauseToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.PauseOnDroughtStart);
                 _droughtStartedResumeToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.UnpauseOnDroughtStart);
-                _droughtEndedPauseToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.PauseOnDroughtEnded);
-                _droughtEndedResumeToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.UnpauseOnDroughtEnded);
+                _temperateStartedPauseToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.PauseOnTemperateStarted);
+                _temperateStartedResumeToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.UnpauseOnTemperateStarted);
+                _badtideStartedPauseToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.PauseOnBadtideStarted);
+                _badtideStartedResumeToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.UnpauseOnBadtideStarted);
             }
         }
 
@@ -117,23 +150,23 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _waterPumpMonobehaviour = null;
         }
 
-        private void ToggleUnpauseDroughtEnded(ChangeEvent<bool> changeEvent)
+        private void ToggleUnpauseTemperateStarted(ChangeEvent<bool> changeEvent)
         {
-            _waterPumpMonobehaviour.UnpauseOnDroughtEnded = changeEvent.newValue;
-            if (changeEvent.newValue == true && _droughtEndedPauseToggle.value == true)
+            _waterPumpMonobehaviour.UnpauseOnTemperateStarted = changeEvent.newValue;
+            if (changeEvent.newValue == true && _temperateStartedPauseToggle.value == true)
             {
-                _droughtEndedPauseToggle.value = false;
-                _waterPumpMonobehaviour.PauseOnDroughtEnded = false;
+                _temperateStartedPauseToggle.value = false;
+                _waterPumpMonobehaviour.PauseOnTemperateStarted = false;
             }
 
         }
-        private void TogglePauseDroughtEnded(ChangeEvent<bool> changeEvent)
+        private void TogglePauseTemperateStarted(ChangeEvent<bool> changeEvent)
         {
-            _waterPumpMonobehaviour.PauseOnDroughtEnded = changeEvent.newValue;
-            if (changeEvent.newValue == true && _droughtEndedResumeToggle.value == true)
+            _waterPumpMonobehaviour.PauseOnTemperateStarted = changeEvent.newValue;
+            if (changeEvent.newValue == true && _temperateStartedResumeToggle.value == true)
             {
-                _droughtEndedResumeToggle.value = false;
-                _waterPumpMonobehaviour.UnpauseOnDroughtEnded = false;
+                _temperateStartedResumeToggle.value = false;
+                _waterPumpMonobehaviour.UnpauseOnTemperateStarted = false;
             }
         }
 
@@ -153,6 +186,25 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 _droughtStartedPauseToggle.value = false;
                 _waterPumpMonobehaviour.PauseOnDroughtStart = false;
+            }
+        }
+
+        private void TogglePauseBadtideStarted(ChangeEvent<bool> changeEvent)
+        {
+            _waterPumpMonobehaviour.PauseOnBadtideStarted = changeEvent.newValue;
+            if (changeEvent.newValue == true && _badtideStartedPauseToggle.value == true)
+            {
+                _badtideStartedResumeToggle.value = false;
+                _waterPumpMonobehaviour.UnpauseOnBadtideStarted = false;
+            }
+        }
+        private void ToggleUnpauseBadtideStarted(ChangeEvent<bool> changeEvent)
+        {
+            _waterPumpMonobehaviour.UnpauseOnBadtideStarted = changeEvent.newValue;
+            if (changeEvent.newValue == true && _badtideStartedPauseToggle.value == true)
+            {
+                _badtideStartedPauseToggle.value = false;
+                _waterPumpMonobehaviour.PauseOnBadtideStarted = false;
             }
         }
     }
