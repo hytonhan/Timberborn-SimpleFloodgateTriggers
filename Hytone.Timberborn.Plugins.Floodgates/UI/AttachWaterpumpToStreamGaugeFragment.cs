@@ -4,7 +4,11 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIPresets;
+using TimberApi.UIPresets.Labels;
+using TimberApi.UIPresets.ScrollViews;
+using Timberborn.Buildings;
 using Timberborn.Common;
 using Timberborn.Localization;
 using Timberborn.PrefabSystem;
@@ -13,7 +17,6 @@ using Timberborn.UIFormatters;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -55,12 +58,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                   .Where(x => x.name.StartsWith("StreamGauge"))
                                                   .SingleOrDefault();
 
-            var root = _builder.CreateComponentBuilder()
-                               .CreateVisualElement()
+            // var root = _builder.CreateComponentBuilder()
+            //                    .CreateVisualElement()
+            var root = _builder.Create<DefaultScrollView>()
                                .SetName("LinksScrollView")
-                               .SetWidth(new Length(290, Pixel))
-                               .SetJustifyContent(Justify.Center)
-                               .SetMargin(new Margin(0, 0, new Length(7, Pixel), 0))
+                            //    .SetWidth(new Length(290, Pixel))
+                            //    .SetJustifyContent(Justify.Center)
+                            //    .SetMargin(new Margin(0, 0, new Length(7, Pixel), 0))
                                .BuildAndInitialize();
 
             _attachToStreamGaugeButton.Initialize(parent, () => _waterpumpMonoBehaviour, delegate
@@ -69,14 +73,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 ShowFragment(_waterpumpMonoBehaviour);
             });
 
-            _noLinks = _builder.CreateComponentBuilder()
-                               .CreateLabel()
-                               .AddPreset(factory => factory.Labels()
-                                                            .GameTextBig(name: "NoLinksLabel",
-                                                                         locKey: "Floodgates.Triggers.NoLinks",
-                                                                         builder: builder =>
-                                                                            builder.SetStyle(style =>
-                                                                                style.alignSelf = Align.Center)))
+            _noLinks = _builder.Create<GameLabel>()
+                               .Big()
+                               .SetName("NoLinksLabel")
+                               .SetLocKey("Floodgates.Triggers.NoLinks")
+            // _noLinks = _builder.CreateComponentBuilder()
+            //                    .CreateLabel()
+            //                    .AddPreset(factory => factory.Labels()
+            //                                                 .GameTextBig(name: "NoLinksLabel",
+            //                                                              locKey: "Floodgates.Triggers.NoLinks",
+            //                                                              builder: builder =>
+            //                                                                 builder.SetStyle(style =>
+            //                                                                     style.alignSelf = Align.Center)))
                                .BuildAndInitialize();
 
             _linksScrollView = root.Q<VisualElement>("LinksScrollView");
@@ -165,7 +173,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var j = i;
                 var link = links[i];
                 var streamGauge = link.StreamGauge.GameObjectFast;
-                var labeledPrefab = streamGauge.GetComponent<LabeledPrefab>();
+                var labeledPrefab = streamGauge.GetComponent<Building>();
                 var view = _linkViewFactory.CreateViewForWaterpump(i, labeledPrefab.DisplayNameLocKey);
 
                 var gaugeHeightLabel = view.Q<Label>("StreamGaugeHeightLabel");

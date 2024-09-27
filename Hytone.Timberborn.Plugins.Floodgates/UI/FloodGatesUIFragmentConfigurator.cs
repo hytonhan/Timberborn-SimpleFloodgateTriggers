@@ -1,14 +1,9 @@
 ﻿using Bindito.Core;
-using TimberApi.ConfiguratorSystem;
-using TimberApi.SceneSystem;
 using Timberborn.EntityPanelSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
-    /// <summary>
-    /// Configurator for FloodgateTriggers UI stuff
-    /// </summary>
-    [Configurator(SceneEntrypoint.InGame)]
+    [Context("Game")]
     public class FloodGatesUIFragmentConfigurator : IConfigurator
     {
         public void Configure(IContainerDefinition containerDefinition)
@@ -29,9 +24,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<WaterpumpScheduleFragment>().AsSingleton();
         }
 
-        /// <summary>
-        /// This magic class somehow adds our UI fragment into the game
-        /// </summary>
         private class EntityPanelModuleProvider : IProvider<EntityPanelModule>
         {
            private readonly TriggersFragment _triggersFragment;

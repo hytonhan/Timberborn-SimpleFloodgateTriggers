@@ -4,8 +4,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIBuilderSystem.StylingElements;
+using TimberApi.UIPresets.Labels;
+using TimberApi.UIPresets.ScrollViews;
 using Timberborn.BaseComponentSystem;
+using Timberborn.Buildings;
 using Timberborn.Common;
 using Timberborn.EntitySystem;
 using Timberborn.Localization;
@@ -15,7 +19,7 @@ using Timberborn.UIFormatters;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
+// using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -57,12 +61,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                                   .Where(x => x.name.StartsWith("StreamGauge"))
                                                   .SingleOrDefault();
 
-            var root = _builder.CreateComponentBuilder()
-                               .CreateVisualElement()
+            // _builder.Create<TimberApi.UIPresets.ScrollViews.DefaultScrollView>().set.BuildAndInitialize();
+
+
+            // var root = _builder.CreateComponentBuilder()
+            //                    .CreateVisualElement()
+            var root = _builder.Create<DefaultScrollView>()
                                .SetName("LinksScrollView")
-                               .SetWidth(new Length(290, Pixel))
-                               .SetJustifyContent(Justify.Center)
-                               .SetMargin(new Margin(0, 0, new Length(7, Pixel), 0))
+                            //    .SetWidth(new Length(290))
+                            //    .SetJustifyContent(Justify.Center)
+                            //    .SetMargin(new Margin(0, 0, new Length(7), 0))
                                .BuildAndInitialize();
 
             _attachToStreamGaugeButton.Initialize(parent, () => _floodgateTriggerMonoBehaviour, delegate
@@ -71,15 +79,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 //AddAllStreamGaugeViews();
                 ShowFragment(_floodgateTriggerMonoBehaviour);
             });
-
-            _noLinks = _builder.CreateComponentBuilder()
-                               .CreateLabel()
-                               .AddPreset(factory => factory.Labels()
-                                                            .GameTextBig(name: "NoLinksLabel",
-                                                                         locKey: "Floodgates.Triggers.NoLinks",
-                                                                         builder: builder => 
-                                                                            builder.SetStyle(style => 
-                                                                                style.alignSelf = Align.Center)))
+            // _noLinks = _builder.CreateComponentBuilder()
+            //                    .CreateLabel()
+            _noLinks = _builder.Create<GameLabel>()
+                               .Big()
+                               .SetName("NoLinksLabel")
+                               .SetLocKey("Floodgates.Triggers.NoLinks")
+                            //    .AddPreset(factory => factory.Labels()
+                            //                                 .GameTextBig(name: "NoLinksLabel",
+                            //                                              locKey: "Floodgates.Triggers.NoLinks",
+                            //                                              builder: builder => 
+                            //                                                 builder.SetStyle(style => 
+                            //                                                     style.alignSelf = Align.Center)))
                                .BuildAndInitialize();
 
             _linksScrollView = root.Q<VisualElement>("LinksScrollView");
@@ -104,32 +115,41 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var link = links[i];
                 var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
                 var streamGauge = link.StreamGauge.GetComponentFast<StreamGauge>();
+                Debug.Log($"floodgate: {floodgate}");
+                Debug.Log($"streamGauge: {streamGauge}");
                 var setting = _settingsList[i];
                 setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item2.SetValueWithoutNotify(link.Threshold1);
                 setting.Item4.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item4.SetValueWithoutNotify(link.Threshold2);
                 var height = UIHelpers.GetMaxHeight(floodgate);
+                Debug.Log("foo1");
                 setting.Item6.highValue = height;
                 setting.Item6.SetValueWithoutNotify(link.Height1);
+                Debug.Log("foo2");
                 setting.Rest.Item1.highValue = height;
                 setting.Rest.Item1.SetValueWithoutNotify(link.Height2);
+                Debug.Log("foo3");
 
                 setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
                 setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
                 setting.Rest.Item5.SetValueWithoutNotify(link.DisableDuringBadtide);
 
+                Debug.Log("foo4");
                 //setting.Rest.Item7.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Rest.Item7.SetValueWithoutNotify(link.ContaminationThresholdLow);
                 //setting.Rest.Rest.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Rest.Rest.Item2.SetValueWithoutNotify(link.ContaminationThresholdHigh);
                 setting.Rest.Rest.Item4.highValue = height;
                 setting.Rest.Rest.Item4.SetValueWithoutNotify(link.ContaminationHeight1);
+                Debug.Log("foo5");
                 setting.Rest.Rest.Item6.highValue = height;
                 setting.Rest.Rest.Item6.SetValueWithoutNotify(link.ContaminationHeight2);
 
+                Debug.Log("foo6");
                 setting.Rest.Rest.Item3.SetValueWithoutNotify(link.EnableContaminationLow);
                 setting.Rest.Rest.Item5.SetValueWithoutNotify(link.EnableContaminationHigh);
+                Debug.Log("foo7");
             }
         }
         
@@ -168,9 +188,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var j = i;
                 var link = links[i];
                 var streamGauge = link.StreamGauge.GameObjectFast;
-                var labeledPrefab = link.StreamGauge.GetComponentFast<LabeledPrefab>();
+                var building = link.StreamGauge.GetComponentFast<Building>();
 
-                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i, labeledPrefab.DisplayNameLocKey);
+                var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i, building.DisplayNameLocKey);
 
                 var gaugeHeightLabel = view.Q<Label>("StreamGaugeHeightLabel");
 

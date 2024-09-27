@@ -1,6 +1,5 @@
 ﻿using Bindito.Core;
 using Hytone.Timberborn.Plugins.Floodgates.Schedule;
-using Timberborn.ConstructibleSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +9,8 @@ using Timberborn.BuildingsBlocking;
 using Timberborn.BaseComponentSystem;
 using Timberborn.DeconstructionSystem;
 using Timberborn.HazardousWeatherSystem;
+using Timberborn.BlockSystem;
+using System.Reflection;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
@@ -184,7 +185,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtStarted()
         {
-            var constructible = GetComponentFast<Constructible>();
+            var constructible = GetComponentFast<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
@@ -204,7 +205,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnBadtideStarted()
         {
-            var constructible = GetComponentFast<Constructible>();
+            var constructible = GetComponentFast<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
@@ -224,7 +225,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnTemperateStarted()
         {
-            var constructible = GetComponentFast<Constructible>();
+            var constructible = GetComponentFast<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
@@ -308,7 +309,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             }
             if (_weatherServíce.IsHazardousWeather)
             {
-                var hazardType = _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType();
+                var hazardService = (HazardousWeatherService)typeof(WeatherService).GetField("_hazardousWeatherService", BindingFlags.NonPublic | BindingFlags.Instance)
+                                                                               .GetValue(_weatherServíce);
+                var hazardType = hazardService.CurrentCycleHazardousWeather.GetType();
                 if (hazardType == typeof(DroughtWeather) &&
                     DisableScheduleOnDrought)
                 {
@@ -338,7 +341,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public void PauseBuilding()
         {
             var pausable = GetComponentFast<PausableBuilding>();
-            var constructible = GetComponentFast<Constructible>();
+            var constructible = GetComponentFast<BlockObject>();
 
             if (ScheduleEnabled == true &&
                 pausable.Paused == false &&
@@ -351,7 +354,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public void ResumeBuilding()
         {
             var pausable = GetComponentFast<PausableBuilding>();
-            var constructible = GetComponentFast<Constructible>();
+            var constructible = GetComponentFast<BlockObject>();
             if (ScheduleEnabled == true &&
                 pausable.Paused == true &&
                 constructible.IsFinished)

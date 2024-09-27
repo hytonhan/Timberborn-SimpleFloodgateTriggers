@@ -1,0 +1,9 @@
+{
+    "Name": "SimpleFloodgateTriggers",
+    "Version": "0.99",
+    "Id": "Hytone.SimpleFloodgateTriggers",
+    "MinimumGameVersion": "0.0.0.0",
+    "Description": "I just hope this works.",
+    "RequiredMods": [
+    ]
+  }

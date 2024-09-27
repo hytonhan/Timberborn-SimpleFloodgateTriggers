@@ -6,7 +6,7 @@ using Timberborn.SelectionSystem;
 using Timberborn.ToolSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
-using TimberApi.ObjectSelectionSystem;
+using TimberApi.EntityLinkerSystem;
 using Timberborn.BaseComponentSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI

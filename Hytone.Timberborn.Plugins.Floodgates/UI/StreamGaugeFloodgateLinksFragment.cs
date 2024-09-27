@@ -2,8 +2,11 @@
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System.Collections.ObjectModel;
 using System.Linq;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIPresets.Builders;
+using TimberApi.UIPresets.Labels;
 using Timberborn.BaseComponentSystem;
+using Timberborn.Buildings;
 using Timberborn.Common;
 using Timberborn.CoreUI;
 using Timberborn.EntityPanelSystem;
@@ -66,42 +69,44 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             _waterdumpSprite = (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
                                                 .Where(x => x.name.StartsWith("WaterDump"))
                                                 .FirstOrDefault();
-            var rootbuilder =
-                _builder.CreateFragmentBuilder()
-                        .AddComponent(
-                            _builder.CreateComponentBuilder()
-                                    .CreateVisualElement()
-                                    .SetJustifyContent(Justify.Center)
-                                    .SetName("FloodgatesContainer")
-                                    .AddComponent(
-                                        _builder.CreateComponentBuilder()
-                                                .CreateLabel()
-                                                .AddPreset(
-                                                    factory => factory.Labels()
-                                                                      .GameTextBig(locKey: "Floodgates.Triggers.LinkedFloodgates",
-                                                                                   builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
-                                                .BuildAndInitialize())
-                                    .AddComponent(
-                                        _builder.CreateComponentBuilder()
-                                                .CreateScrollView()
-                                                .AddPreset(
-                                                    factory => factory.ScrollViews()
-                                                                      .MainScrollView(name: "FloodgateLinks"))
-                                                .BuildAndInitialize())
-                                    .BuildAndInitialize());
+            var rootbuilder = _builder.Create<FragmentBuilder>();
+            // var rootbuilder =
+            //     _builder.CreateFragmentBuilder()
+            //             .AddComponent(
+            //                 _builder.CreateComponentBuilder()
+            //                         .CreateVisualElement()
+            //                         .SetJustifyContent(Justify.Center)
+            //                         .SetName("FloodgatesContainer")
+            //                         .AddComponent(
+            //                             _builder.CreateComponentBuilder()
+            //                                     .CreateLabel()
+            //                                     .AddPreset(
+            //                                         factory => factory.Labels()
+            //                                                           .GameTextBig(locKey: "Floodgates.Triggers.LinkedFloodgates",
+            //                                                                        builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)))
+            //                                     .BuildAndInitialize())
+            //                         .AddComponent(
+            //                             _builder.CreateComponentBuilder()
+            //                                     .CreateScrollView()
+            //                                     .AddPreset(
+            //                                         factory => factory.ScrollViews()
+            //                                                           .MainScrollView(name: "FloodgateLinks"))
+            //                                     .BuildAndInitialize())
+            //                         .BuildAndInitialize());
 
             _root = rootbuilder.BuildAndInitialize();
             _links = _root.Q<ScrollView>("FloodgateLinks");
 
-            _noLinks = _builder.CreateComponentBuilder()
-                               .CreateLabel()
-                               .AddPreset(factory => factory.Labels()
-                                                            .GameTextBig(name: "NoLinksLabel",
-                                                                         locKey: "Floodgates.Triggers.NoFloodgateLinks",
-                                                                         builder: builder =>
-                                                                            builder.SetStyle(style =>
-                                                                                style.alignSelf = Align.Center)))
-                               .BuildAndInitialize();
+            _noLinks = _builder.Create<GameLabel>().BuildAndInitialize();
+            // _noLinks = _builder.CreateComponentBuilder()
+            //                    .CreateLabel()
+            //                    .AddPreset(factory => factory.Labels()
+            //                                                 .GameTextBig(name: "NoLinksLabel",
+            //                                                              locKey: "Floodgates.Triggers.NoFloodgateLinks",
+            //                                                              builder: builder =>
+            //                                                                 builder.SetStyle(style =>
+            //                                                                     style.alignSelf = Align.Center)))
+            //                    .BuildAndInitialize();
 
             _root.ToggleDisplayStyle(visible: false);
             return _root;
@@ -142,7 +147,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             foreach (var link in links)
             {
                 var floodgate = link.Floodgate.GameObjectFast;
-                var labeledPrefab = floodgate.GetComponent<LabeledPrefab>();
+                var labeledPrefab = floodgate.GetComponent<Building>();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
                 var imageContainer = view.Q<VisualElement>("ImageContainer");
@@ -171,7 +176,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 // (?<=[^A-Z])(?=[A-Z]) |
                 // (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
                 var waterpump = link.WaterPump.GameObjectFast;
-                var labeledPrefab = waterpump.GetComponent<LabeledPrefab>();
+                var labeledPrefab = waterpump.GetComponent<Building>();
                 string waterpumpName = waterpump.name.Split('.').First();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 

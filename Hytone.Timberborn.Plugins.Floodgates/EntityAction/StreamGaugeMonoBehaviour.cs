@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using Timberborn.BlockSystem;
 using Timberborn.BuildingsBlocking;
-using Timberborn.ConstructibleSystem;
 using Timberborn.EntitySystem;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.TickSystem;
@@ -111,7 +111,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
             var currHeight = _streamGauge.WaterLevel;
             var currContamination = _streamGauge.ContaminationLevel;
-            var currentHazardType = _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType();
+            var hazardService = (HazardousWeatherService)typeof(WeatherService).GetField("_hazardousWeatherService", BindingFlags.NonPublic | BindingFlags.Instance)
+                                                                               .GetValue(_weatherServíce);
+            var currentHazardType = hazardService.CurrentCycleHazardousWeather.GetType();
             foreach (var link in FloodgateLinks)
             {
                 if (_weatherServíce.IsHazardousWeather)
@@ -185,7 +187,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     continue;
                 }
 
-                var constructible = link.WaterPump.GetComponentFast<Constructible>();
+                var constructible = link.WaterPump.GetComponentFast<BlockObject>();
                 if (constructible.IsUnfinished)
                 {
                     continue;
