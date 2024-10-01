@@ -68,6 +68,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             //                    .CreateVisualElement()
             var root = _builder.Create<DefaultScrollView>()
                                .SetName("LinksScrollView")
+                               .ModifyRoot(root => root.SetMargin(new Margin(0, 0, new Length(7), 0)))
                             //    .SetWidth(new Length(290))
                             //    .SetJustifyContent(Justify.Center)
                             //    .SetMargin(new Margin(0, 0, new Length(7), 0))
@@ -85,6 +86,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                .Big()
                                .SetName("NoLinksLabel")
                                .SetLocKey("Floodgates.Triggers.NoLinks")
+                               .ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center))
                             //    .AddPreset(factory => factory.Labels()
                             //                                 .GameTextBig(name: "NoLinksLabel",
                             //                                              locKey: "Floodgates.Triggers.NoLinks",
@@ -115,41 +117,32 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var link = links[i];
                 var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
                 var streamGauge = link.StreamGauge.GetComponentFast<StreamGauge>();
-                Debug.Log($"floodgate: {floodgate}");
-                Debug.Log($"streamGauge: {streamGauge}");
                 var setting = _settingsList[i];
                 setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item2.SetValueWithoutNotify(link.Threshold1);
                 setting.Item4.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item4.SetValueWithoutNotify(link.Threshold2);
                 var height = UIHelpers.GetMaxHeight(floodgate);
-                Debug.Log("foo1");
                 setting.Item6.highValue = height;
                 setting.Item6.SetValueWithoutNotify(link.Height1);
-                Debug.Log("foo2");
                 setting.Rest.Item1.highValue = height;
                 setting.Rest.Item1.SetValueWithoutNotify(link.Height2);
-                Debug.Log("foo3");
 
                 setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
                 setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
                 setting.Rest.Item5.SetValueWithoutNotify(link.DisableDuringBadtide);
 
-                Debug.Log("foo4");
                 //setting.Rest.Item7.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Rest.Item7.SetValueWithoutNotify(link.ContaminationThresholdLow);
                 //setting.Rest.Rest.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Rest.Rest.Item2.SetValueWithoutNotify(link.ContaminationThresholdHigh);
                 setting.Rest.Rest.Item4.highValue = height;
                 setting.Rest.Rest.Item4.SetValueWithoutNotify(link.ContaminationHeight1);
-                Debug.Log("foo5");
                 setting.Rest.Rest.Item6.highValue = height;
                 setting.Rest.Rest.Item6.SetValueWithoutNotify(link.ContaminationHeight2);
 
-                Debug.Log("foo6");
                 setting.Rest.Rest.Item3.SetValueWithoutNotify(link.EnableContaminationLow);
                 setting.Rest.Rest.Item5.SetValueWithoutNotify(link.EnableContaminationHigh);
-                Debug.Log("foo7");
             }
         }
         
@@ -405,14 +398,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         }
         
         /// <summary>
-        /// Makes the height slider work in increments of 0.5
+        /// Makes the height slider work in increments of 0.05
         /// </summary>
         /// <param name="slider"></param>
         /// <param name="value"></param>
         /// <returns></returns>
         private float UpdateHeightSliderValue(Slider slider, float value)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * 20f) / 20f;
             slider.SetValueWithoutNotify(num);
             return num;
         }

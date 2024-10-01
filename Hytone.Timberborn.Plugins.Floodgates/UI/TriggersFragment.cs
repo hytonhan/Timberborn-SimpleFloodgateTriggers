@@ -12,6 +12,7 @@ using TimberApi.UIPresets.Buttons;
 using Timberborn.ConstructionSites;
 using TimberApi.UIBuilderSystem.ElementBuilders;
 using UnityEngine.Categorization;
+using TimberApi.UIBuilderSystem.StylingElements;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -66,26 +67,48 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public VisualElement InitializeFragment()               
         {
-
             var rootBuilder = _builder.Create<VisualElementBuilder>()
-                .AddComponent<FragmentBuilder>(builder => 
+                .AddComponent<FragmentBuilder>("TriggersFragment", builder => 
                     builder.AddComponent<GameButton>(button => button.SetName("BasicButton")
                                                                      .SetLocKey("Floodgate.Triggers.Basic")
-                                                                     .SetWidth(96))
+                                                                     .SetWidth(96)
+                                                                     .ModifyRoot(root => 
+                                                                        root.SetBackgroundImage(_buttonGameActiveImage)))
                            .AddComponent<GameButton>(button => button.SetName("TimerButton")
                                                                      .SetLocKey("Floodgate.Triggers.Timer")
                                                                      .SetWidth(96))
                            .AddComponent<GameButton>(button => button.SetName("AdvancedButton")
                                                                      .SetLocKey("Floodgate.Triggers.Advanced")
                                                                      .SetWidth(96))
-                           .AddComponent<VisualElementBuilder>(element => element.SetName("BasicTab"))
-                           .AddComponent<VisualElementBuilder>(element => element.SetName("TimerTab"))
+                           .AddComponent<VisualElementBuilder>(element => element.SetName("BasicTab").SetWidth(288))
+                           .AddComponent<VisualElementBuilder>(element => element.SetName("TimerTab").SetWidth(288))
                            .AddComponent<VisualElementBuilder>(element => 
                                 element.SetName("AdvancedTab")
+                                       .SetWidth(288)
                                        .AddComponent<VisualElementBuilder>(element => 
                                             element.SetName("Placeholder")
-                                                   .AddComponent<GameButton>("NewStreamGaugeButton"))))
-                           ;
+                                                   .AddComponent<GameButton>("NewStreamGaugeButton", button => 
+                                                        button.AddClass("entity-fragment__button")
+                                                              .AddClass("entity-fragment__button--green")
+                                                              .SetLocKey("Floodgates.Triggers.Empty")
+                                                              .ModifyRoot(root => 
+                                                                    root.SetMargin(new Margin(0, new Length(2)))
+                                                            )
+                                                    )
+                                        )
+                            )
+                    );
+            //                                                                                                       .CreateButton()
+            //                                                                                                       .AddClass("entity-fragment__button")
+            //                                                                                                       .AddClass("entity-fragment__button--green")
+            //                                                                                                       .SetName("NewStreamGaugeButton")
+            //                                                                                                       .SetColor(new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)))
+            //                                                                                                       .SetFontSize(new Length(13, Pixel))
+            //                                                                                                       .SetFontStyle(FontStyle.Normal)
+            //                                                                                                       .SetHeight(new Length(29, Pixel))
+            //                                                                                                       .SetWidth(new Length(290, Pixel))
+            //                                                                                                       .Build()))
+
             // var rootBuilder = _builder.CreateFragmentBuilder()
             //                           .ModifyWrapper(builder => builder.SetFlexDirection(FlexDirection.Row)
             //                                                            .SetFlexWrap(Wrap.Wrap)
@@ -155,6 +178,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             //                                                 .BuildAndInitialize());
 
             _root = rootBuilder.BuildAndInitialize();
+
+            var fragment = _root.Q<VisualElement>("TriggersFragment");
+            fragment.style.flexDirection = FlexDirection.Row;
+            fragment.style.flexWrap = Wrap.Wrap;
+            fragment.style.justifyContent = Justify.Center;
+            //                           .ModifyWrapper(builder => builder.SetFlexDirection(FlexDirection.Row)
+            //                                                            .SetFlexWrap(Wrap.Wrap)
+            //                                                            .SetJustifyContent(Justify.Center))
+
+
             this._root.ToggleDisplayStyle(false);
 
             _floodgatesLinks = _root.Q<VisualElement>("Placeholder");

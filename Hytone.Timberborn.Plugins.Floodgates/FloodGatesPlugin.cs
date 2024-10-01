@@ -18,7 +18,6 @@ namespace Hytone.Timberborn.Plugins.Floodgates
         public void StartMod(IModEnvironment modEnvironment) 
         {
             var playerLogPath = Application.persistentDataPath + $"{Path.PathSeparator}Player.log";
-            Debug.Log("Hello world!");
             
             var harmony = new Harmony("hytone.plugins.floodgatetriggers");
             harmony.PatchAll();

@@ -1,5 +1,6 @@
 ﻿using Bindito.Core;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulators;
 using System;
 using System.Reflection;
 using Timberborn.HazardousWeatherSystem;
@@ -61,6 +62,23 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     }
                 }
             }
+
+            var waterSourceRegulators = GameObject.FindObjectsByType<WaterSourceRegulatorMonobehaviour>(FindObjectsSortMode.None);
+            if (waterSourceRegulators != null)
+            {
+                foreach (WaterSourceRegulatorMonobehaviour waterSourceRegulator in waterSourceRegulators)
+                {
+                    if (hazardWeather == typeof(DroughtWeather))
+                    {
+                        waterSourceRegulator.OnDroughtStarted();
+
+                    }
+                    else if (hazardWeather == typeof(BadtideWeather))
+                    {
+                        waterSourceRegulator.OnBadtideStarted();
+                    }
+                }
+            }
         }
 
         [OnEvent]
@@ -87,15 +105,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             {
                 foreach (WaterPumpMonobehaviour waterpump in waterpumps)
                 {
-                    //if (hazardWeather == typeof(DroughtWeather))
-                    //{
                         waterpump.OnTemperateStarted();
-                    //}
-                    //else if (hazardWeather == typeof(BadtideWeather))
-                    //{
-                    //    Console.WriteLine($"UNCOMMENT WATERPUMP BADTIDE END");
-                    //    //waterpump.OnBadtideEnded();
-                    //}
+                }
+            }
+            var waterSourceRegulators = GameObject.FindObjectsByType<WaterSourceRegulatorMonobehaviour>(FindObjectsSortMode.None);
+            if (waterSourceRegulators != null)
+            {
+                foreach (WaterSourceRegulatorMonobehaviour waterSourceRegulator in waterSourceRegulators)
+                {
+                    waterSourceRegulator.OnTemperateStarted();
                 }
             }
         }

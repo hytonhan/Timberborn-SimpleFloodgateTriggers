@@ -1,4 +1,5 @@
 ﻿using Bindito.Core;
+using Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators;
 using Timberborn.EntityPanelSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
@@ -22,6 +23,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<AttachWaterpumpToStreamGaugeFragment>().AsSingleton();
             containerDefinition.Bind<WaterpumpDroughtSettingsFragment>().AsSingleton();
             containerDefinition.Bind<WaterpumpScheduleFragment>().AsSingleton();
+
+            containerDefinition.Bind<WaterSourceRegulatorFragment>().AsSingleton();
+            containerDefinition.Bind<AttachWaterSourceRegulatorButton>().AsSingleton();
+            containerDefinition.Bind<AttachWaterSourceRegulatorFragment>().AsSingleton();
+            containerDefinition.Bind<WaterSourceRegulatorDroughtFragment>().AsSingleton();
+            containerDefinition.Bind<WaterSourceRegulatorScheduleFragment>().AsSingleton();
         }
 
         private class EntityPanelModuleProvider : IProvider<EntityPanelModule>
@@ -31,13 +38,17 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
             private readonly WaterPumpFragment _waterPumpFragment;
 
+            private readonly WaterSourceRegulatorFragment _waterSourceRegulatorFragment;
+
             public EntityPanelModuleProvider(TriggersFragment triggersFragment,
                                              StreamGaugeFloodgateLinksFragment streamGaugeFloodgateLinksFragment,
-                                             WaterPumpFragment waterPumpFragment)
+                                             WaterPumpFragment waterPumpFragment,
+                                             WaterSourceRegulatorFragment waterSourceRegulatorFragment)
             {
                 _triggersFragment = triggersFragment;
                 _streamGaugeFloodgateLinksFragment = streamGaugeFloodgateLinksFragment;
                 _waterPumpFragment = waterPumpFragment;
+                _waterSourceRegulatorFragment = waterSourceRegulatorFragment;
             }
 
             public EntityPanelModule Get()
@@ -46,6 +57,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 builder.AddMiddleFragment(_triggersFragment);
                 builder.AddMiddleFragment(_streamGaugeFloodgateLinksFragment);
                 builder.AddMiddleFragment(_waterPumpFragment);
+                builder.AddMiddleFragment(_waterSourceRegulatorFragment);
                 return builder.Build();
             }
         }

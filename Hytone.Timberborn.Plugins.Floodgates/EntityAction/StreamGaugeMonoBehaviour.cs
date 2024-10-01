@@ -10,6 +10,7 @@ using Timberborn.EntitySystem;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.TickSystem;
 using Timberborn.WaterBuildings;
+using Timberborn.WaterSourceSystem;
 using Timberborn.WeatherSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
@@ -24,6 +25,9 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         private List<WaterPumpStreamGaugeLink> _waterpumpsLinks = new List<WaterPumpStreamGaugeLink>();
         public ReadOnlyCollection<WaterPumpStreamGaugeLink> WaterpumpLinks { get; private set; }
+
+        private List<WaterSourceRegulatorStreamGaugeLink> _watersourceRegulatorLinks = new List<WaterSourceRegulatorStreamGaugeLink>();
+        public ReadOnlyCollection<WaterSourceRegulatorStreamGaugeLink> WaterSourceRegulatorLinks { get; private set; }
 
         private StreamGauge _streamGauge;
 
@@ -42,6 +46,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             FloodgateLinks = _floodgateLinks.AsReadOnly();
             WaterpumpLinks = _waterpumpsLinks.AsReadOnly();
+            WaterSourceRegulatorLinks = _watersourceRegulatorLinks.AsReadOnly();
             base.enabled = false;
         }
 
@@ -57,6 +62,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         }
 
+        public void AttachWaterSourceRegulator(WaterSourceRegulatorStreamGaugeLink link)
+        {
+            _watersourceRegulatorLinks.Add(link);
+        }
+
         public void DetachFloodgate(StreamGaugeFloodgateLink link)
         {
 			_floodgateLinks.Remove(link);
@@ -65,6 +75,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void DetachWaterpump(WaterPumpStreamGaugeLink link)
         {
             _waterpumpsLinks.Remove(link);
+        }
+
+        public void DetachWaterSourceRegulator(WaterSourceRegulatorStreamGaugeLink link)
+        {
+            _watersourceRegulatorLinks.Remove(link);
         }
 
         private void DetachAllFloodgates()
@@ -85,6 +100,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             }
         }
 
+        private void DetachAllWaterSourceRegulators()
+        {
+			for (int i = _watersourceRegulatorLinks.Count - 1; i >= 0; i--)
+            {
+				var link = _watersourceRegulatorLinks[i];
+				link.WaterSourceRegulator.DetachLink(link);
+            }
+        }
+
         public void OnEnterFinishedState()
         {
             base.enabled = true;
@@ -96,6 +120,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             base.enabled = false;
             DetachAllFloodgates();
             DetachAllWaterpumps();
+            DetachAllWaterSourceRegulators();
             _streamGauge = null;
         }
 
@@ -247,6 +272,87 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     if (pausable.Paused)
                     {
                         pausable.Resume();
+                    }
+                }
+            }
+            foreach (var link in WaterSourceRegulatorLinks)
+            {
+                if (_weatherServíce.IsHazardousWeather)
+                {
+                    if(currentHazardType == typeof(DroughtWeather) && link.DisableDuringDrought)
+                    {
+                        continue;
+                    }
+                    else if(currentHazardType == typeof(BadtideWeather) && link.DisableDuringBadtide)
+                    {
+                        continue;
+                    }
+                }
+                else if(_weatherServíce.IsHazardousWeather == false && link.DisableDuringTemperate)
+                {
+                    continue;
+                }
+
+                var constructible = link.WaterSourceRegulator.GetComponentFast<BlockObject>();
+                if (constructible.IsUnfinished)
+                {
+                    continue;
+                }
+                var regulator = link.WaterSourceRegulator.GetComponentFast<WaterSourceRegulator>();
+                if (currHeight <= link.Threshold1 && link.Enabled1)
+                {
+                    if (regulator.IsOpen)
+                    {
+                        regulator.Close();
+                    }
+                }
+                else if (currHeight >= link.Threshold2 && link.Enabled2)
+                {
+                    if (regulator.IsOpen)
+                    {
+                        regulator.Close();
+                    }
+                }
+                else if (currHeight <= link.Threshold3 && link.Enabled3)
+                {
+                    if (regulator.IsOpen == false)
+                    {
+                        regulator.Open();
+                    }
+                }
+                else if (currHeight >= link.Threshold4 && link.Enabled4)
+                {
+                    if (regulator.IsOpen == false)
+                    {
+                        regulator.Open();
+                    }
+                }
+                if (currContamination <= link.ContaminationCloseBelowThreshold && link.ContaminationCloseBelowEnabled)
+                {
+                    if (regulator.IsOpen)
+                    {
+                        regulator.Close();
+                    }
+                }
+                else if (currContamination >= link.ContaminationCloseAboveThreshold && link.ContaminationCloseAboveEnabled)
+                {
+                    if (regulator.IsOpen)
+                    {
+                        regulator.Close();
+                    }
+                }
+                else if (currContamination <= link.ContaminationOpenBelowThreshold && link.ContaminationOpenBelowEnabled)
+                {
+                    if (regulator.IsOpen == false)
+                    {
+                        regulator.Open();
+                    }
+                }
+                else if (currContamination >= link.ContaminationOpenAboveThreshold && link.ContaminationOpenAboveEnabled)
+                {
+                    if (regulator.IsOpen == false)
+                    {
+                        regulator.Open();
                     }
                 }
             }

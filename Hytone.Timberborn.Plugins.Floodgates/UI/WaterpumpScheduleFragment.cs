@@ -2,7 +2,12 @@
 using System;
 using System.Globalization;
 using TimberApi.UIBuilderSystem;
+using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
 using TimberApi.UIPresets.Builders;
+using TimberApi.UIPresets.Labels;
+using TimberApi.UIPresets.Sliders;
+using TimberApi.UIPresets.Toggles;
 using Timberborn.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -42,7 +47,57 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public VisualElement InitializeFragment()
         {
-            var rootBuilder = _builder.Create<BoxBuilder>();
+            var rootBuilder = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.ScheduleEnabled) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.PauseOnSchedule")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnDrought) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Schedule.DisableOnDrought")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnTemperate) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Schedule.DisableOnTemperate")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnBadtide) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Schedule.DisableOnBadtide")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameLabel>(nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Label", label => 
+                    label.Big()
+                         .SetLocKey("Floodgates.WaterpumpTrigger.PauseStartTime")
+                         .ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center))
+                )
+                .AddComponent<GameSlider>(nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Slider", slider => 
+                    slider.Small()
+                          .SetLowValue(0)
+                          .SetLocKey("Floodgates.Triggers.Empty")
+                          .ModifyRoot(root => root.SetHighValue(23.5f)
+                                                  .SetPadding(new Padding(new Length(21), 0))
+                                                  .SetStyle(style => style.flexGrow = 1f)
+                          )
+                )
+                .AddComponent<GameLabel>(nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Label", label => 
+                    label.Big()
+                         .SetLocKey("Floodgates.WaterpumpTrigger.ResumeStartTime")
+                         .ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center))
+                )
+                .AddComponent<GameSlider>(nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Slider", slider => 
+                    slider.Small()
+                          .SetLowValue(0)
+                          .SetLocKey("Floodgates.Triggers.Empty")
+                          .ModifyRoot(root => root.SetHighValue(23.5f)
+                                                  .SetPadding(new Padding(new Length(21), 0))
+                                                  .SetStyle(style => style.flexGrow = 1f)
+                          )
+                )
+                ;
+
             // var rootBuilder =
             //     _builder.CreateComponentBuilder()
             //             .CreateVisualElement()
@@ -141,6 +196,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _scheduleEnabledToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.ScheduleEnabled);
                 _disableScheduleOnDrought.SetValueWithoutNotify(_waterPumpMonobehaviour.DisableScheduleOnDrought);
                 _disableScheduleOnTemperate.SetValueWithoutNotify(_waterPumpMonobehaviour.DisableScheduleOnTemperate);
+                _disableScheduleOnBadtide.SetValueWithoutNotify(_waterPumpMonobehaviour.DisableScheduleOnBadtide);
             }
         }
 

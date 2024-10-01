@@ -68,18 +68,46 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                                           .FirstOrDefault();
 
             _root = _builder.Create<VisualElementBuilder>()
-                .AddComponent<GameToggle>(toggle => toggle.SetName("DroughtStartedEnabled"))
-                .AddComponent<GameTextLabel>(label => label.SetName("DroughtStartedValue"))
-                .AddComponent<GameSlider>(slider => slider.SetName("DroughtStartedSlider"))
-                .AddComponent<GameToggle>(toggle => toggle.SetName("DroughtEndedEnabled"))
-                .AddComponent<GameTextLabel>(label => label.SetName("DroughtEndedValue"))
-                .AddComponent<GameSlider>(slider => slider.SetName("DroughtEndedSlider"))
-                .AddComponent<GameToggle>(toggle => toggle.SetName("BadtideStartedEnabled"))
-                .AddComponent<GameTextLabel>(label => label.SetName("BadtideStartedValue"))
-                .AddComponent<GameSlider>(slider => slider.SetName("BadtideStartedSlider"))
-                .AddComponent<GameToggle>(toggle => toggle.SetName("BadtideEndedEnabled"))
-                .AddComponent<GameTextLabel>(label => label.SetName("BadtideEndedValue"))
-                .AddComponent<GameSlider>(slider => slider.SetName("BadtideEndedSlider"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("DroughtStartedEnabled").SetLocKey("Floodgate.Triggers.EnableOnDroughtStarted")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("DroughtStartedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("DroughtStartedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("DroughtEndedEnabled").SetLocKey("Floodgate.Triggers.EnableOnDroughtEnded")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("DroughtEndedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("DroughtEndedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("BadtideStartedEnabled").SetLocKey("Floodgate.Triggers.EnableOnBadtideStarted")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("BadtideStartedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("BadtideStartedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("BadtideEndedEnabled").SetLocKey("Floodgate.Triggers.EnableOnBadtideEnded")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("BadtideEndedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("BadtideEndedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
                 .BuildAndInitialize();
 
 
@@ -278,7 +306,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private void ChangeBadtideEndedHeight(ChangeEvent<float> changeEvent)
         {
-            float num = Mathf.Round(changeEvent.newValue * 2f) / 2f;
+            float num = Mathf.Round(changeEvent.newValue * 20f) / 20f;
             _badtideEndedSlider.SetValueWithoutNotify(num);
             if ((bool)_floodgateTriggerComponent && _floodgateTriggerComponent.BadtideEndedHeight != num)
             {
@@ -293,7 +321,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         private float UpdateDroughtEndedSliderValue(float value)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * 20f) / 20f;
             _droughtEndedSlider.SetValueWithoutNotify(num);
             return num;
         }
@@ -318,14 +346,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         private float UpdateDroughtStartedSliderValue(float value)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * 20f) / 20f;
             _droughtStartedSlider.SetValueWithoutNotify(num);
             return num;
         }
 
         private void ChangeBadtideStartedHeight(ChangeEvent<float> changeEvent)
         {
-            float num = Mathf.Round(changeEvent.newValue * 2f) / 2f;
+            float num = Mathf.Round(changeEvent.newValue * 20f) / 20f;
             _badtideStartedSlider.SetValueWithoutNotify(num);
 
             if ((bool)_floodgateTriggerComponent && _floodgateTriggerComponent.BadtideStartedHeight != num)

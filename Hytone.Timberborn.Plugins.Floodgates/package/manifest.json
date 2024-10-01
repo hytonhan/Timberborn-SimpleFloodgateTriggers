@@ -1,9 +1,17 @@
 {
-  "name": "SimpleFloodgateTriggers",
-  "version_number": "4.0.0",
-  "website_url": "https://github.com/hytonhan/Timberborn-SimpleFloodgateTriggers",
-  "description": "Automated Floodgates and Water pumps on basic events",
-  "dependencies": [
-    "Timberborn_Central-TimberAPI-0.5.3"
+  "Name": "SimpleFloodgateTriggers",
+  "Version": "5.0.1",
+  "Id": "Hytone.SimpleFloodgateTriggers",
+  "MinimumGameVersion": "0.6.0.0",
+  "Description": "Automated Floodgates and Water pumps on basic events",
+  "RequiredMods": [
+      {
+        "Id": "Harmony",
+        "MinimumVersion": "2.3.3"
+      },
+      {
+        "Id": "TimberApi",
+        "MinimumVersion": "0.7.7.0"
+      }
   ]
 }

@@ -1,5 +1,6 @@
 ﻿using TimberApi.UIBuilderSystem;
 using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
 using TimberApi.UIPresets.Buttons;
 using TimberApi.UIPresets.Labels;
 using TimberApi.UIPresets.Sliders;
@@ -34,40 +35,62 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public VisualElement CreateViewForFloodgate(int index, string streamgaugeLocKey)
         {
             var foo = _builder.Create<VisualElementBuilder>()
+                .SetMinHeight(new Length(450))
                 .AddComponent<ButtonBuilder>("Target", button => 
-                    button.AddComponent<VisualElementBuilder>(element => 
-                        element.AddComponent<VisualElementBuilder>(element2 => 
-                                    element2.AddComponent<VisualElementBuilder>("ImageContainer", element4 => element4)
+                    button.AddClass("entity-fragment__button")
+                          .AddClass("entity-fragment__button--green")
+                          .SetHeight(new Length(32))
+                          .SetMargin(new Margin(0, new Length(2)))
+                          .AddComponent<VisualElementBuilder>(element => 
+                        element.SetFlexWrap(Wrap.Wrap)
+                               .SetFlexDirection(FlexDirection.Row)
+                               .SetJustifyContent(Justify.SpaceBetween)         
+                               .AddComponent<VisualElementBuilder>(element2 => 
+                                    element2.SetFlexWrap(Wrap.Wrap)
+                                            .SetFlexDirection(FlexDirection.Row)
+                                            .SetJustifyContent(Justify.FlexStart)
+                                            .AddComponent<VisualElementBuilder>("ImageContainer", element4 => 
+                                                element4.SetHeight(new Length(28))
+                                                        .SetWidth(new Length(28))
+                                                        .SetMargin(new Margin(new Length(1), 0, 0 , new Length(6)))
+                                            )
                                             .AddComponent<GameTextLabel>("StreamGaugeLabel", label => label.Big().SetText(_loc.T(streamgaugeLocKey)))
                                             .AddComponent<GameTextLabel>("StreamGaugeHeightLabel", label => label.Big())
                         )
                                .AddComponent<VisualElementBuilder>(element3 => 
                                     element3.AddComponent<ButtonBuilder>("DetachLinkButton", button => 
-                                        button.AddComponent<VisualElementBuilder>(element => 
+                                        button.AddClass("unity-text-element")
+                                              .AddClass("unity-button")
+                                              .AddClass("entity-panel__button")
+                                              .AddClass("entity-panel__button--red")
+                                              .AddClass("distribution-route__icon-wrapper")
+                                              .AddComponent<VisualElementBuilder>(element => 
                                             element.AddClass("entity-panel__button")
-                                                   .AddClass("delete-building__icon"))))
+                                                   .AddClass("delete-building__icon"))
+                                    )
+                                )
                     )
-                    .AddComponent<VisualElementBuilder>(element => 
-                        element.AddComponent<GameToggle>($"DisableDuringDroughtToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringDrought"))
-                               .AddComponent<GameToggle>($"DisableDuringBadtideToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringBadtide"))
-                               .AddComponent<GameToggle>($"DisableDuringTemperate{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringTemperate"))
-                               .AddComponent<GameTextLabel>($"Threshold1Label{index}", label => label.SetText(_loc.T("Floodgates.Triggers.Threshold1")))
-                               .AddComponent<GameSlider>($"Threshold1Slider{index}", slider => slider)
-                               .AddComponent<GameTextLabel>($"Threshold1FloodgateHeightLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.HeightWhenBelowThreshold1")))
-                               .AddComponent<GameSlider>($"Threshold1FloodgateHeightSlider{index}", slider => slider)
-                               .AddComponent<GameTextLabel>($"Threshold2Label{index}", label => label.SetText(_loc.T("Floodgates.Triggers.Threshold2")))
-                               .AddComponent<GameSlider>($"Threshold2Slider{index}", slider => slider)
-                               .AddComponent<GameTextLabel>($"Threshold2FloodgateHeightLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.HeightWhenAboveThreshold2")))
-                               .AddComponent<GameSlider>($"Threshold2FloodgateHeightSlider{index}", slider => slider)
-                               .AddComponent<GameTextLabel>($"ContaminationThresholdLowLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.ContaminationThresholdLow")))
-                               .AddComponent<GameSlider>($"ContaminationThresholdLowSlider{index}", slider => slider)
-                               .AddComponent<GameToggle>($"ContaminationThresholdLowFloodgateHeightToggle{index}", toggle => toggle.SetLocKey("Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow"))
-                               .AddComponent<GameSlider>($"ContaminationThresholdLowFloodgateHeightSlider{index}", slider => slider)
-                               .AddComponent<GameTextLabel>($"ContaminationThresholdHighLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.ContaminationThresholdHigh")))
-                               .AddComponent<GameSlider>($"ContaminationThresholdHighSlider{index}", slider => slider)
-                               .AddComponent<GameToggle>($"ContaminationThresholdHighFloodgateHeightToggle{index}", toggle => toggle.SetLocKey("Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh"))
-                               .AddComponent<GameSlider>($"ContaminationThresholdHighFloodgateHeightSlider{index}", slider => slider)
-                               )
+                )
+                .AddComponent<VisualElementBuilder>(element => 
+                    element.AddComponent<GameToggle>($"DisableDuringDroughtToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringDrought"))
+                           .AddComponent<GameToggle>($"DisableDuringBadtideToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringBadtide"))
+                           .AddComponent<GameToggle>($"DisableDuringTemperate{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringTemperate"))
+                           .AddComponent<GameTextLabel>($"Threshold1Label{index}", label => label.SetText(_loc.T("Floodgates.Triggers.Threshold1")).Big().ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                           .AddComponent<GameSlider>($"Threshold1Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameTextLabel>($"Threshold1FloodgateHeightLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.HeightWhenBelowThreshold1")).Big().ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                           .AddComponent<GameSlider>($"Threshold1FloodgateHeightSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameTextLabel>($"Threshold2Label{index}", label => label.SetText(_loc.T("Floodgates.Triggers.Threshold2")).Big().ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                           .AddComponent<GameSlider>($"Threshold2Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameTextLabel>($"Threshold2FloodgateHeightLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.HeightWhenAboveThreshold2")).Big().ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                           .AddComponent<GameSlider>($"Threshold2FloodgateHeightSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameTextLabel>($"ContaminationThresholdLowLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.ContaminationThresholdLow")).Big().ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                           .AddComponent<GameSlider>($"ContaminationThresholdLowSlider{index}", slider => slider.SetLowValue(0).SetHighValue(1).Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameToggle>($"ContaminationThresholdLowFloodgateHeightToggle{index}", toggle => toggle.SetLocKey("Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow").ModifyRoot(root => root.SetMargin(new Margin(0, new Length(3)))))
+                           .AddComponent<GameSlider>($"ContaminationThresholdLowFloodgateHeightSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameTextLabel>($"ContaminationThresholdHighLabel{index}", label => label.SetText(_loc.T("Floodgates.Triggers.ContaminationThresholdHigh")).Big().ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                           .AddComponent<GameSlider>($"ContaminationThresholdHighSlider{index}", slider => slider.SetLowValue(0).SetHighValue(1).Small().SetLocKey("Floodgates.Triggers.Empty"))
+                           .AddComponent<GameToggle>($"ContaminationThresholdHighFloodgateHeightToggle{index}", toggle => toggle.SetLocKey("Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh").ModifyRoot(root => root.SetMargin(new Margin(0, new Length(3)))))
+                           .AddComponent<GameSlider>($"ContaminationThresholdHighFloodgateHeightSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty"))
                 );
             // var foo = _builder.CreateComponentBuilder()
             //                   .CreateVisualElement()
@@ -288,7 +311,34 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         public VisualElement CreateViewForStreamGauge(string objectLocKey)
         {
-            var foo = _builder.Create<GameButton>().SetName("Target").BuildAndInitialize();
+            var foo = _builder.Create<VisualElementBuilder>()
+                .AddComponent<ButtonBuilder>("Target", button => 
+                    button.AddClass("entity-fragment__button")
+                          .AddClass("entity-fragment__button--green")
+                          .SetHeight(new Length(32))
+                          .SetMargin(new Margin(0, new Length(2)))
+                          .AddComponent<VisualElementBuilder>(element => 
+                        element.SetFlexWrap(Wrap.Wrap)
+                               .SetFlexDirection(FlexDirection.Row)
+                               .SetJustifyContent(Justify.SpaceBetween)
+                               .AddComponent<VisualElementBuilder>(element =>
+                            element.SetFlexWrap(Wrap.Wrap)
+                                   .SetFlexDirection(FlexDirection.Row)
+                                   .SetJustifyContent(Justify.FlexStart)
+                                   .AddComponent<VisualElementBuilder>("ImageContainer", element => element.SetHeight(new Length(28)).SetWidth(new Length(28)).SetMargin(new Margin(new Length(1), 0, 0, new Length(6))))
+                                   .AddComponent<GameTextLabel>(label => label.Big().SetText(_loc.T(objectLocKey)))
+                                )
+                               .AddComponent<ButtonBuilder>("DetachLinkButton", button => 
+                                    button.AddClass("unity-text-element")
+                                          .AddClass("unity-button")
+                                          .AddClass("entity-panel__button")
+                                          .AddClass("entity-panel__button--red")
+                                          .AddClass("distribution-route__icon-wrapper")
+                                          .AddComponent<VisualElementBuilder>(element => 
+                                        element.AddClass("entity-panel__button")
+                                               .AddClass("delete-building__icon")))
+                    )
+                );
             // var foo = _builder.CreateComponentBuilder()
             //                          .CreateButton()
             //                          .SetName("Target")
@@ -351,7 +401,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             //                                      .Build()) 
             //                          .Build();
 
-            return foo;
+            return foo.BuildAndInitialize();
         }
 
 
@@ -362,7 +412,82 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         public VisualElement CreateViewForWaterpump(int index, string streamgaugeLocKey)
         {
-            var root = _builder.Create<GameButton>().SetName("Target").BuildAndInitialize();
+            var root = _builder.Create<VisualElementBuilder>()
+                // .SetMinHeight(450)
+                .AddComponent<ButtonBuilder>("Target", button => 
+                    button.AddClass("entity-fragment__button")
+                          .AddClass("entity-fragment__button--green")
+                          .SetHeight(new Length(32))
+                          .SetMargin(new Margin(0, new Length(2)))
+                          .SetWidth(new Length(280))
+                          .AddComponent<VisualElementBuilder>(element => 
+                        element.SetFlexWrap(Wrap.Wrap)
+                               .SetFlexDirection(FlexDirection.Row)
+                               .SetJustifyContent(Justify.SpaceBetween)         
+                               .AddComponent<VisualElementBuilder>(element2 => 
+                                    element2.SetFlexWrap(Wrap.Wrap)
+                                            .SetFlexDirection(FlexDirection.Row)
+                                            .SetJustifyContent(Justify.FlexStart)
+                                            .AddComponent<VisualElementBuilder>("ImageContainer", element4 => 
+                                                element4.SetHeight(new Length(28))
+                                                        .SetWidth(new Length(28))
+                                                        .SetMargin(new Margin(new Length(1), 0, 0 , new Length(6)))
+                                            )
+                                            .AddComponent<GameTextLabel>("StreamGaugeLabel", label => label.Big().SetText(_loc.T(streamgaugeLocKey)))
+                                            .AddComponent<GameTextLabel>("StreamGaugeHeightLabel", label => label.Big())
+                        )
+                               .AddComponent<VisualElementBuilder>(element3 => 
+                                    element3.AddComponent<ButtonBuilder>("DetachLinkButton", button => 
+                                        button.AddClass("unity-text-element")
+                                              .AddClass("unity-button")
+                                              .AddClass("entity-panel__button")
+                                              .AddClass("entity-panel__button--red")
+                                              .AddClass("distribution-route__icon-wrapper")
+                                              .AddComponent<VisualElementBuilder>(element => 
+                                            element.AddClass("entity-panel__button")
+                                                   .AddClass("delete-building__icon"))
+                                    )
+                                )
+                    )
+                )
+                .AddComponent<VisualElementBuilder>(element => 
+                    element.AddComponent<GameToggle>($"DisableDuringDroughtToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringDrought"))
+                           .AddComponent<GameToggle>($"DisableDuringBadtideToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringBadtide"))
+                           .AddComponent<GameToggle>($"DisableDuringTemperate{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.DisableDuringTemperate"))
+                           .AddComponent<VisualElementBuilder>(element => 
+                                element.SetFlexWrap(Wrap.Wrap)
+                                       .SetFlexDirection(FlexDirection.Row)
+                                       .SetJustifyContent(Justify.Center)
+                                       .AddComponent<VisualElementBuilder>(element => 
+                                            element.SetWidth(140)
+                                                   .SetJustifyContent(Justify.Center)
+                                                   .AddComponent<GameTextLabel>(label => label.SetText(_loc.T("Floodgates.Triggers.Depth")).ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameToggle>($"Threshold1Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold1").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold1Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"Threshold2Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold2").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold2Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"Threshold3Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold3").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold3Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"Threshold4Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold4").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold4Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                        )
+                                        .AddComponent<VisualElementBuilder>(element => 
+                                            element.SetWidth(140)
+                                                   .SetJustifyContent(Justify.Center)
+                                                   .AddComponent<GameTextLabel>(label => label.SetText(_loc.T("Floodgates.Triggers.Contamination")).ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameToggle>($"ContaminationPauseBelowToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold1").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationPauseBelowSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"ContaminationPauseAboveToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold2").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationPauseAboveSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"ContaminationUnpauseBelowToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold3").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationUnpauseBelowSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"ContaminationUnpauseAboveToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterpumpTrigger.Threshold4").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationUnpauseAboveSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                        )
+                            )
+                )
+            .BuildAndInitialize();
+
             // var root = _builder.CreateComponentBuilder()
             //                   .CreateVisualElement()
             //                   .AddComponent(
@@ -602,6 +727,84 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
             return root;
         }
+        public VisualElement CreateViewForWaterSourceRegulator(int index, string streamgaugeLocKey)
+        {
+            var root = _builder.Create<VisualElementBuilder>()
+                .AddComponent<ButtonBuilder>("Target", button => 
+                    button.AddClass("entity-fragment__button")
+                          .AddClass("entity-fragment__button--green")
+                          .SetHeight(new Length(32))
+                          .SetMargin(new Margin(0, new Length(2)))
+                          .SetWidth(new Length(280))
+                          .AddComponent<VisualElementBuilder>(element => 
+                        element.SetFlexWrap(Wrap.Wrap)
+                               .SetFlexDirection(FlexDirection.Row)
+                               .SetJustifyContent(Justify.SpaceBetween)         
+                               .AddComponent<VisualElementBuilder>(element2 => 
+                                    element2.SetFlexWrap(Wrap.Wrap)
+                                            .SetFlexDirection(FlexDirection.Row)
+                                            .SetJustifyContent(Justify.FlexStart)
+                                            .AddComponent<VisualElementBuilder>("ImageContainer", element4 => 
+                                                element4.SetHeight(new Length(28))
+                                                        .SetWidth(new Length(28))
+                                                        .SetMargin(new Margin(new Length(1), 0, 0 , new Length(6)))
+                                            )
+                                            .AddComponent<GameTextLabel>("StreamGaugeLabel", label => label.Big().SetText(_loc.T(streamgaugeLocKey)))
+                                            .AddComponent<GameTextLabel>("StreamGaugeHeightLabel", label => label.Big())
+                        )
+                               .AddComponent<VisualElementBuilder>(element3 => 
+                                    element3.AddComponent<ButtonBuilder>("DetachLinkButton", button => 
+                                        button.AddClass("unity-text-element")
+                                              .AddClass("unity-button")
+                                              .AddClass("entity-panel__button")
+                                              .AddClass("entity-panel__button--red")
+                                              .AddClass("distribution-route__icon-wrapper")
+                                              .AddComponent<VisualElementBuilder>(element => 
+                                            element.AddClass("entity-panel__button")
+                                                   .AddClass("delete-building__icon"))
+                                    )
+                                )
+                    )
+                )
+                .AddComponent<VisualElementBuilder>(element => 
+                    element.AddComponent<GameToggle>($"DisableDuringDroughtToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.DisableDuringDrought"))
+                           .AddComponent<GameToggle>($"DisableDuringBadtideToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.DisableDuringBadtide"))
+                           .AddComponent<GameToggle>($"DisableDuringTemperate{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.DisableDuringTemperate"))
+                           .AddComponent<VisualElementBuilder>(element => 
+                                element.SetFlexWrap(Wrap.Wrap)
+                                       .SetFlexDirection(FlexDirection.Row)
+                                       .SetJustifyContent(Justify.Center)
+                                       .AddComponent<VisualElementBuilder>(element => 
+                                            element.SetWidth(140)
+                                                   .SetJustifyContent(Justify.Center)
+                                                   .AddComponent<GameTextLabel>(label => label.SetText(_loc.T("Floodgates.Triggers.Depth")).ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameToggle>($"Threshold1Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold1").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold1Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"Threshold2Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold2").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold2Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"Threshold3Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold3").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold3Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"Threshold4Toggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold4").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"Threshold4Slider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                        )
+                                        .AddComponent<VisualElementBuilder>(element => 
+                                            element.SetWidth(140)
+                                                   .SetJustifyContent(Justify.Center)
+                                                   .AddComponent<GameTextLabel>(label => label.SetText(_loc.T("Floodgates.Triggers.Contamination")).ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameToggle>($"ContaminationCloseBelowToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold1").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationCloseBelowSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"ContaminationCloseAboveToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold2").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationCloseAboveSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"ContaminationOpenBelowToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold3").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationOpenBelowSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                                   .AddComponent<GameToggle>($"ContaminationOpenAboveToggle{index}", toggle => toggle.SetLocKey("Floodgates.WaterSourceRegulator.Threshold4").ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center)))
+                                                   .AddComponent<GameSlider>($"ContaminationOpenAboveSlider{index}", slider => slider.Small().SetLocKey("Floodgates.Triggers.Empty").SetHighValue(1).ModifyRoot(root => root.SetPadding(new Padding(new Length(5), 0)).SetStyle(style => style.flexGrow = 1f)))
+                                        )
+                            )
+                )
+            .BuildAndInitialize();
 
+            return root;
+        }
     }
 }

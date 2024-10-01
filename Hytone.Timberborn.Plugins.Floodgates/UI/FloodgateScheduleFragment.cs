@@ -3,6 +3,7 @@ using System;
 using System.Globalization;
 using TimberApi.UIBuilderSystem;
 using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
 using TimberApi.UIPresets.Labels;
 using TimberApi.UIPresets.Sliders;
 using TimberApi.UIPresets.Toggles;
@@ -53,18 +54,26 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public VisualElement InitializeFragment()
         {
             var rootBuilder = _builder.Create<VisualElementBuilder>()
-                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle"))
-                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle"))
-                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle"))
-                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnTemperate) + "Toggle"))
-                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label").Big())
-                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider"))
-                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label").Big())
-                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider"))
-                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label").Big())
-                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider"))
-                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label").Big())
-                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle").SetLocKey("Floodgate.Schedule.Enable").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle").SetLocKey("Floodgate.Schedule.DisableOnDrought").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle").SetLocKey("Floodgate.Schedule.DisableOnBadtide").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnTemperate) + "Toggle").SetLocKey("Floodgate.Schedule.DisableOnTemperate").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider").Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetHighValue(23.5f)))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider").Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetHighValue(23.5f)))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider").SetLocKey("Floodgates.Triggers.Empty").Small())
                 ;
             // var rootBuilder =
             //     _builder.CreateComponentBuilder()
@@ -245,10 +254,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private void ChangeHeight(ChangeEvent<float> changeEvent,
                                   ref Slider slider)
         {
-            float num = UpdateSliderValue(changeEvent.newValue, ref slider);
             switch (slider.name)
             {
                 case nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 20f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.FirstScheduleHeight != num)
                     {
@@ -256,7 +266,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
                 case nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 20f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.SecondScheduleHeight != num)
                     {
@@ -264,7 +277,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
                 case nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 2f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.FirstScheduleTime != num)
                     {
@@ -272,7 +288,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
                 case nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 2f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.SecondScheduleTime != num)
                     {
@@ -280,12 +299,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
             }
         }
 
-        private float UpdateSliderValue(float value, ref Slider field)
+        private float UpdateSliderValue(float value, ref Slider field, float changeStep)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * changeStep) / changeStep;
             field.SetValueWithoutNotify(num);
             return num;
         }
