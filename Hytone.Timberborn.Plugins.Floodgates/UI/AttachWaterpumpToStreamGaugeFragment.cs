@@ -125,6 +125,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
                 setting.Rest.Item2.SetValueWithoutNotify(link.DisableDuringDrought);
                 setting.Rest.Item3.SetValueWithoutNotify(link.DisableDuringTemperate);
+                setting.Rest.Item5.SetValueWithoutNotify(link.DisableDuringBadtide); // ?? HAJOAA
 
                 setting.Rest.Item6.SetValueWithoutNotify(link.ContaminationPauseBelowEnabled);
                 // setting.Rest.Item7.highValue = UIHelpers.GetMaxHeight(streamGauge);
@@ -234,7 +235,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 disableDuringDroughtToggle.RegisterValueChangedCallback((@event) => ChangeDisableOnDroughtToggle(@event, j));
                 var disableDuringTemperate = view.Q<Toggle>($"DisableDuringTemperate{i}");
                 disableDuringTemperate.RegisterValueChangedCallback((@event) => ChangeDisableOnTemperateToggle(@event, j));
-                var disableDuringBadtide = view.Q<Toggle>($"DisableDuringBadtide{i}");
+                var disableDuringBadtide = view.Q<Toggle>($"DisableDuringBadtideToggle{i}");
                 disableDuringBadtide.RegisterValueChangedCallback((@event) => ChangeDisableOnBadtideToggle(@event, j));
 
                 var foo = new Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider, Toggle, Tuple<Slider, Toggle, Toggle, Label, Toggle, Toggle, Slider, Tuple<Toggle, Slider, Toggle, Slider, Toggle, Slider>>>(
