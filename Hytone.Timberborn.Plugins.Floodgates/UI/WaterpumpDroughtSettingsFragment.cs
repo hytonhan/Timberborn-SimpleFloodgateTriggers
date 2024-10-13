@@ -1,9 +1,11 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
+using TimberApi.UIPresets.Toggles;
 using Timberborn.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -33,66 +35,100 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public VisualElement InitiliazeFragment(VisualElement parent)
         {
-            var pauseOnDrought = _builder.CreateComponentBuilder()
-                                         .CreateVisualElement()
-                                         .AddPreset(factory => factory.Toggles()
-                                                                 .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnDroughtStart",
-                                                                                    name: "PauseOnDroughtStartToggle",
-                                                                                    fontStyle: FontStyle.Normal,
-                                                                                    color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                    builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                   .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+            var pauseOnDrought = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>("PauseOnDroughtStartToggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.PauseOnDroughtStart")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, 0, 0)))
+                );
+        //     var pauseOnDrought = _builder.CreateComponentBuilder()
+        //                                  .CreateVisualElement()
+        //                                  .AddPreset(factory => factory.Toggles()
+        //                                                          .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnDroughtStart",
+        //                                                                             name: "PauseOnDroughtStartToggle",
+        //                                                                             fontStyle: FontStyle.Normal,
+        //                                                                             color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+        //                                                                             builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+        //                                                                                            .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
 
-            var unpauseOnDrought = _builder.CreateComponentBuilder()
-                                           .CreateVisualElement()
-                                           .AddPreset(factory => factory.Toggles()
-                                                                   .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnDroughtStart",
-                                                                                       name: "UnpauseOnDroughtStartToggle",
-                                                                                       fontStyle: FontStyle.Normal,
-                                                                                       color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                       builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                               .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(30, Pixel), 0))));
-            var unpauseOnTemperate = _builder.CreateComponentBuilder()
-                                             .CreateVisualElement()
-                                             .AddPreset(factory => factory.Toggles()
-                                                                    .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnTemperateStart",
-                                                                                       name: "UnpauseOnTemperateStartToggle",
-                                                                                       fontStyle: FontStyle.Normal,
-                                                                                       color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                       builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                                  .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+            var unpauseOnDrought = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>("UnpauseOnDroughtStartToggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.UnpauseOnDroughtStart")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(11), 0)))
+                );
+        //     var unpauseOnDrought = _builder.CreateComponentBuilder()
+        //                                    .CreateVisualElement()
+        //                                    .AddPreset(factory => factory.Toggles()
+        //                                                            .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnDroughtStart",
+        //                                                                                name: "UnpauseOnDroughtStartToggle",
+        //                                                                                fontStyle: FontStyle.Normal,
+        //                                                                                color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+        //                                                                                builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+        //                                                                                                        .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(30, Pixel), 0))));
+        //     
+        
+            var unpauseOnTemperate = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>("UnpauseOnTemperateStartToggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.UnpauseOnTemperateStart")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(11), 0)))
+                );
+        //     var unpauseOnTemperate = _builder.CreateComponentBuilder()
+        //                                      .CreateVisualElement()
+        //                                      .AddPreset(factory => factory.Toggles()
+        //                                                             .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnTemperateStart",
+        //                                                                                name: "UnpauseOnTemperateStartToggle",
+        //                                                                                fontStyle: FontStyle.Normal,
+        //                                                                                color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+        //                                                                                builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+        //                                                                                                           .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
 
-            var pauseOnTemperate = _builder.CreateComponentBuilder()
-                                           .CreateVisualElement()
-                                           .AddPreset(factory => factory.Toggles()
-                                                                  .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnTemperateStart",
-                                                                                     name: "PauseOnTemperateStartToggle",
-                                                                                     fontStyle: FontStyle.Normal,
-                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                     builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                                .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
-            var unpauseOnBadtide = _builder.CreateComponentBuilder()
-                                           .CreateVisualElement()
-                                           .AddPreset(factory => factory.Toggles()
-                                                                  .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnBadtideStart",
-                                                                                     name: "UnpauseOnBadtideStartToggle",
-                                                                                     fontStyle: FontStyle.Normal,
-                                                                                     color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                     builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                                .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+            var pauseOnTemperate = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>("PauseOnTemperateStartToggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.PauseOnTemperateStart")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, 0, 0)))
+                );
+        //     var pauseOnTemperate = _builder.CreateComponentBuilder()
+        //                                    .CreateVisualElement()
+        //                                    .AddPreset(factory => factory.Toggles()
+        //                                                           .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnTemperateStart",
+        //                                                                              name: "PauseOnTemperateStartToggle",
+        //                                                                              fontStyle: FontStyle.Normal,
+        //                                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+        //                                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+        //                                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+        
+            var unpauseOnBadtide = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>("UnpauseOnBadtideStartToggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.UnpauseOnBadtideStart")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(11), 0)))
+                );
+        //     var unpauseOnBadtide = _builder.CreateComponentBuilder()
+        //                                    .CreateVisualElement()
+        //                                    .AddPreset(factory => factory.Toggles()
+        //                                                           .CheckmarkInverted(locKey: "Floodgate.Triggers.UnpauseOnBadtideStart",
+        //                                                                              name: "UnpauseOnBadtideStartToggle",
+        //                                                                              fontStyle: FontStyle.Normal,
+        //                                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+        //                                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+        //                                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
 
-            var pauseOnBadtide = _builder.CreateComponentBuilder()
-                                         .CreateVisualElement()
-                                         .AddPreset(factory => factory.Toggles()
-                                                                .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnBadtideStart",
-                                                                                   name: "PauseOnBadtideStartToggle",
-                                                                                   fontStyle: FontStyle.Normal,
-                                                                                   color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                                   builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                              .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
+            var pauseOnBadtide = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>("PauseOnBadtideStartToggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.PauseOnBadtideStart")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, 0, 0)))
+                );
+        //     var pauseOnBadtide = _builder.CreateComponentBuilder()
+        //                                  .CreateVisualElement()
+        //                                  .AddPreset(factory => factory.Toggles()
+        //                                                         .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnBadtideStart",
+        //                                                                            name: "PauseOnBadtideStartToggle",
+        //                                                                            fontStyle: FontStyle.Normal,
+        //                                                                            color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+        //                                                                            builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+        //                                                                                                       .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))));
 
-            var root = _builder.CreateComponentBuilder()
-                               .CreateVisualElement();
+            var root = _builder.Create<VisualElementBuilder>();
+            // var root = _builder.CreateComponentBuilder()
+            //                    .CreateVisualElement();
 
             root.AddComponent(pauseOnDrought.Build());
             root.AddComponent(unpauseOnDrought.Build());

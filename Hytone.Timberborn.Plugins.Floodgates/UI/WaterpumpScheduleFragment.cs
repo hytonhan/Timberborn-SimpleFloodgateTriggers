@@ -1,11 +1,16 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using System.Globalization;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
+using TimberApi.UIPresets.Builders;
+using TimberApi.UIPresets.Labels;
+using TimberApi.UIPresets.Sliders;
+using TimberApi.UIPresets.Toggles;
 using Timberborn.Localization;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -42,59 +47,110 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public VisualElement InitializeFragment()
         {
-            var rootBuilder =
-                _builder.CreateComponentBuilder()
-                        .CreateVisualElement()
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnSchedule",
-                                                                         name: nameof(WaterPumpMonobehaviour.ScheduleEnabled) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnDrought",
-                                                                         name: nameof(WaterPumpMonobehaviour.DisableScheduleOnDrought) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnTemperate",
-                                                                         name: nameof(WaterPumpMonobehaviour.DisableScheduleOnTemperate) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnBadtide",
-                                                                         name: nameof(WaterPumpMonobehaviour.DisableScheduleOnBadtide) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Label",
-                                                                  text: $"{_loc.T("Floodgates.WaterpumpTrigger.PauseStartTime")}: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   23.5f,
-                                                                   name: nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Slider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Label",
-                                                                  text: $"{_loc.T("Floodgates.WaterpumpTrigger.ResumeStartTime")}: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   23.5f,
-                                                                   name: nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Slider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")));
+            var rootBuilder = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.ScheduleEnabled) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Triggers.PauseOnSchedule")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnDrought) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Schedule.DisableOnDrought")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnTemperate) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Schedule.DisableOnTemperate")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameToggle>(nameof(WaterPumpMonobehaviour.DisableScheduleOnBadtide) + "Toggle", toggle => 
+                    toggle.SetLocKey("Floodgate.Schedule.DisableOnBadtide")
+                          .ModifyRoot(root => root.SetMargin(new Margin(new Length(3), 0, new Length(1), 0))
+                          )
+                )
+                .AddComponent<GameLabel>(nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Label", label => 
+                    label.Big()
+                         .SetLocKey("Floodgates.WaterpumpTrigger.PauseStartTime")
+                         .ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center))
+                )
+                .AddComponent<GameSlider>(nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Slider", slider => 
+                    slider.Small()
+                          .SetLowValue(0)
+                          .SetLocKey("Floodgates.Triggers.Empty")
+                          .ModifyRoot(root => root.SetHighValue(23.5f)
+                                                  .SetPadding(new Padding(new Length(21), 0))
+                                                  .SetStyle(style => style.flexGrow = 1f)
+                          )
+                )
+                .AddComponent<GameLabel>(nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Label", label => 
+                    label.Big()
+                         .SetLocKey("Floodgates.WaterpumpTrigger.ResumeStartTime")
+                         .ModifyRoot(root => root.SetStyle(style => style.alignSelf = Align.Center))
+                )
+                .AddComponent<GameSlider>(nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Slider", slider => 
+                    slider.Small()
+                          .SetLowValue(0)
+                          .SetLocKey("Floodgates.Triggers.Empty")
+                          .ModifyRoot(root => root.SetHighValue(23.5f)
+                                                  .SetPadding(new Padding(new Length(21), 0))
+                                                  .SetStyle(style => style.flexGrow = 1f)
+                          )
+                )
+                ;
+
+            // var rootBuilder =
+            //     _builder.CreateComponentBuilder()
+            //             .CreateVisualElement()
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Triggers.PauseOnSchedule",
+            //                                                              name: nameof(WaterPumpMonobehaviour.ScheduleEnabled) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnDrought",
+            //                                                              name: nameof(WaterPumpMonobehaviour.DisableScheduleOnDrought) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnTemperate",
+            //                                                              name: nameof(WaterPumpMonobehaviour.DisableScheduleOnTemperate) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(1, Pixel), 0))))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnBadtide",
+            //                                                              name: nameof(WaterPumpMonobehaviour.DisableScheduleOnBadtide) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Label",
+            //                                                       text: $"{_loc.T("Floodgates.WaterpumpTrigger.PauseStartTime")}: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        23.5f,
+            //                                                        name: nameof(WaterPumpMonobehaviour.PauseOnScheduleTime) + "Slider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Label",
+            //                                                       text: $"{_loc.T("Floodgates.WaterpumpTrigger.ResumeStartTime")}: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        23.5f,
+            //                                                        name: nameof(WaterPumpMonobehaviour.ResumeOnScheduleTime) + "Slider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")));
 
             _root = rootBuilder.BuildAndInitialize();
 
@@ -140,6 +196,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _scheduleEnabledToggle.SetValueWithoutNotify(_waterPumpMonobehaviour.ScheduleEnabled);
                 _disableScheduleOnDrought.SetValueWithoutNotify(_waterPumpMonobehaviour.DisableScheduleOnDrought);
                 _disableScheduleOnTemperate.SetValueWithoutNotify(_waterPumpMonobehaviour.DisableScheduleOnTemperate);
+                _disableScheduleOnBadtide.SetValueWithoutNotify(_waterPumpMonobehaviour.DisableScheduleOnBadtide);
             }
         }
 

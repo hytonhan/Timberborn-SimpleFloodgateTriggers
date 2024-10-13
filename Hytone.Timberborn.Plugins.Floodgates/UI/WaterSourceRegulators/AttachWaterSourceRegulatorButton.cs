@@ -1,4 +1,4 @@
-﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using System;
 using Timberborn.Localization;
@@ -8,14 +8,15 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using TimberApi.EntityLinkerSystem;
 using Timberborn.BaseComponentSystem;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulators;
 
-namespace Hytone.Timberborn.Plugins.Floodgates.UI
+namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
 {
     /// <summary>
     /// Custom button behaviour which handles the linking
     /// of a Floodgate with a StreamGauge
     /// </summary>
-    public class AttachWaterpumpToStreamGaugeButton
+    public class AttachWaterSourceRegulatorButton
     {
         private static readonly string PickStreamGaugeTipLocKey = "Floodgate.Triggers.PickStreamGaugeTip";
         private static readonly string PickStreamGaugeTitleLocKey = "Floodgate.Triggers.PickStreamGaugeTitle";
@@ -27,10 +28,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private readonly ToolManager _toolManager;
         private Button _button;
 
-        public AttachWaterpumpToStreamGaugeButton(ILoc loc, 
-                                         PickObjectTool pickObjectTool,
-                                         EntitySelectionService EntitySelectionService, 
-                                         ToolManager toolManager)
+        public AttachWaterSourceRegulatorButton(
+            ILoc loc, 
+            PickObjectTool pickObjectTool,
+            EntitySelectionService EntitySelectionService, 
+            ToolManager toolManager)
         {
             _loc = loc;
             _pickObjectTool = pickObjectTool;
@@ -39,13 +41,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         }
 
         public void Initialize(VisualElement root, 
-                               Func<WaterPumpMonobehaviour> waterpumpProvider, 
+                               Func<WaterSourceRegulatorMonobehaviour> waterSourceRegulatorProvider, 
                                Action createdRouteCallback)
         {
             _button = root.Q<Button>("NewStreamGaugeButton");
             _button.clicked += delegate
             {
-                StartAttachStreamGauge(waterpumpProvider(), createdRouteCallback);
+                StartAttachStreamGauge(waterSourceRegulatorProvider(), createdRouteCallback);
             };
         }
 
@@ -66,18 +68,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// </summary>
         /// <param name="floodgate"></param>
         /// <param name="createdLinkCallback"></param>
-        private void StartAttachStreamGauge(WaterPumpMonobehaviour waterpump, 
+        private void StartAttachStreamGauge(WaterSourceRegulatorMonobehaviour waterSourceRegulator, 
                                             Action createdLinkCallback)
         {
             _pickObjectTool.StartPicking<StreamGaugeMonoBehaviour>(
                 _loc.T(PickStreamGaugeTitleLocKey), 
                 _loc.T(PickStreamGaugeTipLocKey), 
-                (GameObject gameObject) => ValidateStreamGauge(waterpump, gameObject), 
+                (GameObject gameObject) => ValidateStreamGauge(waterSourceRegulator, gameObject), 
                 delegate (GameObject streamGauge)
             {
-                FinishStreamGaugeSelection(waterpump, streamGauge, createdLinkCallback);
+                FinishStreamGaugeSelection(waterSourceRegulator, streamGauge, createdLinkCallback);
             });
-            _EntitySelectionService.Select(waterpump);
+            _EntitySelectionService.Select(waterSourceRegulator);
         }
 
         /// <summary>
@@ -86,7 +88,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <param name="floodgate"></param>
         /// <param name="gameObject"></param>
         /// <returns></returns>
-        private string ValidateStreamGauge(WaterPumpMonobehaviour waterpump, 
+        private string ValidateStreamGauge(WaterSourceRegulatorMonobehaviour waterSourceRegulator, 
                                            GameObject gameObject)
         {
             StreamGaugeMonoBehaviour streamGaugeComponent = gameObject.GetComponent<StreamGaugeMonoBehaviour>();
@@ -101,12 +103,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <param name="streamGauge"></param>
         /// <param name="attachedStreamGaugeCallback"></param>
         private void FinishStreamGaugeSelection(
-            WaterPumpMonobehaviour waterpump, 
+            WaterSourceRegulatorMonobehaviour waterSourceRegulator, 
             GameObject streamGauge, 
             Action attachedStreamGaugeCallback)
         {
             StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();
-            waterpump.AttachLink(waterpump, streamGaugeComponent);
+            waterSourceRegulator.AttachLink(streamGaugeComponent);
             attachedStreamGaugeCallback();
         }
 

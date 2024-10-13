@@ -1,12 +1,16 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
 using System.Globalization;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
+using TimberApi.UIPresets.Labels;
+using TimberApi.UIPresets.Sliders;
+using TimberApi.UIPresets.Toggles;
 using Timberborn.Localization;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -49,81 +53,103 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public VisualElement InitializeFragment()
         {
-            var rootBuilder =
-                _builder.CreateComponentBuilder()
-                        .CreateVisualElement()
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
-                                                                         name: nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnDrought",
-                                                                         name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnBadtide",
-                                                                         name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnTemperate",
-                                                                         name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnTemperate) + "Toggle",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label",
-                                                                  text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   23.5f,
-                                                                   name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label",
-                                                                  text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   1f,
-                                                                   name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label",
-                                                                  text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   23.5f,
-                                                                   name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label",
-                                                                  text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   1f,
-                                                                   name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")));
+            var rootBuilder = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle").SetLocKey("Floodgate.Schedule.Enable").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle").SetLocKey("Floodgate.Schedule.DisableOnDrought").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle").SetLocKey("Floodgate.Schedule.DisableOnBadtide").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameToggle>(toggle => toggle.SetName(nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnTemperate) + "Toggle").SetLocKey("Floodgate.Schedule.DisableOnTemperate").ModifyRoot(test => test.SetMargin(new Margin(new Length(5), 0, 0, 0))))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider").Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetHighValue(23.5f)))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider").Small().SetLocKey("Floodgates.Triggers.Empty").ModifyRoot(root => root.SetHighValue(23.5f)))
+                .AddComponent<GameTextLabel>(label => label.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label").Big().ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName(nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider").SetLocKey("Floodgates.Triggers.Empty").Small())
+                ;
+            // var rootBuilder =
+            //     _builder.CreateComponentBuilder()
+            //             .CreateVisualElement()
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.Enable",
+            //                                                              name: nameof(FloodgateTriggerMonoBehaviour.ScheduleEnabled) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnDrought",
+            //                                                              name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnDrought) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnBadtide",
+            //                                                              name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnBadtide) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Schedule.DisableOnTemperate",
+            //                                                              name: nameof(FloodgateTriggerMonoBehaviour.DisableScheduleOnTemperate) + "Toggle",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Label",
+            //                                                       text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        23.5f,
+            //                                                        name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Label",
+            //                                                       text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        1f,
+            //                                                        name: nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Label",
+            //                                                       text: $"{_loc.T("Floodgate.Triggers.Time")}: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        23.5f,
+            //                                                        name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Label",
+            //                                                       text: $"{_loc.T("Floodgate.Triggers.Height")}: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        1f,
+            //                                                        name: nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")));
 
             _root = rootBuilder.BuildAndInitialize();
 
@@ -228,10 +254,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private void ChangeHeight(ChangeEvent<float> changeEvent,
                                   ref Slider slider)
         {
-            float num = UpdateSliderValue(changeEvent.newValue, ref slider);
             switch (slider.name)
             {
                 case nameof(FloodgateTriggerMonoBehaviour.FirstScheduleHeight) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 20f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.FirstScheduleHeight != num)
                     {
@@ -239,7 +266,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
                 case nameof(FloodgateTriggerMonoBehaviour.SecondScheduleHeight) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 20f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.SecondScheduleHeight != num)
                     {
@@ -247,7 +277,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
                 case nameof(FloodgateTriggerMonoBehaviour.FirstScheduleTime) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 2f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.FirstScheduleTime != num)
                     {
@@ -255,7 +288,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
                 case nameof(FloodgateTriggerMonoBehaviour.SecondScheduleTime) + "Slider":
+                {
+                    float num = UpdateSliderValue(changeEvent.newValue, ref slider, 2f);
                     if ((bool)_floodgateTriggerComponent &&
                        _floodgateTriggerComponent.SecondScheduleTime != num)
                     {
@@ -263,12 +299,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                         _floodgateTriggerComponent.ChangeScheduleValues();
                     }
                     return;
+                }
             }
         }
 
-        private float UpdateSliderValue(float value, ref Slider field)
+        private float UpdateSliderValue(float value, ref Slider field, float changeStep)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * changeStep) / changeStep;
             field.SetValueWithoutNotify(num);
             return num;
         }

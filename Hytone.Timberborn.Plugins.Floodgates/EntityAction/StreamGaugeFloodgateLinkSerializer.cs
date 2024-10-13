@@ -61,10 +61,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 ContaminationThresholdHigh = objectLoader.Get(ContaminationThresholdHighKey),
                 ContaminationHeight1 = objectLoader.Get(ContaminationHeight1Key),
                 ContaminationHeight2 = objectLoader.Get(ContaminationHeight2Key),
-                DisableDuringDrought = objectLoader.Has(DisableDuringDroughtKey) ? objectLoader.Get(DisableDuringDroughtKey) : false,
-                DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) ? objectLoader.Get(DisableDuringTemperateKey) : false,
-                EnableContaminationLow = objectLoader.Has(EnableContaminationLowKey) ? objectLoader.Get(EnableContaminationLowKey) : false,
-                EnableContaminationHigh = objectLoader.Has(EnableContaminationHighKey) ? objectLoader.Get(EnableContaminationHighKey) : false
+                DisableDuringDrought = objectLoader.Has(DisableDuringDroughtKey) && objectLoader.Get(DisableDuringDroughtKey),
+                DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) && objectLoader.Get(DisableDuringTemperateKey),
+                DisableDuringBadtide= objectLoader.Has(DisableDuringBadtideKey) && objectLoader.Get(DisableDuringBadtideKey),
+                EnableContaminationLow = objectLoader.Has(EnableContaminationLowKey) && objectLoader.Get(EnableContaminationLowKey),
+                EnableContaminationHigh = objectLoader.Has(EnableContaminationHighKey) && objectLoader.Get(EnableContaminationHighKey)
             };
             return link;
         }

@@ -1,6 +1,7 @@
 ﻿using Bindito.Core;
 using Hytone.Timberborn.Plugins.Floodgates.Schedule;
-using Timberborn.ConstructibleSystem;
+// using Timberborn.ConstructibleSystem;
+using Timberborn.BlockSystem;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -10,6 +11,7 @@ using Timberborn.WeatherSystem;
 using UnityEngine;
 using Timberborn.BaseComponentSystem;
 using Timberborn.HazardousWeatherSystem;
+using System.Reflection;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
@@ -308,8 +310,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 _scheduleTrigger.Disable();
                 return;
             }
+            var hazardService = (HazardousWeatherService)typeof(WeatherService).GetField("_hazardousWeatherService", BindingFlags.NonPublic | BindingFlags.Instance)
+                                                                               .GetValue(_weatherServíce);
             if (_weatherServíce.IsHazardousWeather &&
-                _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType() == typeof(DroughtWeather))
+                hazardService.CurrentCycleHazardousWeather.GetType() == typeof(DroughtWeather))
             {
                 if(DisableScheduleOnDrought)
                 {
@@ -320,7 +324,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 return;
             }
             else if (_weatherServíce.IsHazardousWeather &&
-                     _weatherServíce._hazardousWeatherService.CurrentCycleHazardousWeather.GetType() == typeof(BadtideWeather))
+                     hazardService.CurrentCycleHazardousWeather.GetType() == typeof(BadtideWeather))
             {
                 if (DisableScheduleOnBadtide)
                 {

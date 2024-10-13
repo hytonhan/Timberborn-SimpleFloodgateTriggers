@@ -2,12 +2,17 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using TimberApi.UiBuilderSystem;
+using TimberApi.UIBuilderSystem;
+using TimberApi.UIBuilderSystem.ElementBuilders;
+using TimberApi.UIBuilderSystem.StylingElements;
+using TimberApi.UIPresets.Builders;
+using TimberApi.UIPresets.Labels;
+using TimberApi.UIPresets.Sliders;
+using TimberApi.UIPresets.Toggles;
 using Timberborn.Localization;
 using Timberborn.WaterBuildings;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UIElements.Length.Unit;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -62,87 +67,131 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             var test = (Texture2D)Resources.LoadAll("UI/Images/Core/scroll-bar-nine-slice", typeof(Texture2D))
                                           .FirstOrDefault();
 
-            _root =
-                _builder.CreateComponentBuilder()
-                        .CreateVisualElement()
-                        .SetMargin(new Margin(0, 0, new Length(10, Pixel), 0))
-                        .AddPreset(factory => factory.Toggles()
-                                                     .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtStarted",
-                                                                        name: "DroughtStartedEnabled",
-                                                                        fontStyle: FontStyle.Normal,
-                                                                        color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                        builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                   .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: "DroughtStartedValue",
-                                                                  text: "Height: ",
-                                                                  builder: labelBuilder => labelBuilder.SetMargin(new Margin(new Length(8, Pixel), 0))
-                                                                                                       .SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   1f,
-                                                                   name: "DroughtStartedSlider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          //.SetMargin(new Margin(0, 0, new Length(20, Pixel), 0))
-                                                                                                          //.AddClass("floodgate-fragment__slider")
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtEnded",
-                                                                         name: "DroughtEndedEnabled",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: "DroughtEndedValue",
-                                                                  text: "Height: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   1f,
-                                                                   name: "DroughtEndedSlider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnBadtideStarted",
-                                                                         name: "BadtideStartedEnabled",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: "BadtideStartedValue",
-                                                                  text: "Height: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   1f,
-                                                                   name: "BadtideStartedSlider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
-                        .AddPreset(factory => factory.Toggles()
-                                                      .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnBadtideEnded",
-                                                                         name: "BadtideEndedEnabled",
-                                                                         fontStyle: FontStyle.Normal,
-                                                                         color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
-                                                                         builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
-                                                                                                    .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
-                        .AddPreset(factory => factory.Labels()
-                                                     .GameTextBig(name: "BadtideEndedValue",
-                                                                  text: "Height: ",
-                                                                  builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
-                        .AddPreset(factory => factory.Sliders()
-                                                     .SliderCircle(0f,
-                                                                   1f,
-                                                                   name: "BadtideEndedSlider",
-                                                                   builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
-                                                                                                          .SetPadding(new Padding(new Length(21, Pixel), 0))
-                                                                                                          .AddClass("slider")))
+            _root = _builder.Create<VisualElementBuilder>()
+                .AddComponent<GameToggle>(toggle => toggle.SetName("DroughtStartedEnabled").SetLocKey("Floodgate.Triggers.EnableOnDroughtStarted")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("DroughtStartedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("DroughtStartedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("DroughtEndedEnabled").SetLocKey("Floodgate.Triggers.EnableOnDroughtEnded")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("DroughtEndedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("DroughtEndedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("BadtideStartedEnabled").SetLocKey("Floodgate.Triggers.EnableOnBadtideStarted")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("BadtideStartedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("BadtideStartedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .AddComponent<GameToggle>(toggle => toggle.SetName("BadtideEndedEnabled").SetLocKey("Floodgate.Triggers.EnableOnBadtideEnded")
+                                                                                           .ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(11), 0, new Length(3), 0))
+                                                                                                    // .SetStyle(style => style.alignSelf = Align.Center)
+                                                                                            )
+                )
+                .AddComponent<GameTextLabel>(label => label.SetName("BadtideEndedValue").ModifyRoot(root => 
+                                                                                                root.SetMargin(new Margin(new Length(8), 0))
+                                                                                                    .SetStyle(style => style.alignSelf = Align.Center)))
+                .AddComponent<GameSlider>(slider => slider.SetName("BadtideEndedSlider").Small().SetLocKey("Floodgates.Triggers.Empty"))
+                .BuildAndInitialize();
 
-                        .BuildAndInitialize();
+
+            // _root =
+            //     _builder.CreateComponentBuilder()
+            //             .CreateVisualElement()
+            //             .SetMargin(new Margin(0, 0, new Length(10), 0))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                          .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtStarted",
+            //                                                             name: "DroughtStartedEnabled",
+            //                                                             fontStyle: FontStyle.Normal,
+            //                                                             color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                             builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                        .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: "DroughtStartedValue",
+            //                                                       text: "Height: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetMargin(new Margin(new Length(8, Pixel), 0))
+            //                                                                                            .SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        1f,
+            //                                                        name: "DroughtStartedSlider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               //.SetMargin(new Margin(0, 0, new Length(20, Pixel), 0))
+            //                                                                                               //.AddClass("floodgate-fragment__slider")
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnDroughtEnded",
+            //                                                              name: "DroughtEndedEnabled",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: "DroughtEndedValue",
+            //                                                       text: "Height: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        1f,
+            //                                                        name: "DroughtEndedSlider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnBadtideStarted",
+            //                                                              name: "BadtideStartedEnabled",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: "BadtideStartedValue",
+            //                                                       text: "Height: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        1f,
+            //                                                        name: "BadtideStartedSlider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+            //             .AddPreset(factory => factory.Toggles()
+            //                                           .CheckmarkInverted(locKey: "Floodgate.Triggers.EnableOnBadtideEnded",
+            //                                                              name: "BadtideEndedEnabled",
+            //                                                              fontStyle: FontStyle.Normal,
+            //                                                              color: new StyleColor(new Color(0.8f, 0.8f, 0.8f, 1f)),
+            //                                                              builder: builder => builder.SetStyle(style => style.alignSelf = Align.Center)
+            //                                                                                         .SetMargin(new Margin(new Length(3, Pixel), 0, new Length(11, Pixel), 0))))
+            //             .AddPreset(factory => factory.Labels()
+            //                                          .GameTextBig(name: "BadtideEndedValue",
+            //                                                       text: "Height: ",
+            //                                                       builder: labelBuilder => labelBuilder.SetStyle(style => style.alignSelf = Align.Center)))
+            //             .AddPreset(factory => factory.Sliders()
+            //                                          .SliderCircle(0f,
+            //                                                        1f,
+            //                                                        name: "BadtideEndedSlider",
+            //                                                        builder: sliderBuilder => sliderBuilder.SetStyle(style => style.flexGrow = 1f)
+            //                                                                                               .SetPadding(new Padding(new Length(21, Pixel), 0))
+            //                                                                                               .AddClass("slider")))
+
+            //             .BuildAndInitialize();
 
             _droughtEndedSlider = _root.Q<Slider>("DroughtEndedSlider");
             _droughtEndedEnabledToggle = _root.Q<Toggle>("DroughtEndedEnabled");
@@ -257,7 +306,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private void ChangeBadtideEndedHeight(ChangeEvent<float> changeEvent)
         {
-            float num = Mathf.Round(changeEvent.newValue * 2f) / 2f;
+            float num = Mathf.Round(changeEvent.newValue * 20f) / 20f;
             _badtideEndedSlider.SetValueWithoutNotify(num);
             if ((bool)_floodgateTriggerComponent && _floodgateTriggerComponent.BadtideEndedHeight != num)
             {
@@ -272,7 +321,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         private float UpdateDroughtEndedSliderValue(float value)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * 20f) / 20f;
             _droughtEndedSlider.SetValueWithoutNotify(num);
             return num;
         }
@@ -297,14 +346,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <returns></returns>
         private float UpdateDroughtStartedSliderValue(float value)
         {
-            float num = Mathf.Round(value * 2f) / 2f;
+            float num = Mathf.Round(value * 20f) / 20f;
             _droughtStartedSlider.SetValueWithoutNotify(num);
             return num;
         }
 
         private void ChangeBadtideStartedHeight(ChangeEvent<float> changeEvent)
         {
-            float num = Mathf.Round(changeEvent.newValue * 2f) / 2f;
+            float num = Mathf.Round(changeEvent.newValue * 20f) / 20f;
             _badtideStartedSlider.SetValueWithoutNotify(num);
 
             if ((bool)_floodgateTriggerComponent && _floodgateTriggerComponent.BadtideStartedHeight != num)

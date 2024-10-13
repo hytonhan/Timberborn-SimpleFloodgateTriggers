@@ -1,4 +1,7 @@
-﻿using Timberborn.WaterBuildings;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using Timberborn.WaterBuildings;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
@@ -7,33 +10,16 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
     /// </summary>
     public static class UIHelpers
     {
-        private static readonly string _maxHeightName1 = "MaxHeight";
-        private static readonly string _maxHeightName2 = "_maxHeight";
 
         public static int GetMaxHeight(Floodgate floodgate)
         {
-            var height = floodgate.GetType()
-                                  .GetField(_maxHeightName1,
-                                            System.Reflection.BindingFlags.NonPublic |
-                                            System.Reflection.BindingFlags.Public |
-                                            System.Reflection.BindingFlags.Instance)
-                                  ?.GetValue(floodgate);
-
-            if (height == null)
-            {
-                height = floodgate.GetType()
-                                  .GetField(_maxHeightName2,
-                                            System.Reflection.BindingFlags.NonPublic |
-                                            System.Reflection.BindingFlags.Public |
-                                            System.Reflection.BindingFlags.Instance)
-                                  ?.GetValue(floodgate);
-            }
-            return (int)height;
+            return floodgate.MaxHeight;
         }
 
-        public static int GetMaxHeight(StreamGauge streamGauge)
+        public static float GetMaxHeight(StreamGauge streamGauge)
         {
-            return (int)streamGauge._maxWaterLevel;
+            var maxWaterLevelField = typeof(StreamGauge).GetField("_maxWaterLevel",  BindingFlags.NonPublic | BindingFlags.Instance);
+            return (float)maxWaterLevelField.GetValue(streamGauge);
         }
     }
 }

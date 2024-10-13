@@ -361,3 +361,6 @@ MigrationBackup/
 /Hytone.Timberborn.Plugins.Floodgates/package/SimpleFloodgateTriggers_3.3.2_modio.zip
 /Hytone.Timberborn.Plugins.Floodgates/package/SimpleFloodgateTriggers_3.3.1_modio.zip
 /Hytone.Timberborn.Plugins.Floodgates/package/SimpleFloodgateTriggers_*.zip
+Hytone.Timberborn.Plugins.Floodgates/Managed
+/**/*.dll
+/**/TimberAPI/*

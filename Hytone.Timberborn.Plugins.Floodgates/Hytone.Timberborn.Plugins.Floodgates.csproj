@@ -8,16 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="TimberAPI" Version="0.6.2" />
-    <PackageReference Include="Timberborn.GameLibs" Version="0.5.0-r.0" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="package\" />
   </ItemGroup>
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy $(ProjectDir)\..\README.md $(ProjectDir)\package&#xD;&#xA;copy $(OutDir)$(AssemblyName).dll $(ProjectDir)\package\SimpleFloodgateTriggers\plugins" />
-  </Target>
+  <ItemGroup>
+    <Reference Include="Managed\Timberborn*.dll" />
+    <Reference Include="Managed\UnityEngine*.dll" />
+    <Reference Include="Managed\Bindito*.dll" />
+    <Reference Include="TimberAPI\core\*.dll" />
+  </ItemGroup>
 
 </Project>

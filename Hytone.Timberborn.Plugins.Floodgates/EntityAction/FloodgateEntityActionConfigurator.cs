@@ -1,34 +1,35 @@
 ﻿using Bindito.Core;
 using HarmonyLib;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TimberApi.ConfiguratorSystem;
 using TimberApi.DependencyContainerSystem;
-using TimberApi.SceneSystem;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BehaviorSystem;
 using Timberborn.EntitySystem;
-using Timberborn.IrrigationSystem;
+// using Timberborn.IrrigationSystem;
 using Timberborn.Persistence;
 using Timberborn.SerializationSystem;
 using Timberborn.TemplateSystem;
 using Timberborn.WaterBuildings;
+using Timberborn.WaterSourceSystem;
 using Timberborn.WorldSerialization;
 using UnityEngine;
-using UnityEngine.InputSystem;
+// using UnityEngine.InputSystem;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
 
-    [Configurator(SceneEntrypoint.InGame)]
+    [Context("Game")]
     public class FloodgateEntityActionConfigurator : IConfigurator
     {
         public void Configure(IContainerDefinition containerDefinition)
         {
             containerDefinition.Bind<StreamGaugeFloodgateLinkSerializer>().AsSingleton();
             containerDefinition.Bind<WaterpumpStreamGaugeLinkSerializer>().AsSingleton();
+            containerDefinition.Bind<WaterSourceRegulatorLinkSerializer>().AsSingleton();
             containerDefinition.Bind<EventListeners>().AsSingleton();
             containerDefinition.MultiBind<TemplateModule>().ToProvider(ProvideTemplateModule).AsSingleton();
         }
@@ -38,6 +39,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             TemplateModule.Builder builder = new TemplateModule.Builder();
             builder.AddDecorator<Floodgate, FloodgateTriggerMonoBehaviour>();
             builder.AddDecorator<StreamGauge, StreamGaugeMonoBehaviour>();
+            builder.AddDecorator<WaterSourceRegulator, WaterSourceRegulatorMonobehaviour>();
             return builder.Build();
         }
     }
@@ -47,7 +49,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     {
         public static void Postfix(BaseComponent __result)
         {
-            if ((__result.GetComponentFast<WaterInput>() != null || __result.GetComponentFast<WaterOutput>() != null || __result.GetComponentFast<IrrigationTower>())
+            if ((__result.GetComponentFast<WaterInput>() != null || __result.GetComponentFast<WaterOutput>() != null)
                 && __result.name.ToLower().Contains("shower") == false)
             {
                 var baseInstantiator = DependencyContainer.GetInstance<BaseInstantiator>();
