@@ -1,9 +1,10 @@
+
 {
   "Name": "SimpleFloodgateTriggers",
-  "Version": "5.0.2",
-  "Id": "Hytone.SimpleFloodgateTriggers",
-  "MinimumGameVersion": "0.6.0.0",
-  "Description": "Automated Floodgates and Water pumps on basic events",
+    "Version": "5.0.2",
+    "Id": "Hytone.SimpleFloodgateTriggers",
+    "MinimumGameVersion": "0.6.7.0",
+    "Description": "Automated Floodgates, water pumps, water domes and more.",
   "RequiredMods": [
       {
         "Id": "Harmony",
@@ -15,3 +16,4 @@
       }
   ]
 }
+
