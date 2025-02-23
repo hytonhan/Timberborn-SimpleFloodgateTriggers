@@ -11,6 +11,7 @@ using TimberApi.UIPresets.Labels;
 using TimberApi.UIPresets.ScrollViews;
 using Timberborn.Buildings;
 using Timberborn.Common;
+using Timberborn.EntitySystem;
 using Timberborn.Localization;
 using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
@@ -167,7 +168,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
                 var j = i;
                 var link = links[i];
                 var streamGauge = link.StreamGauge.GameObjectFast;
-                var labeledPrefab = streamGauge.GetComponent<Building>();
+                var labeledPrefab = streamGauge.GetComponent<LabeledEntitySpec>();
                 var view = _linkViewFactory.CreateViewForWaterSourceRegulator(i, labeledPrefab.DisplayNameLocKey);
 
                 var gaugeHeightLabel = view.Q<Label>("StreamGaugeHeightLabel");

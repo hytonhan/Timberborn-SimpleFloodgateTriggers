@@ -181,7 +181,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 var j = i;
                 var link = links[i];
                 var streamGauge = link.StreamGauge.GameObjectFast;
-                var building = link.StreamGauge.GetComponentFast<Building>();
+                var building = link.StreamGauge.GetComponentFast<LabeledEntitySpec>();
 
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i, building.DisplayNameLocKey);
 

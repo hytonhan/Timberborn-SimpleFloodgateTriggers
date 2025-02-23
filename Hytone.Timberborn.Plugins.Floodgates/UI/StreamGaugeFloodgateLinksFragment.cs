@@ -169,7 +169,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             foreach (var link in links)
             {
                 var floodgate = link.Floodgate.GameObjectFast;
-                var labeledPrefab = floodgate.GetComponent<Building>();
+                var labeledPrefab = floodgate.GetComponent<LabeledEntitySpec>();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
                 var test =  (Sprite)Resources.LoadAll("Buildings", typeof(Sprite))
@@ -201,7 +201,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 // (?<=[^A-Z])(?=[A-Z]) |
                 // (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
                 var waterpump = link.WaterPump.GameObjectFast;
-                var labeledPrefab = waterpump.GetComponent<Building>();
+                var labeledPrefab = waterpump.GetComponent<LabeledEntitySpec>();
                 string waterpumpName = waterpump.name.Split('.').First();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
@@ -255,7 +255,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             foreach (var link in waterSourceRegulatorLinks)
             {
                 var waterSourceRegulator = link.WaterSourceRegulator.GameObjectFast;
-                var labeledPrefab = waterSourceRegulator.GetComponent<Building>();
+                var labeledPrefab = waterSourceRegulator.GetComponent<LabeledEntitySpec>();
                 string waterpumpName = waterSourceRegulator.name.Split('.').First();
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForStreamGauge(labeledPrefab.DisplayNameLocKey);
 
