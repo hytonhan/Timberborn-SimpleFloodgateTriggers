@@ -13,6 +13,7 @@ using Timberborn.BlockSystem;
 using System.Reflection;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
 using Timberborn.WaterSourceSystem;
+using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulators
 {
@@ -103,11 +104,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void Load(IEntityLoader entityLoader)
         {
-            if (!entityLoader.HasComponent(WaterPumpKey))
+            if (!entityLoader.TryGetComponent(WaterPumpKey, out IObjectLoader component))
             {
                 return;
             }
-            IObjectLoader component = entityLoader.GetComponent(WaterPumpKey);
             if (component.Has(CloseOnDroughtStartKey))
             {
                 CloseOnDroughtStart = component.Get(CloseOnDroughtStartKey);

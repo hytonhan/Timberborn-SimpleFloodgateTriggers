@@ -11,6 +11,7 @@ using Timberborn.DeconstructionSystem;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.BlockSystem;
 using System.Reflection;
+using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
@@ -101,11 +102,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void Load(IEntityLoader entityLoader)
         {
-            if (!entityLoader.HasComponent(WaterPumpKey))
+            if (!entityLoader.TryGetComponent(WaterPumpKey, out IObjectLoader component))
             {
                 return;
             }
-            IObjectLoader component = entityLoader.GetComponent(WaterPumpKey);
             if (component.Has(PauseOnDroughtStartKey))
             {
                 PauseOnDroughtStart = component.Get(PauseOnDroughtStartKey);

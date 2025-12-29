@@ -6,7 +6,6 @@ using Timberborn.SelectionSystem;
 using Timberborn.ToolSystem;
 using UnityEngine;
 using UnityEngine.UIElements;
-using TimberApi.EntityLinkerSystem;
 using Timberborn.BaseComponentSystem;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulators;
 
@@ -23,14 +22,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
         private static readonly string AttachToStreamGaugeLocKey = "Floodgate.Triggers.AttachToStreamGauge";
 
         private readonly ILoc _loc;
-        private readonly PickObjectTool _pickObjectTool;
+        private readonly FloodgateTriggersPickObjectTool _pickObjectTool;
         private readonly EntitySelectionService _EntitySelectionService;
         private readonly ToolManager _toolManager;
         private Button _button;
 
         public AttachWaterSourceRegulatorButton(
             ILoc loc, 
-            PickObjectTool pickObjectTool,
+            FloodgateTriggersPickObjectTool pickObjectTool,
             EntitySelectionService EntitySelectionService, 
             ToolManager toolManager)
         {

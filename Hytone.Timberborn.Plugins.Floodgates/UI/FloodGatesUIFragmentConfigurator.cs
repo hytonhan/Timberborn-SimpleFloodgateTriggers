@@ -29,6 +29,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             containerDefinition.Bind<AttachWaterSourceRegulatorFragment>().AsSingleton();
             containerDefinition.Bind<WaterSourceRegulatorDroughtFragment>().AsSingleton();
             containerDefinition.Bind<WaterSourceRegulatorScheduleFragment>().AsSingleton();
+
+            containerDefinition.Bind<FloodgateTriggersPickObjectTool>().AsSingleton();
         }
 
         private class EntityPanelModuleProvider : IProvider<EntityPanelModule>

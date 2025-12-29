@@ -1,4 +1,5 @@
 ﻿using Timberborn.Persistence;
+using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
@@ -6,7 +7,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     /// Defines how a StreamGaugeFloodgateLink instance 
     /// should be serialized and deserialized
     /// </summary>
-    public class StreamGaugeFloodgateLinkSerializer : IObjectSerializer<StreamGaugeFloodgateLink>
+    public class StreamGaugeFloodgateLinkSerializer : IValueSerializer<StreamGaugeFloodgateLink>
     {
         private static readonly PropertyKey<FloodgateTriggerMonoBehaviour> FloodgateKey = new PropertyKey<FloodgateTriggerMonoBehaviour>("Floodgate");
         private static readonly PropertyKey<StreamGaugeMonoBehaviour> StreamGaugeKey = new PropertyKey<StreamGaugeMonoBehaviour>("StreamGauge");
@@ -26,10 +27,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private static readonly PropertyKey<bool> EnableContaminationLowKey = new PropertyKey<bool>("EnableContaminationLow");
         private static readonly PropertyKey<bool> EnableContaminationHighKey = new PropertyKey<bool>("EnableContaminationHigh");
 
-        public void Serialize(StreamGaugeFloodgateLink value, IObjectSaver objectSaver)
+        private readonly ReferenceSerializer _referenceSerializer;
+
+        public StreamGaugeFloodgateLinkSerializer(ReferenceSerializer referenceSerializer)
         {
-            objectSaver.Set(FloodgateKey, value.Floodgate);
-            objectSaver.Set(StreamGaugeKey, value.StreamGauge);
+            _referenceSerializer = referenceSerializer;
+        }
+
+        public void Serialize(StreamGaugeFloodgateLink value, IValueSaver valueSaver)
+        {
+            IObjectSaver objectSaver = valueSaver.AsObject();
+            objectSaver.Set(FloodgateKey, value.Floodgate, _referenceSerializer.Of<FloodgateTriggerMonoBehaviour>());
+            objectSaver.Set(StreamGaugeKey, value.StreamGauge, _referenceSerializer.Of<StreamGaugeMonoBehaviour>());
             objectSaver.Set(Threshold1Key, value.Threshold1);
             objectSaver.Set(Threshold2Key, value.Threshold2);
             objectSaver.Set(Height1Key, value.Height1);
@@ -47,11 +56,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
             objectSaver.Set(EnableContaminationHighKey, value.EnableContaminationHigh);
         }
 
-        public Obsoletable<StreamGaugeFloodgateLink> Deserialize(IObjectLoader objectLoader)
+        public Obsoletable<StreamGaugeFloodgateLink> Deserialize(IValueLoader valueLoader)
         {
-
-            var link = new StreamGaugeFloodgateLink(objectLoader.Get(FloodgateKey),
-                                                    objectLoader.Get(StreamGaugeKey))
+            IObjectLoader objectLoader = valueLoader.AsObject();
+            var link = new StreamGaugeFloodgateLink(objectLoader.Get(FloodgateKey, _referenceSerializer.Of<FloodgateTriggerMonoBehaviour>()),
+                                                    objectLoader.Get(StreamGaugeKey, _referenceSerializer.Of<StreamGaugeMonoBehaviour>()))
             {
                 Threshold1 = objectLoader.Get(Threshold1Key),
                 Threshold2 = objectLoader.Get(Threshold2Key),
@@ -63,7 +72,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 ContaminationHeight2 = objectLoader.Get(ContaminationHeight2Key),
                 DisableDuringDrought = objectLoader.Has(DisableDuringDroughtKey) && objectLoader.Get(DisableDuringDroughtKey),
                 DisableDuringTemperate = objectLoader.Has(DisableDuringTemperateKey) && objectLoader.Get(DisableDuringTemperateKey),
-                DisableDuringBadtide= objectLoader.Has(DisableDuringBadtideKey) && objectLoader.Get(DisableDuringBadtideKey),
+                DisableDuringBadtide = objectLoader.Has(DisableDuringBadtideKey) && objectLoader.Get(DisableDuringBadtideKey),
                 EnableContaminationLow = objectLoader.Has(EnableContaminationLowKey) && objectLoader.Get(EnableContaminationLowKey),
                 EnableContaminationHigh = objectLoader.Has(EnableContaminationHighKey) && objectLoader.Get(EnableContaminationHighKey)
             };

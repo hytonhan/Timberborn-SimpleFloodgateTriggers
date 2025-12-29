@@ -1,8 +1,9 @@
 ﻿using Timberborn.Persistence;
+using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
-    public class WaterpumpStreamGaugeLinkSerializer : IObjectSerializer<WaterPumpStreamGaugeLink>
+    public class WaterpumpStreamGaugeLinkSerializer : IValueSerializer<WaterPumpStreamGaugeLink>
     {
         private static readonly PropertyKey<WaterPumpMonobehaviour> WaterPumpKey = new PropertyKey<WaterPumpMonobehaviour>("WaterPump");
         private static readonly PropertyKey<StreamGaugeMonoBehaviour> StreamGaugeKey = new PropertyKey<StreamGaugeMonoBehaviour>("StreamGauge");
@@ -27,10 +28,18 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         private static readonly PropertyKey<float> ContaminationUnpauseBelowThresholdKey = new PropertyKey<float>("ContaminationUnpauseBelowThreshold");
         private static readonly PropertyKey<float> ContaminationUnpauseAboveThresholdKey = new PropertyKey<float>("ContaminationUnpauseAboveThreshold");
 
-        public void Serialize(WaterPumpStreamGaugeLink value, IObjectSaver objectSaver)
+        private readonly ReferenceSerializer _referenceSerializer;
+
+        public WaterpumpStreamGaugeLinkSerializer(ReferenceSerializer referenceSerializer)
         {
-            objectSaver.Set(WaterPumpKey, value.WaterPump);
-            objectSaver.Set(StreamGaugeKey, value.StreamGauge);
+            _referenceSerializer = referenceSerializer;
+        }
+
+        public void Serialize(WaterPumpStreamGaugeLink value, IValueSaver valueSaver)
+        {
+            IObjectSaver objectSaver = valueSaver.AsObject();
+            objectSaver.Set(WaterPumpKey, value.WaterPump, _referenceSerializer.Of<WaterPumpMonobehaviour>());
+            objectSaver.Set(StreamGaugeKey, value.StreamGauge, _referenceSerializer.Of<StreamGaugeMonoBehaviour>());
             objectSaver.Set(Threshold1Key, value.Threshold1);
             objectSaver.Set(Threshold2Key, value.Threshold2);
             objectSaver.Set(Threshold3Key, value.Threshold3);
@@ -54,10 +63,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
             objectSaver.Set(ContaminationUnpauseAboveEnabledKey, value.ContaminationUnpauseAboveEnabled);
         }
 
-        public Obsoletable<WaterPumpStreamGaugeLink> Deserialize(IObjectLoader objectLoader)
+        public Obsoletable<WaterPumpStreamGaugeLink> Deserialize(IValueLoader valueLoader)
         {
-            var link = new WaterPumpStreamGaugeLink(objectLoader.Get(WaterPumpKey),
-                                                    objectLoader.Get(StreamGaugeKey))
+            IObjectLoader objectLoader = valueLoader.AsObject();
+            var link = new WaterPumpStreamGaugeLink(objectLoader.Get(WaterPumpKey, _referenceSerializer.Of<WaterPumpMonobehaviour>()),
+                                                    objectLoader.Get(StreamGaugeKey, _referenceSerializer.Of<StreamGaugeMonoBehaviour>()))
             {
                 Threshold1 = objectLoader.Get(Threshold1Key),
                 Threshold2 = objectLoader.Get(Threshold2Key),

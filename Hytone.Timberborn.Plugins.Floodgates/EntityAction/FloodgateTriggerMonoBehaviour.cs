@@ -12,6 +12,7 @@ using UnityEngine;
 using Timberborn.BaseComponentSystem;
 using Timberborn.HazardousWeatherSystem;
 using System.Reflection;
+using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 {
@@ -136,11 +137,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// <param name="entityLoader"></param>
         public void Load(IEntityLoader entityLoader)
         {
-            if (!entityLoader.HasComponent(FloodgateTriggerKey))
+            if (!entityLoader.TryGetComponent(FloodgateTriggerKey, out IObjectLoader component))
             {
                 return;
             }
-            IObjectLoader component = entityLoader.GetComponent(FloodgateTriggerKey);
             if (component.Has(DroughtEndedEnabledKey))
             {
                 DroughtEndedEnabled = component.Get(DroughtEndedEnabledKey);
