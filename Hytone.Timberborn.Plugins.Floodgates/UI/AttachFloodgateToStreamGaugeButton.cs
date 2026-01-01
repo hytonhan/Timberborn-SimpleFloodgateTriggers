@@ -1,5 +1,7 @@
 ﻿using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using System;
+using System.IO;
+using Timberborn.BaseComponentSystem;
 using Timberborn.Localization;
 using Timberborn.SelectionSystem;
 using Timberborn.ToolSystem;
@@ -21,13 +23,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private readonly ILoc _loc;
         private readonly FloodgateTriggersPickObjectTool _pickObjectTool;
         private readonly EntitySelectionService _EntitySelectionService;
-        private readonly ToolManager _toolManager;
+        private readonly ToolService _toolManager;
         private Button _button;
 
         public AttachFloodgateToStreamGaugeButton(ILoc loc, 
                                          FloodgateTriggersPickObjectTool pickObjectTool, 
                                          EntitySelectionService EntitySelectionService, 
-                                         ToolManager toolManager)
+                                         ToolService toolManager)
         {
             _loc = loc;
             _pickObjectTool = pickObjectTool;
@@ -70,7 +72,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _loc.T(PickStreamGaugeTitleLocKey), 
                 _loc.T(PickStreamGaugeTipLocKey), 
                 (GameObject gameObject) => ValidateStreamGauge(floodgate, gameObject), 
-                delegate (GameObject streamGauge)
+                delegate (StreamGaugeMonoBehaviour streamGauge)
             {
                 FinishStreamGaugeSelection(floodgate, streamGauge, createdLinkCallback);
             });
@@ -99,11 +101,21 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <param name="attachedStreamGaugeCallback"></param>
         private void FinishStreamGaugeSelection(
             FloodgateTriggerMonoBehaviour floodgate, 
-            GameObject streamGauge, 
+            StreamGaugeMonoBehaviour streamGauge, 
             Action attachedStreamGaugeCallback)
         {
-            StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();
-            floodgate.AttachLink(floodgate, streamGaugeComponent);
+            if (streamGauge == null) Console.WriteLine("gauge is null");
+            // StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();
+            // var comps = streamGauge.GetComponents<BaseComponent>();
+            //
+            // Console.WriteLine($"components: {comps.Length} ");
+            // foreach (BaseComponent comp in comps)
+            // {
+            //     Console.WriteLine($"\tcomp: {comp.GetType().Name}");
+            // }
+            // if (streamGaugeComponent == null) Console.WriteLine("streamGaugeComponent is null");
+            
+            floodgate.AttachLink(floodgate, streamGauge);
             attachedStreamGaugeCallback();
         }
 

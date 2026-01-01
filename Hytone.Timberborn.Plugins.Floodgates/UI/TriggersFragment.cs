@@ -227,8 +227,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public void ShowFragment(BaseComponent entity)
         {
-            _floodgate = entity.GetComponentFast<Floodgate>();
-            _floodgateTriggerMonoBehaviour = entity.GetComponentFast<FloodgateTriggerMonoBehaviour>();
+            _floodgate = entity.GetComponent<Floodgate>();
+            _floodgateTriggerMonoBehaviour = entity.GetComponent<FloodgateTriggerMonoBehaviour>();
             if ((bool)_floodgateTriggerMonoBehaviour)
             {
                 _droughtSettingsFragment.ShowFragment(_floodgate, _floodgateTriggerMonoBehaviour);

@@ -12,7 +12,6 @@ using Timberborn.Buildings;
 using Timberborn.Common;
 using Timberborn.EntitySystem;
 using Timberborn.Localization;
-using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
 using Timberborn.UIFormatters;
 using Timberborn.WaterBuildings;
@@ -108,8 +107,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             for (int i = 0; i < links.Count(); i++)
             {
                 var link = links[i];
-                var waterpump = link.WaterPump.GetComponentFast<WaterInput>();
-                var streamGauge = link.StreamGauge.GetComponentFast<StreamGauge>();
+                var waterpump = link.WaterPump.GetComponent<WaterInput>();
+                var streamGauge = link.StreamGauge.GetComponent<StreamGauge>();
                 var setting = _settingsList[i];
                 setting.Item1.SetValueWithoutNotify(link.Enabled1);
                 setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
@@ -162,7 +161,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     setting.Rest.Rest.Item3.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold3")} {NumberFormatter.FormatAsPercentRounded(setting.Rest.Rest.Item4.value)}";
                     setting.Rest.Rest.Item5.text = $"{_loc.T("Floodgates.WaterpumpTrigger.Threshold4")} {NumberFormatter.FormatAsPercentRounded(setting.Rest.Rest.Item6.value)}";
 
-                    var gauge = links[i].StreamGauge.GetComponentFast<StreamGauge>();
+                    var gauge = links[i].StreamGauge.GetComponent<StreamGauge>();
                     setting.Rest.Item4.text = $"({gauge.WaterLevel.ToString("0.00")}m, {NumberFormatter.FormatAsPercentRounded(gauge.ContaminationLevel)})";
                 }
             }
@@ -175,7 +174,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 var j = i;
                 var link = links[i];
-                var streamGauge = link.StreamGauge.GameObjectFast;
+                var streamGauge = link.StreamGauge;
                 var labeledPrefab = streamGauge.GetComponent<LabeledEntitySpec>();
                 var view = _linkViewFactory.CreateViewForWaterpump(i, labeledPrefab.DisplayNameLocKey);
 

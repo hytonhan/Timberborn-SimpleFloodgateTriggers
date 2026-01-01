@@ -4,8 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using Timberborn.BaseComponentSystem;
 using Timberborn.BlockSystem;
-using Timberborn.BuildingsBlocking;
+using Timberborn.Buildings;
+// using Timberborn.BuildingsBlocking;
 using Timberborn.EntitySystem;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.TickSystem;
@@ -18,7 +20,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     /// <summary>
     /// Custom behaviour we want to add for StreamGauges
     /// </summary>
-    public class StreamGaugeMonoBehaviour : TickableComponent, IRegisteredComponent, IFinishedStateListener
+    public class StreamGaugeMonoBehaviour : TickableComponent, IRegisteredComponent, IFinishedStateListener, IAwakableComponent
 	{
         private List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
         public ReadOnlyCollection<StreamGaugeFloodgateLink> FloodgateLinks { get; private set; }
@@ -42,12 +44,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         }
 
 
-        private void Awake()
+        public void Awake()
         {
             FloodgateLinks = _floodgateLinks.AsReadOnly();
             WaterpumpLinks = _waterpumpsLinks.AsReadOnly();
             WaterSourceRegulatorLinks = _watersourceRegulatorLinks.AsReadOnly();
-            base.enabled = false;
+            this.DisableComponent();
         }
 
         public void AttachFloodgate(StreamGaugeFloodgateLink link)
@@ -111,13 +113,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         public void OnEnterFinishedState()
         {
-            base.enabled = true;
-            _streamGauge = this.GetComponentFast<StreamGauge>();
+            this.EnableComponent();
+            _streamGauge = this.GetComponent<StreamGauge>();
         }
 
         public void OnExitFinishedState()
         {
-            base.enabled = false;
+            this.DisableComponent();
             DetachAllFloodgates();
             DetachAllWaterpumps();
             DetachAllWaterSourceRegulators();
@@ -130,7 +132,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public override void Tick()
         {
-            if(!enabled)
+            if(!Enabled)
             {
                 return;
             }
@@ -159,7 +161,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
                 if(currContamination < link.ContaminationThresholdLow && link.EnableContaminationLow)
                 {
-                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
                     if (floodgate.Height != link.ContaminationHeight1)
                     {
                         floodgate.SetHeightAndSynchronize(link.ContaminationHeight1);
@@ -168,7 +170,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 }
                 if (currContamination > link.ContaminationThresholdHigh && link.EnableContaminationHigh)
                 {
-                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
                     if (floodgate.Height != link.ContaminationHeight2)
                     {
                         floodgate.SetHeightAndSynchronize(link.ContaminationHeight2);
@@ -178,7 +180,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
                 if (currHeight <= link.Threshold1)
                 {
-                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
                     if (floodgate.Height != link.Height1)
                     {
                         floodgate.SetHeightAndSynchronize(link.Height1);
@@ -187,7 +189,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                 }
                 if (currHeight >= link.Threshold2)
                 {
-                    var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
+                    var floodgate = link.Floodgate.GetComponent<Floodgate>();
                     if (floodgate.Height != link.Height2)
                     {
                         floodgate.SetHeightAndSynchronize(link.Height2);
@@ -212,12 +214,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     continue;
                 }
 
-                var constructible = link.WaterPump.GetComponentFast<BlockObject>();
+                var constructible = link.WaterPump.GetComponent<BlockObject>();
                 if (constructible.IsUnfinished)
                 {
                     continue;
                 }
-                var pausable = link.WaterPump.GetComponentFast<PausableBuilding>();
+                var pausable = link.WaterPump.GetComponent<PausableBuilding>();
                 if (currHeight <= link.Threshold1 && link.Enabled1)
                 {
                     if (pausable.Paused == false)
@@ -293,12 +295,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
                     continue;
                 }
 
-                var constructible = link.WaterSourceRegulator.GetComponentFast<BlockObject>();
+                var constructible = link.WaterSourceRegulator.GetComponent<BlockObject>();
                 if (constructible.IsUnfinished)
                 {
                     continue;
                 }
-                var regulator = link.WaterSourceRegulator.GetComponentFast<WaterSourceRegulator>();
+                var regulator = link.WaterSourceRegulator.GetComponent<WaterSourceRegulator>();
                 if (currHeight <= link.Threshold1 && link.Enabled1)
                 {
                     if (regulator.IsOpen)

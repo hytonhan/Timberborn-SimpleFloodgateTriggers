@@ -12,6 +12,7 @@ using UnityEngine;
 using Timberborn.BaseComponentSystem;
 using Timberborn.HazardousWeatherSystem;
 using System.Reflection;
+using Timberborn.SingletonSystem;
 using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
@@ -20,7 +21,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
     /// This class handles the data related to Floodgate Triggers. It also holds the actions
     /// which are executed when certain events happen.
     /// </summary>
-    public class FloodgateTriggerMonoBehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener
+    public class FloodgateTriggerMonoBehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener, IAwakableComponent
     {
         //Keys used in data saving/loading
         private static readonly ComponentKey FloodgateTriggerKey = new ComponentKey(nameof(FloodgateTriggerMonoBehaviour));
@@ -47,6 +48,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         private IScheduleTrigger _scheduleTrigger;
         private WeatherService _weatherServíce;
         private StreamGaugeFloodgateLinkSerializer _linkSerializer;
+        private EventBus _eventBus;
 
         private readonly List<StreamGaugeFloodgateLink> _floodgateLinks = new List<StreamGaugeFloodgateLink>();
         public ReadOnlyCollection<StreamGaugeFloodgateLink> FloodgateLinks { get; private set; }
@@ -76,11 +78,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
             WeatherService weatherServíce,
-            StreamGaugeFloodgateLinkSerializer linkSerializer)
+            StreamGaugeFloodgateLinkSerializer linkSerializer,
+            EventBus eventBus)
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
             _weatherServíce = weatherServíce;
             _linkSerializer = linkSerializer;
+            _eventBus = eventBus;
         }
 
         public void Awake()
@@ -103,6 +107,34 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         {
             _scheduleTrigger?.Disable();
             DetachAllLinks();
+        }
+
+        [OnEvent]
+        public void OnHazardousWeatherStarted(HazardousWeatherStartedEvent hazardousWeatherStartedEvent)
+        {
+            var hazardWeather = hazardousWeatherStartedEvent.HazardousWeather.GetType();
+            if (hazardWeather == typeof(DroughtWeather))
+            {
+                this.OnDroughtStarted();
+            }
+            else if (hazardWeather == typeof(BadtideWeather))
+            {
+                this.OnBadtideStarted();
+            }
+        }
+
+        [OnEvent]
+        public void OnHazardousWeatherEnded(HazardousWeatherEndedEvent hazardousWeatherEndedEndedEvent)
+        {
+            var hazardWeather = hazardousWeatherEndedEndedEvent.HazardousWeather.GetType();
+            if (hazardWeather == typeof(DroughtWeather))
+            {
+                this.OnDroughtEnded();
+            }
+            else if (hazardWeather == typeof(BadtideWeather))
+            {
+                this.OnBadtideEnded();
+            }
         }
 
         /// <summary>
@@ -137,6 +169,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// <param name="entityLoader"></param>
         public void Load(IEntityLoader entityLoader)
         {
+            _eventBus.Register(this);
             if (!entityLoader.TryGetComponent(FloodgateTriggerKey, out IObjectLoader component))
             {
                 return;
@@ -222,7 +255,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void OnDroughtStarted()
         {
-            var floodgate = GetComponentFast<Floodgate>();
+            var floodgate = GetComponent<Floodgate>();
             if (DroughtStartedEnabled == true &&
                floodgate.Height != DroughtStartedHeight)
             {
@@ -240,7 +273,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         public void OnBadtideStarted()
         {
-            var floodgate = GetComponentFast<Floodgate>();
+            var floodgate = GetComponent<Floodgate>();
             if (BadtideStartedEnabled == true &&
                floodgate.Height != BadtideStartedHeight)
             {
@@ -261,7 +294,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void OnDroughtEnded()
         {
-            var floodgate = GetComponentFast<Floodgate>();
+            var floodgate = GetComponent<Floodgate>();
             if (DroughtEndedEnabled == true &&
                floodgate.Height != DroughtEndedHeight)
             {
@@ -279,7 +312,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
 
         public void OnBadtideEnded()
         {
-            var floodgate = GetComponentFast<Floodgate>();
+            var floodgate = GetComponent<Floodgate>();
             if (BadtideEndedEnabled == true &&
                floodgate.Height != BadtideEndedHeight)
             {
@@ -372,7 +405,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void SetFirstScheduleHeight()
         {
-            var floodgate = GetComponentFast<Floodgate>();
+            var floodgate = GetComponent<Floodgate>();
             if (ScheduleEnabled == true &&
                 floodgate.Height != FirstScheduleHeight)
             {
@@ -385,7 +418,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction
         /// </summary>
         public void SetSecondScheduleHeight()
         {
-            var floodgate = GetComponentFast<Floodgate>();
+            var floodgate = GetComponent<Floodgate>();
             if (ScheduleEnabled == true &&
                 floodgate.Height != SecondScheduleHeight)
             {

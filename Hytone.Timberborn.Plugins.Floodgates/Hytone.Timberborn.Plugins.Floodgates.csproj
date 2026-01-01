@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="cp $(ProjectDir)bin/Debug/netstandard2.1/Hytone.Timberborn.Plugins.Floodgates.dll /home/hannuh/.steam/steam/steamapps/compatdata/1062090/pfx/drive_c/users/steamuser/Documents/Timberborn/Mods/SimpleFloodgateTriggers/version-0.7" />
+    <Exec Command="cp $(ProjectDir)bin/Debug/netstandard2.1/Hytone.Timberborn.Plugins.Floodgates.dll /home/hannuh/.steam/steam/steamapps/compatdata/1062090/pfx/drive_c/users/steamuser/Documents/Timberborn/Mods/SimpleFloodgateTriggers/version-1.0" />
   </Target>
 
   <ItemGroup>
@@ -23,9 +23,8 @@
     <Reference Include="Managed\Timberborn*.dll" />
     <Reference Include="Managed\UnityEngine*.dll" />
     <Reference Include="Managed\Bindito*.dll" />
-    <Reference Include="/home/hannuh/.steam/steam/steamapps/workshop/content/1062090/3288241660/version-0.7/core/*.dll" />
     <Reference Include="/home/hannuh/.steam/steam/steamapps/workshop/content/1062090/3434034047/version-0.7/*.dll" />
-    <Reference Include="/home/hannuh/.steam/steam/steamapps/workshop/content/1062090/3283831040/version-0.7/Scripts/*.dll" />
+    <Reference Include="/home/hannuh/.steam/steam/steamapps/workshop/content/1062090/3283831040/version-1.0/Scripts/*.dll" />
   </ItemGroup>
 
 </Project>

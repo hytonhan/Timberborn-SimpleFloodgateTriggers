@@ -24,14 +24,14 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
         private readonly ILoc _loc;
         private readonly FloodgateTriggersPickObjectTool _pickObjectTool;
         private readonly EntitySelectionService _EntitySelectionService;
-        private readonly ToolManager _toolManager;
+        private readonly ToolService _toolManager;
         private Button _button;
 
         public AttachWaterSourceRegulatorButton(
             ILoc loc, 
             FloodgateTriggersPickObjectTool pickObjectTool,
             EntitySelectionService EntitySelectionService, 
-            ToolManager toolManager)
+            ToolService toolManager)
         {
             _loc = loc;
             _pickObjectTool = pickObjectTool;
@@ -74,7 +74,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
                 _loc.T(PickStreamGaugeTitleLocKey), 
                 _loc.T(PickStreamGaugeTipLocKey), 
                 (GameObject gameObject) => ValidateStreamGauge(waterSourceRegulator, gameObject), 
-                delegate (GameObject streamGauge)
+                delegate (StreamGaugeMonoBehaviour streamGauge)
             {
                 FinishStreamGaugeSelection(waterSourceRegulator, streamGauge, createdLinkCallback);
             });
@@ -103,7 +103,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
         /// <param name="attachedStreamGaugeCallback"></param>
         private void FinishStreamGaugeSelection(
             WaterSourceRegulatorMonobehaviour waterSourceRegulator, 
-            GameObject streamGauge, 
+            StreamGaugeMonoBehaviour streamGauge, 
             Action attachedStreamGaugeCallback)
         {
             StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();

@@ -210,7 +210,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         public void ShowFragment(BaseComponent entity)
         {
-            _waterpumpMono = entity.GetComponentFast<WaterPumpMonobehaviour>();
+            _waterpumpMono = entity.GetComponent<WaterPumpMonobehaviour>();
             if ((bool)_waterpumpMono)
             {
                 _droughtSettingsFragment.ShowFragment( _waterpumpMono);

@@ -5,19 +5,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Timberborn.Persistence;
 using Timberborn.WeatherSystem;
-using Timberborn.BuildingsBlocking;
 using Timberborn.BaseComponentSystem;
 using Timberborn.DeconstructionSystem;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.BlockSystem;
 using System.Reflection;
 using Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps;
+using Timberborn.SingletonSystem;
 using Timberborn.WaterSourceSystem;
 using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulators
 {
-    public class WaterSourceRegulatorMonobehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener
+    public class WaterSourceRegulatorMonobehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener, IAwakableComponent
     {
         //Keys used in data saving/loading
         private static readonly ComponentKey WaterPumpKey = new ComponentKey(nameof(WaterSourceRegulatorMonobehaviour));
@@ -42,6 +42,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
         private IScheduleTrigger _scheduleTrigger;
         private WeatherService _weatherServíce;
         private WaterSourceRegulatorLinkSerializer _linkSerializer;
+        private EventBus _eventBus;
 
         private readonly List<WaterSourceRegulatorStreamGaugeLink> _waterSourceRegulatorLinks = new List<WaterSourceRegulatorStreamGaugeLink>();
         public ReadOnlyCollection<WaterSourceRegulatorStreamGaugeLink> WaterSourceRegulatorLinks { get; private set; }
@@ -69,11 +70,35 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
             WeatherService weatherService,
-            WaterSourceRegulatorLinkSerializer linkSerializer)
+            WaterSourceRegulatorLinkSerializer linkSerializer,
+            EventBus eventBus)
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
             _weatherServíce = weatherService;
             _linkSerializer = linkSerializer;
+            _eventBus = eventBus;
+        }
+
+        [OnEvent]
+        public void OnHazardousWeatherStarted(HazardousWeatherStartedEvent hazardousWeatherStartedEvent)
+        {
+            Console.WriteLine("Hazard started");
+            var hazardWeather = hazardousWeatherStartedEvent.HazardousWeather.GetType();
+            if (hazardWeather == typeof(DroughtWeather))
+            {
+                this.OnDroughtStarted();
+            }
+            else if (hazardWeather == typeof(BadtideWeather))
+            {
+                this.OnBadtideStarted();
+            }
+        }
+        
+        [OnEvent]
+        public void OnHazardousWeatherEnded(HazardousWeatherEndedEvent hazardousWeatherEndedEndedEvent)
+        {
+            Console.WriteLine("Hazard ended");
+            this.OnTemperateStarted();
         }
 
         public void Awake()
@@ -104,6 +129,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void Load(IEntityLoader entityLoader)
         {
+            _eventBus.Register(this);
             if (!entityLoader.TryGetComponent(WaterPumpKey, out IObjectLoader component))
             {
                 return;
@@ -187,12 +213,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void OnDroughtStarted()
         {
-            var constructible = GetComponentFast<BlockObject>();
+            var constructible = GetComponent<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
             }
-            var regulator = GetComponentFast<WaterSourceRegulator>();
+            var regulator = GetComponent<WaterSourceRegulator>();
 
             if (CloseOnDroughtStart == true && regulator.IsOpen)
             {
@@ -214,12 +240,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void OnBadtideStarted()
         {
-            var constructible = GetComponentFast<BlockObject>();
+            var constructible = GetComponent<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
             }
-            var regulator = GetComponentFast<WaterSourceRegulator>();
+            var regulator = GetComponent<WaterSourceRegulator>();
 
             if (CloseOnBadtideStarted == true && regulator.IsOpen)
             {
@@ -241,29 +267,40 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void OnTemperateStarted()
         {
-            var constructible = GetComponentFast<BlockObject>();
+            Console.WriteLine("foo1");
+            var constructible = GetComponent<BlockObject>();
+            Console.WriteLine("foo2");
             if (constructible.IsUnfinished)
             {
+                Console.WriteLine("foo2.1");
                 return;
             }
-            var regulator = GetComponentFast<WaterSourceRegulator>();
+            Console.WriteLine("foo3");
+            var regulator = GetComponent<WaterSourceRegulator>();
 
+            Console.WriteLine("foo4");
             if (CloseOnTemperateStarted == true && regulator.IsOpen)
             {
+                Console.WriteLine("foo4.1");
                 regulator.Close();
             }
             else if(OpenOnTemperateStarted == true && regulator.IsOpen == false)
             {
+                Console.WriteLine("foo4.2");
                 regulator.Open();
             }
+            Console.WriteLine("foo5");
             if (ScheduleEnabled && !DisableScheduleOnTemperate)
             {
+                Console.WriteLine("foo5.1");
                 _scheduleTrigger.Enable();
             }
             else if (DisableScheduleOnTemperate)
             {
+                Console.WriteLine("foo5.2");
                 _scheduleTrigger.Disable();
             }
+            Console.WriteLine("foo6");
         }
 
         public void AttachLink(StreamGaugeMonoBehaviour streamGauge)
@@ -362,8 +399,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void OpenBuilding()
         {
-            var regulator = GetComponentFast<WaterSourceRegulator>();
-            var constructible = GetComponentFast<BlockObject>();
+            var regulator = GetComponent<WaterSourceRegulator>();
+            var constructible = GetComponent<BlockObject>();
 
             if (ScheduleEnabled == true &&
                 regulator.IsOpen == false &&
@@ -375,8 +412,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterSourceRegulator
 
         public void CloseBuilding()
         {
-            var regulator = GetComponentFast<WaterSourceRegulator>();
-            var constructible = GetComponentFast<BlockObject>();
+            var regulator = GetComponent<WaterSourceRegulator>();
+            var constructible = GetComponent<BlockObject>();
             if (ScheduleEnabled == true &&
                 regulator.IsOpen &&
                 constructible.IsFinished)

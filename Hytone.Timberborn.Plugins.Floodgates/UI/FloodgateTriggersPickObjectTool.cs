@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hytone.Timberborn.Plugins.Floodgates.EntityAction;
 using Timberborn.BaseComponentSystem;
 using Timberborn.BlueprintSystem;
 using Timberborn.CoreUI;
@@ -14,13 +15,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 {
     // TODO: This class has commented code regarding custom cursor from PickObjectTool
     //       In the future the code can be uncommented, when the old cursor for the tool is recovered.
-    public class FloodgateTriggersPickObjectTool : Tool, IInputProcessor
+    public class FloodgateTriggersPickObjectTool : ITool, IInputProcessor
     {
         //private static readonly string CursorKey = "PickObjectCursor";
 
         private readonly InputService _inputService;
 
-        private readonly ToolManager _toolManager;
+        private readonly ToolService _toolManager;
 
         private readonly Highlighter _highlighter;
 
@@ -32,7 +33,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private readonly SelectableObjectRaycaster _selectableObjectRaycaster;
 
-        private ToolDescription _toolDescription = null!;
+        // private ToolDescription _toolDescription = null!;
 
         private string _warning = "";
 
@@ -40,12 +41,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 
         private Func<GameObject, string> _validateCandidate = null!;
 
-        private Action<GameObject> _callback = null!;
+        private Action<StreamGaugeMonoBehaviour> _callback = null!;
 
 
-	private readonly ISpecService _specService;
+	    private readonly ISpecService _specService;
 
-        public FloodgateTriggersPickObjectTool(InputService inputService, ToolManager toolManager, Highlighter highlighter, EntityComponentRegistry entityComponentRegistry, CursorService cursorService, SelectableObjectRaycaster selectableObjectRaycaster, ISpecService specService)
+        public FloodgateTriggersPickObjectTool(InputService inputService, ToolService toolManager, Highlighter highlighter, EntityComponentRegistry entityComponentRegistry, CursorService cursorService, SelectableObjectRaycaster selectableObjectRaycaster, ISpecService specService)
         {
             _inputService = inputService;
             _toolManager = toolManager;
@@ -57,39 +58,38 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
 		    _specService = specService;
         }
 
-        public override void Enter()
+        public void Enter()
         {
             _inputService.AddInputProcessor(this);
             //_cursorService.SetCursor(CursorKey);
         }
 
-        public override void Exit()
+        public void Exit()
         {
             _inputService.RemoveInputProcessor(this);
             _highlighter.UnhighlightAllSecondary();
             //_cursorService.ResetCursor();
         }
 
-        public override ToolDescription Description()
-        {
-            return _toolDescription;
-        }
+        // public ToolDescription Description()
+        // {
+        //     return _toolDescription;
+        // }
 
-        public override string WarningText()
+        public string WarningText()
         {
             return _warning;
         }
 
-        public void StartPicking<T>(string title, string description, Func<GameObject, string> validateCandidate, Action<GameObject> callback) where T : BaseComponent, IRegisteredComponent
+        public void StartPicking<T>(string title, string description, Func<GameObject, string> validateCandidate, Action<StreamGaugeMonoBehaviour> callback) where T : BaseComponent, IRegisteredComponent
         {
-            _toolDescription = CreateDescription(title, description);
+            // _toolDescription = CreateDescription(title, description);
             _validateCandidate = validateCandidate;
             _callback = callback;
             _allCandidates.Clear();
-
             foreach (var component in _entityComponentRegistry.GetEnabled<T>())
             {
-                _allCandidates.Add(component.GameObjectFast, component);
+                _allCandidates.Add(component.GameObject, component);
             }
             _toolManager.SwitchTool(this);
         }
@@ -97,15 +97,15 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         public bool ProcessInput()
         {
             HighlightCandidates();
-            if (_selectableObjectRaycaster.TryHitSelectableObject(out var hitObject) && _allCandidates.ContainsKey(hitObject.GameObjectFast))
+            if (_selectableObjectRaycaster.TryHitSelectableObject(out var hitObject) && _allCandidates.ContainsKey(hitObject.GameObject))
             {
                 // _highlighter.HighlightSecondary(hitObject, _specService.GetSingleSpec<SelectionColorSpec>().EntitySelection);
                 _highlighter.HighlightSecondary(hitObject, Color.green);
-                _warning = _validateCandidate(hitObject.GameObjectFast);
+                _warning = _validateCandidate(hitObject.GameObject);
                 if (_inputService is { MainMouseButtonDown: true, MouseOverUI: false })
                 {
                     _toolManager.SwitchToDefaultTool();
-                    _callback(hitObject.GameObjectFast);
+                    _callback(hitObject.GetComponent<StreamGaugeMonoBehaviour>());
                     return true;
                 }
             }
@@ -124,11 +124,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             }
         }
 
-        private static ToolDescription CreateDescription(string title, string description)
-        {
-            var builder = new ToolDescription.Builder(title);
-            builder.AddSection(description);
-            return builder.Build();
-        }
+        // private static ToolDescription CreateDescription(string title, string description)
+        // {
+        //     var builder = new ToolDescription.Builder(title);
+        //     builder.AddSection(description);
+        //     return builder.Build();
+        // }
     }
 }

@@ -23,7 +23,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             var spec = specField.GetValue(streamGauge);
             var asm = Assembly.Load("Timberborn.WaterBuildings");
             var specType = asm.GetType("Timberborn.WaterBuildings.StreamGaugeSpec");
-            var maxWaterLevelField = specType.GetField("_maxWaterLevel",  BindingFlags.NonPublic | BindingFlags.Instance);
+            var maxWaterLevelField = specType.GetProperty("MaxWaterLevel",  BindingFlags.Public | BindingFlags.Instance);
             return (float)maxWaterLevelField.GetValue(spec);
         }
     }

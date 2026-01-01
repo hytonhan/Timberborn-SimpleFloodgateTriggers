@@ -13,7 +13,6 @@ using Timberborn.Buildings;
 using Timberborn.Common;
 using Timberborn.EntitySystem;
 using Timberborn.Localization;
-using Timberborn.PrefabSystem;
 using Timberborn.SelectionSystem;
 using Timberborn.UIFormatters;
 using Timberborn.WaterBuildings;
@@ -115,8 +114,10 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             for (int i = 0; i < links.Count(); i++)
             {
                 var link = links[i];
-                var floodgate = link.Floodgate.GetComponentFast<Floodgate>();
-                var streamGauge = link.StreamGauge.GetComponentFast<StreamGauge>();
+                var floodgate = link.Floodgate.GetComponent<Floodgate>();
+                if (floodgate == null) Console.WriteLine($"floodgate is null");
+                var streamGauge = link.StreamGauge.GetComponent<StreamGauge>();
+                if (streamGauge == null) Console.WriteLine($"streamGauge is null");
                 var setting = _settingsList[i];
                 setting.Item2.highValue = UIHelpers.GetMaxHeight(streamGauge);
                 setting.Item2.SetValueWithoutNotify(link.Threshold1);
@@ -164,7 +165,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                     setting.Rest.Rest.Item3.text = $"{_loc.T("Floodgates.Triggers.HeightWhenBelowContaminationThresholdLow")}: {setting.Rest.Rest.Item4.value.ToString(CultureInfo.InvariantCulture)}";
                     setting.Rest.Rest.Item5.text = $"{_loc.T("Floodgates.Triggers.HeightWhenAboveContaminationThresholdHigh")}: {setting.Rest.Rest.Item6.value.ToString(CultureInfo.InvariantCulture)}";
 
-                    var gauge = links[i].StreamGauge.GetComponentFast<StreamGauge>();
+                    var gauge = links[i].StreamGauge.GetComponent<StreamGauge>();
                     setting.Rest.Item4.text = $"({gauge.WaterLevel.ToString("0.00")}m, {NumberFormatter.FormatAsPercentRounded(gauge.ContaminationLevel)})";
                 }
             }
@@ -180,8 +181,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
             {
                 var j = i;
                 var link = links[i];
-                var streamGauge = link.StreamGauge.GameObjectFast;
-                var building = link.StreamGauge.GetComponentFast<LabeledEntitySpec>();
+                var streamGauge = link.StreamGauge;
+                var building = link.StreamGauge.GetComponent<LabeledEntitySpec>();
 
                 var view = _streamGaugeFloodgateLinkViewFactory.CreateViewForFloodgate(i, building.DisplayNameLocKey);
 

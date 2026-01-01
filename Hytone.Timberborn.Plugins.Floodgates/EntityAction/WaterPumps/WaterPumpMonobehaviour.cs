@@ -5,17 +5,19 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Timberborn.Persistence;
 using Timberborn.WeatherSystem;
-using Timberborn.BuildingsBlocking;
+// using Timberborn.BuildingsBlocking;
 using Timberborn.BaseComponentSystem;
 using Timberborn.DeconstructionSystem;
 using Timberborn.HazardousWeatherSystem;
 using Timberborn.BlockSystem;
 using System.Reflection;
+using Timberborn.Buildings;
+using Timberborn.SingletonSystem;
 using Timberborn.WorldPersistence;
 
 namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 {
-    public class WaterPumpMonobehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener
+    public class WaterPumpMonobehaviour : BaseComponent, IPersistentEntity, IFinishedStateListener, IAwakableComponent
     {
         //Keys used in data saving/loading
         private static readonly ComponentKey WaterPumpKey = new ComponentKey(nameof(WaterPumpMonobehaviour));
@@ -40,6 +42,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         private IScheduleTrigger _scheduleTrigger;
         private WeatherService _weatherServíce;
         private WaterpumpStreamGaugeLinkSerializer _linkSerializer;
+        private EventBus _eventBus;
 
         private readonly List<WaterPumpStreamGaugeLink> _waterpumpLinks = new List<WaterPumpStreamGaugeLink>();
         public ReadOnlyCollection<WaterPumpStreamGaugeLink> WaterPumpLinks { get; private set; }
@@ -67,11 +70,33 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
         public void InjectDependencies(
             IScheduleTriggerFactory scheduleTriggerFactory,
             WeatherService weatherService,
-            WaterpumpStreamGaugeLinkSerializer linkSerializer)
+            WaterpumpStreamGaugeLinkSerializer linkSerializer,
+            EventBus eventBus)
         {
             _scheduleTriggerFactory = scheduleTriggerFactory;
             _weatherServíce = weatherService;
             _linkSerializer = linkSerializer;
+            _eventBus = eventBus;
+        }
+        
+        [OnEvent]
+        public void OnHazardousWeatherStarted(HazardousWeatherStartedEvent hazardousWeatherStartedEvent)
+        {
+            var hazardWeather = hazardousWeatherStartedEvent.HazardousWeather.GetType();
+            if (hazardWeather == typeof(DroughtWeather))
+            {
+                this.OnDroughtStarted();
+            }
+            else if (hazardWeather == typeof(BadtideWeather))
+            {
+                this.OnBadtideStarted();
+            }
+        }
+        
+        [OnEvent]
+        public void OnHazardousWeatherEnded(HazardousWeatherEndedEvent hazardousWeatherEndedEndedEvent)
+        {
+            this.OnTemperateStarted();
         }
 
         public void Awake()
@@ -102,6 +127,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void Load(IEntityLoader entityLoader)
         {
+            _eventBus.Register(this);
             if (!entityLoader.TryGetComponent(WaterPumpKey, out IObjectLoader component))
             {
                 return;
@@ -185,12 +211,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnDroughtStarted()
         {
-            var constructible = GetComponentFast<BlockObject>();
+            var constructible = GetComponent<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
             }
-            var pausable = GetComponentFast<PausableBuilding>();
+            var pausable = GetComponent<PausableBuilding>();
 
             if (PauseOnDroughtStart == true &&
                pausable.Paused == false)
@@ -205,12 +231,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnBadtideStarted()
         {
-            var constructible = GetComponentFast<BlockObject>();
+            var constructible = GetComponent<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
             }
-            var pausable = GetComponentFast<PausableBuilding>();
+            var pausable = GetComponent<PausableBuilding>();
 
             if (PauseOnBadtideStarted == true &&
                 pausable.Paused == false)
@@ -225,12 +251,12 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void OnTemperateStarted()
         {
-            var constructible = GetComponentFast<BlockObject>();
+            var constructible = GetComponent<BlockObject>();
             if (constructible.IsUnfinished)
             {
                 return;
             }
-            var pausable = GetComponentFast<PausableBuilding>();
+            var pausable = GetComponent<PausableBuilding>();
 
             if (UnpauseOnTemperateStarted == true &&
                 pausable.Paused == true)
@@ -340,8 +366,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void PauseBuilding()
         {
-            var pausable = GetComponentFast<PausableBuilding>();
-            var constructible = GetComponentFast<BlockObject>();
+            var pausable = GetComponent<PausableBuilding>();
+            var constructible = GetComponent<BlockObject>();
 
             if (ScheduleEnabled == true &&
                 pausable.Paused == false &&
@@ -353,8 +379,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.EntityAction.WaterPumps
 
         public void ResumeBuilding()
         {
-            var pausable = GetComponentFast<PausableBuilding>();
-            var constructible = GetComponentFast<BlockObject>();
+            var pausable = GetComponent<PausableBuilding>();
+            var constructible = GetComponent<BlockObject>();
             if (ScheduleEnabled == true &&
                 pausable.Paused == true &&
                 constructible.IsFinished)

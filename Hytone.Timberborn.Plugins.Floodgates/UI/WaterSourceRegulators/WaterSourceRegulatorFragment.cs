@@ -146,8 +146,8 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI.WaterSourceRegulators
 
         public void ShowFragment(BaseComponent entity)
         {
-            _watersourceRegulator = entity.GetComponentFast<WaterSourceRegulator>();
-            _watersourceRegulatorMonoBehaviour = entity.GetComponentFast<WaterSourceRegulatorMonobehaviour>();
+            _watersourceRegulator = entity.GetComponent<WaterSourceRegulator>();
+            _watersourceRegulatorMonoBehaviour = entity.GetComponent<WaterSourceRegulatorMonobehaviour>();
             if ((bool)_watersourceRegulatorMonoBehaviour)
             {
                 _droughtSettingsFragment.ShowFragment(_watersourceRegulatorMonoBehaviour);

@@ -23,13 +23,13 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         private readonly ILoc _loc;
         private readonly FloodgateTriggersPickObjectTool _pickObjectTool;
         private readonly EntitySelectionService _EntitySelectionService;
-        private readonly ToolManager _toolManager;
+        private readonly ToolService _toolManager;
         private Button _button;
 
         public AttachWaterpumpToStreamGaugeButton(ILoc loc, 
                                          FloodgateTriggersPickObjectTool pickObjectTool,
                                          EntitySelectionService EntitySelectionService, 
-                                         ToolManager toolManager)
+                                         ToolService toolManager)
         {
             _loc = loc;
             _pickObjectTool = pickObjectTool;
@@ -72,7 +72,7 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
                 _loc.T(PickStreamGaugeTitleLocKey), 
                 _loc.T(PickStreamGaugeTipLocKey), 
                 (GameObject gameObject) => ValidateStreamGauge(waterpump, gameObject), 
-                delegate (GameObject streamGauge)
+                delegate (StreamGaugeMonoBehaviour streamGauge)
             {
                 FinishStreamGaugeSelection(waterpump, streamGauge, createdLinkCallback);
             });
@@ -101,11 +101,11 @@ namespace Hytone.Timberborn.Plugins.Floodgates.UI
         /// <param name="attachedStreamGaugeCallback"></param>
         private void FinishStreamGaugeSelection(
             WaterPumpMonobehaviour waterpump, 
-            GameObject streamGauge, 
+            StreamGaugeMonoBehaviour streamGauge, 
             Action attachedStreamGaugeCallback)
         {
-            StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();
-            waterpump.AttachLink(waterpump, streamGaugeComponent);
+            // StreamGaugeMonoBehaviour streamGaugeComponent = streamGauge.GetComponent<StreamGaugeMonoBehaviour>();
+            waterpump.AttachLink(waterpump, streamGauge);
             attachedStreamGaugeCallback();
         }
 
